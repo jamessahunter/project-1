@@ -3,14 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>Movie Website</title>
+    <link rel="stylesheet" href="build/css/style.css" />
   </head>
-  <body class="bg-black">
-    <div
-      class="text-white">Hello</div>
-    </div>
+  <body>
+    <!-- Header Section -->
+    <header class="bg-blue-500 py-4">
+      <div class="container mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <h1 class="text-2xl text-white font-bold">Movie Site</h1>
 
-    <script src="./assets/js/script.js"></script>
+        <!-- Navigation Menu -->
+        <nav class="space-x-4">
+          <a href="#" class="text-white">Home</a>
+          <a href="#" class="text-white">Movies</a>
+          <a href="#" class="text-white">TV Shows</a>
+          <a href="#" class="text-white">About</a>
+          <a href="#" class="text-white">Contact</a>
+        </nav>
+
+        <!-- Search Button -->
+        <button
+          class="bg-white text-blue-500 px-7 py-2 rounded-md hover:bg-blue-100"
+        >
+          Search
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-cover bg-center h-64 md:h-96 bg-cool-image relative">
+      <!-- Overlay to enhance text visibility -->
+      <div class="absolute inset-0 bg-black opacity-60"></div>
+
+      <div class="container mx-auto h-full flex items-center">
+        <div class="text-white text-center">
+          <h2 class="text-2xl md:text-4xl font-bold">
+            Discover the Best Movies
+          </h2>
+          <p class="text-lg md:text-xl mt-4">Stream and Enjoy</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Movies Section -->
+    <section class="bg-gray-900 text-white py-8">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-semibold">Featured Movies</h2>
+        <!-- Add featured movie cards here -->
+      </div>
+    </section>
+
+    <!-- Popular TV Shows Section -->
+    <section class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-semibold">Popular TV Shows</h2>
+        <!-- Add popular TV show cards here -->
+      </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section class="bg-gray-700 text-white py-8">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-semibold">Latest News</h2>
+        <!-- Add news articles or updates here -->
+      </div>
+    </section>
+
+    <!-- Content of your website goes here -->
   </body>
 </html>
