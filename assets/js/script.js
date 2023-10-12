@@ -25,14 +25,14 @@ searchButton.on("click", function(event){
     // console.log(scoresBox[0].checked);
     console.log(movieSearchQuery);
     fetchOMDB(movieSearchQuery);
-  })
+});
 
 
 popularButton.on("click",function(){
     // console.log("works");
     popularClicked = true;
     fetchPopular();
-})
+});
 
 // queryResult is used to gather the current search result data from our set of queries
 var queryResult = {
