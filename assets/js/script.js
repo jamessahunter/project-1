@@ -1,7 +1,6 @@
 
 var movie;
 
-// var wait=0; // NOT USED?
 var popularClicked = false;
 var count = 0;
 
@@ -12,11 +11,21 @@ var popularButton = $(".btn-popular");
 var movieInput = $("#search");
 var movieCards = $("#movie-cards");
 var scoresBox = $("#scores");
+var summaryBox=$("#summary");
+var directorBox=$("#director");
+var castBox=$("#cast");
+var runtimeBox=$("#runtime");
+var ratedBox=$("#rated");
+var nytReviewBox=$("#nyt-review");
+var servicesBox=$("#services");
+var genreBox=$("#genre");
+var movieCard=$("<section>").addClass("movie-card");
+var scoresEl=$("<h3>").text("Scores:");
 
 searchButton.on("click", function(event){
     event.preventDefault();
     popularClicked = false;
-    var movieSearchQuery = movieInput.val();
+    movieSearchQuery = movieInput.val();
 
     if(movieSearchQuery === ""){
       // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
@@ -67,26 +76,20 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
 
             // var movieTitle = data.results[i].title;
             // fetchOMDB(movieTitle);
-
-            // console.log(movieTitle);
-            // movieEl=$("<p>").text(movieTitle);
-            // movieCards.prepend(movieEl);
-
-            // console.log("test");
             // console.log(data.results[i]);
           }
           console.log(popularArr);
           fetchOMDB(popularArr[count]);
-        //   loopWithFetch(popularArr);
           })
       }
     })
 }
 
 
-function fetchOMDB(movie){
+function fetchOMDB(movieSearchQuery){
     // fetches based on title
-var omdbUrl = "https://www.omdbapi.com/?t="+ movie +"&plot=short&apikey=704a2c08"
+    console.log(movieSearchQuery);
+var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&plot=short&apikey=704a2c08"
 fetch(omdbUrl)
 .then(function(response){
     if (response.ok){
@@ -112,18 +115,18 @@ fetch(omdbUrl)
             queryResult.mpaaRating = data.Rated;
             queryResult.cast = data.Actors;
             queryResult.director = data.Director;
-
+            queryResult.runtime = data.Runtime;
             // console.log(data.imdbRating);
             // console.log(data.imdbID);
             // console.log(data.Ratings);
-            fetchTMDB(queryResult.imdbID);
+            fetchTMDB(movieSearchQuery);
             })
         }
     });
 }
 
 
-function fetchTMDB(imdbID){
+function fetchTMDB(movie){
 //fetches based on imdb id
 const options = {
     method: 'GET',
@@ -132,16 +135,16 @@ const options = {
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
     }
   };
-  fetch('https://api.themoviedb.org/3/movie/'+ imdbID+'?language=en-US', options)
+  fetch('https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US', options)
   .then(function(response){
   if (response.ok){
     //   console.log(response);
         return response.json().then(function(data){
         console.log("TMDB specific movie");
-        queryResult.title = data.original_title;
-        queryResult.score.tmdb = data.vote_average;
-        queryResult.runtime = data.runtime;
-        queryResult.summary = data.overview;
+        console.log(data);
+        queryResult.title = data.results[0].title;
+        queryResult.score.tmdb = data.results[0].vote_average;
+        queryResult.summary = data.results[0].overview;
         // console.log(data);
         // console.log(data.original_title);
         // console.log(data.vote_average);
@@ -207,65 +210,90 @@ function fetchServices(movie){
 
   appendCard();
 }
+function createElements(){
+      // title and details
+  titleEl=$("<h2>").text(queryResult.title);
 
+  // var runtimeEl=$("<p>").text("Runtime: "+ queryResult.runtime+" minutes");
+runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime} minutes`);
+  // var mpaaRatingEl=$("<p>").text("Rated: "+queryResult.mpaaRating);
+  mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
+  // var genreEl=$("<p>").text("Genre: "+ queryResult.genre);
+  genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
+  // var directorEl=$("<p>").text("Director: "+ queryResult.director);
+  directorEl=$("<p>").text(`Director: ${queryResult.director}`);
+  // var castEl=$("<p>").text("Cast: "+queryResult.cast);
+  castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
+  summaryEl=$("<p>").text(queryResult.summary);
+
+
+    scoresEl=$("<h3>").text("Scores:");
+
+    // var imdbScoreEl=$("<p>").text("IMDB: "+ queryResult.score.imdb);
+    imdbScoreEl=$("<p>").text(`IMDB Score: ${queryResult.score.imdb}`);
+    // var rottenScoreEl=$("<p>").text("Rotten Tomatoes: "+queryResult.score.rotten);
+    rottenScoreEl=$("<p>").text(`Rotten Tomatoes Score: ${queryResult.score.rotten}`);
+    // var metaScoreEl=$("<p>").text("Meta Critic: "+queryResult.score.meta);
+    metaScoreEl=$("<p>").text(`Meta Critic: ${queryResult.score.meta}`);
+    // var tmdbScoreEl=$("<p>").text("User Score: "+queryResult.score.tmdb);
+    tmdbScoreEl=$("<p>").text(`TMDB Score: ${queryResult.score.tmdb}`);
+
+      // var nytSnippetEl=$("<p>").text("Review: "+queryResult.reviews.nyt.snippet);
+    nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
+    // var nytAuthorEl=$("<p>").text("Author: "+queryResult.reviews.nyt.author);
+    nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
+    // var streamingServicesEl=$("<p>").text("Streaming Services: " +queryResult.streamingServices);
+    streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
+}
 
 function appendCard(){
   // console.log("works");
   // movieCards.text("");
+    createElements();
 
-  // title and details
-  var titleEl=$("<h2>").text(queryResult.title);
-
-  // var runtimeEl=$("<p>").text("Runtime: "+ queryResult.runtime+" minutes");
-  var runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime} minutes`);
-  // var mpaaRatingEl=$("<p>").text("Rated: "+queryResult.mpaaRating);
-  var mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
-  // var genreEl=$("<p>").text("Genre: "+ queryResult.genre);
-  var genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
-  // var directorEl=$("<p>").text("Director: "+ queryResult.director);
-  var directorEl=$("<p>").text(`Director: ${queryResult.director}`);
-  // var castEl=$("<p>").text("Cast: "+queryResult.cast);
-  var castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
-  var summaryEl=$("<p>").text(queryResult.summary);
-
-  titleEl.append(runtimeEl, mpaaRatingEl, genreEl, directorEl, castEl, summaryEl);
-
-
+    if(ratedBox[0].checked){
+        titleEl.append(mpaaRatingEl);
+      }
+      if(runtimeBox[0].checked){
+        titleEl.append(runtimeEl)
+      }
+      if(genreBox[0].checked){
+        titleEl.append(genreEl);
+      }
+      if(directorBox[0].checked){
+        titleEl.append(directorEl);
+      }
+      if(castBox[0].checked){
+        titleEl.append(castEl);
+      }
+      if(summaryBox[0].checked){
+        titleEl.append(summaryEl);
+      }
+      movieCard.append(titleEl);
+      // titleEl.append(runtimeEl,ratedEl,genreEl,directorEl,castEl,summaryEl);
+      if(scoresBox[0].checked){
+        scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,userScoreEl);
+        movieCard.append(scoresEl);
+      }
+      if(nytReviewBox[0].checked){
+        nytSnippetEl.append(nytAuthorEl);
+        movieCard.append(nytSnippetEl);
+      }
+      if(servicesBox[0].checked){
+        movieCard.append(servicesEl);
+      }
+    
+      movieCards.prepend(movieCard);
+//   titleEl.append(runtimeEl, mpaaRatingEl, genreEl, directorEl, castEl, summaryEl);
   // scores
-  var scoresEl=$("<h3>").text("Scores:");
-
-  // var imdbScoreEl=$("<p>").text("IMDB: "+ queryResult.score.imdb);
-  var imdbScoreEl=$("<p>").text(`IMDB Score: ${queryResult.score.imdb}`);
-  // var rottenScoreEl=$("<p>").text("Rotten Tomatoes: "+queryResult.score.rotten);
-  var rottenScoreEl=$("<p>").text(`Rotten Tomatoes Score: ${queryResult.score.rotten}`);
-  // var metaScoreEl=$("<p>").text("Meta Critic: "+queryResult.score.meta);
-  var metaScoreEl=$("<p>").text(`Meta Critic: ${queryResult.score.meta}`);
-  // var tmdbScoreEl=$("<p>").text("User Score: "+queryResult.score.tmdb);
-  var tmdbScoreEl=$("<p>").text(`TMDB Score: ${queryResult.score.tmdb}`);
-
-  scoresEl.append(imdbScoreEl, rottenScoreEl, metaScoreEl, tmdbScoreEl);
-
-
+//   scoresEl.append(imdbScoreEl, rottenScoreEl, metaScoreEl, tmdbScoreEl);
   // reviews
-
-  // var nytSnippetEl=$("<p>").text("Review: "+queryResult.reviews.nyt.snippet);
-  var nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
-  // var nytAuthorEl=$("<p>").text("Author: "+queryResult.reviews.nyt.author);
-  var nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
-  // var streamingServicesEl=$("<p>").text("Streaming Services: " +queryResult.streamingServices);
-  var streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
-
-  nytSnippetEl.append(nytAuthorEl);
-
-
-  // movie card
-  var movieCard=$("<section>").addClass("movie-card");
-  movieCard.append(titleEl, scoresEl, nytSnippetEl);
-
-  movieCards.prepend(movieCard);
+//   nytSnippetEl.append(nytAuthorEl);
+//   movieCard.append(titleEl, scoresEl, nytSnippetEl);
+//   movieCards.prepend(movieCard);
 
   
-  if ( popularClicked && count < popularArr.length ){
+  if ( popularClicked && count < popularArr.length -1 ){
     count++;
     fetchOMDB(popularArr[count]);
   }
