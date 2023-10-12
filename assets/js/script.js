@@ -38,7 +38,7 @@ searchButton.on("click",function(event){
 
   function appendCard(){
     // console.log("works");
-    movieCards.text("");
+    // movieCards.text("");
     var movieCard=$("<section>").addClass("movie-card");
     var scoresEl=$("<h3>").text("Scores:");
     titleEl=$("<h2>").text(title);
@@ -132,13 +132,23 @@ fetch(omdbUrl)
             console.log("omdb")
             imdbID=data.imdbID;
             imdbScore=data.imdbRating;
-            rottenScore=data.Ratings[1].Value;
-            metaScore=data.Ratings[2].Value;
-            genre=data.genre;
+            genre=data.Genre;
+            if(data.Ratings.length===2){
+                rottenScore=data.Ratings[1].Value;
+                metaScore="not found";
+              }
+              else if(data.Ratings.length===1){
+                rottenScore="not found";
+                metaScore="not found";
+              }
+              else{
+                rottenScore=data.Ratings[1].Value;
+                metaScore=data.Ratings[2].Value;
+            }
             rated=data.Rated;
             cast=data.Actors;
             director=data.Director;
-            // console.log(data);
+            console.log(data);
             // console.log(data.imdbRating);
             // console.log(data.imdbID);
             // console.log(data.Ratings);
