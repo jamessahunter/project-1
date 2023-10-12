@@ -1,51 +1,36 @@
 
-// don't need -- putting all these into object variable queryResult
-// var movie;
-// var imdbID;
-// var title;
-// var runtime;
-// var rated;
-// var imdbScore;
-// var rottenScore;
-// var metaScore;
-// var tmdbScore;
-// var director;
-// var cast;
-// var nytSnippet;
-// var nytAuthor
-// var services;
-// var summary;
-// var genre;
+var movie;
 
-var wait=0;
-var popularClicked=0;
-var count=0;
+// var wait=0; // NOT USED?
+var popularClicked = false;
+var count = 0;
 
-var popularArr=[];
+var popularArr = [];
 
-var searchButton=$(".btn");
-var popularButton=$(".btn-popular");
-var movieInput=$("#search");
-var movieCards=$("#movie-cards");
-var scoresBox=$("#scores");
+var searchButton = $(".btn");
+var popularButton = $(".btn-popular");
+var movieInput = $("#search");
+var movieCards = $("#movie-cards");
+var scoresBox = $("#scores");
 
-searchButton.on("click",function(event){
+searchButton.on("click", function(event){
     event.preventDefault();
-    popularClicked=0;
-    if(movieInput.val()=== ""){
-      //modal here
+    popularClicked = false;
+    var movieSearchQuery = movieInput.val();
+
+    if(movieSearchQuery === ""){
+      // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
       return;
     }
     // console.log(scoresBox[0].checked);
-    console.log(movieInput.val());
-    movie=movieInput.val();
-    fetchOMDB(movie)
+    console.log(movieSearchQuery);
+    fetchOMDB(movieSearchQuery);
   })
 
 
 popularButton.on("click",function(){
     // console.log("works");
-    popularClicked=1;
+    popularClicked = true;
     fetchPopular();
 })
 
@@ -120,13 +105,13 @@ function appendCard(){
   movieCard.append(titleEl, scoresEl, nytSnippetEl);
 
   movieCards.prepend(movieCard);
+
   
-  
-  if (popularClicked&&count<popularArr.length){
-      count++
-  fetchOMDB(popularArr[count])
+  if ( popularClicked && count < popularArr.length ){
+    count++;
+    fetchOMDB(popularArr[count]);
   }
-  // console.log("movie card")
+  // console.log("movie card");
   // console.log(movieCards);
 }
 
@@ -144,11 +129,12 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
           for(var i=data.results.length-1;i>=0;i--){
             // console.log(wait);
             popularArr.push(data.results[i].title);
-            movie=data.results[i].title;
-            // fetchOMDB(movie);
 
-            // console.log(movie);
-            // movieEl=$("<p>").text(movie);
+            // var movieTitle = data.results[i].title;
+            // fetchOMDB(movieTitle);
+
+            // console.log(movieTitle);
+            // movieEl=$("<p>").text(movieTitle);
             // movieCards.prepend(movieEl);
 
             // console.log("test");
@@ -163,39 +149,7 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
 }
 
 
-function fetchTMDB(imdbID){
-//fetches based on imdb id
-const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
-    }
-  };
-  fetch('https://api.themoviedb.org/3/movie/'+ imdbID+'?language=en-US', options)
-  .then(function(response){
-  if (response.ok){
-    //   console.log(response);
-        return response.json().then(function(data){
-        console.log("TMDB specific movie")
-        queryResult.title = data.original_title;
-        queryResult.score.tmdb = data.vote_average;
-        queryResult.runtime = data.runtime;
-        queryResult.summary = data.overview;
-        // console.log(data);
-        // console.log(data.original_title);
-        // console.log(data.vote_average);
-        // console.log(data.poster_path);
-        // console.log(data.runtime);
-            fetchNYTReview(movie);
-        })
-    }
-  })
-}
-    
-
 function fetchOMDB(movie){
-
     // fetches based on title
 var omdbUrl = "https://www.omdbapi.com/?t="+ movie +"&plot=short&apikey=704a2c08"
 fetch(omdbUrl)
@@ -203,7 +157,7 @@ fetch(omdbUrl)
     if (response.ok){
         //   console.log(response);
             return response.json().then(function(data){
-            console.log("omdb")
+            console.log("omdb");
             console.log(data);
             queryResult.imdbID = data.imdbID;
             queryResult.score.imdb = data.imdbRating;
@@ -230,8 +184,42 @@ fetch(omdbUrl)
             fetchTMDB(queryResult.imdbID);
             })
         }
-    })
+    });
 }
+
+
+function fetchTMDB(imdbID){
+//fetches based on imdb id
+const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
+    }
+  };
+  fetch('https://api.themoviedb.org/3/movie/'+ imdbID+'?language=en-US', options)
+  .then(function(response){
+  if (response.ok){
+    //   console.log(response);
+        return response.json().then(function(data){
+        console.log("TMDB specific movie");
+        queryResult.title = data.original_title;
+        queryResult.score.tmdb = data.vote_average;
+        queryResult.runtime = data.runtime;
+        queryResult.summary = data.overview;
+        // console.log(data);
+        // console.log(data.original_title);
+        // console.log(data.vote_average);
+        // console.log(data.poster_path);
+        // console.log(data.runtime);
+
+        fetchNYTReview(queryResult.title);
+
+        });
+    }
+  });
+}
+    
 
 function fetchNYTReview(movie){
   //fetch to nyt review of movie
@@ -253,8 +241,9 @@ function fetchNYTReview(movie){
   //             })
   //         }
   //     })
-  fetchServices(movie);
+  fetchServices(queryResult.title);
 }
+
 
 function fetchServices(movie){
   // sees if movie is streaming based on imdb id
@@ -276,9 +265,10 @@ function fetchServices(movie){
   //         // console.log("streaming service")
   //         // console.log(data.result)
   //         // console.log(data.result[0].streamingInfo)
-          queryResult.streamingServices = data.result[0].streamingInfo.us[0].service;
+  //         // queryResult.streamingServices = data.result[0].streamingInfo.us[0].service;
   //         })
   //     }
   // })
+
   appendCard();
 }
