@@ -36,6 +36,39 @@ searchButton.on("click",function(event){
     fetchOMDB(movie)
   })
 
+  function appendCard(){
+    // console.log("works");
+    movieCards.text("");
+    var movieCard=$("<section>").addClass("movie-card");
+    var scoresEl=$("<h3>").text("Scores:");
+    titleEl=$("<h2>").text(title);
+    runtimeEl=$("<p>").text("Runtime: "+ runtime+" minutes");
+    ratedEl=$("<p>").text("Rated: "+rated);
+    imdbScoreEl=$("<p>").text("IMDB: "+ imdbScore);
+    rottenScoreEl=$("<p>").text("Rotten Tomatoes: "+rottenScore);
+    metaScoreEl=$("<p>").text("Meta Critic: "+metaScore);
+    userScoreEl=$("<p>").text("User Score: "+userScore);
+    directorEl=$("<p>").text("Director: "+ director);
+    castEl=$("<p>").text("Cast: "+cast);
+    nytSnippetEl=$("<p>").text("Review: "+nytSnippet);
+    nytAuthorEl=$("<p>").text("Author: "+nytAuthor);
+    servicesEl=$("<p>").text("services: " +services);
+    summaryEl=$("<p>").text(summary);
+    genreEl=$("<p>").text("Genre: "+ genre);
+    titleEl.append(runtimeEl,ratedEl,genreEl,directorEl,castEl,summaryEl);
+    scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,userScoreEl);
+    nytSnippetEl.append(nytAuthorEl);
+    movieCard.append(titleEl,scoresEl,nytSnippetEl);
+    movieCards.append(movieCard);
+    // console.log("movie card")
+    // console.log(movieCards);
+  }
+
+
+
+
+
+
 function fetchPopular(){
 //fetch for popular movies
 fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
@@ -71,7 +104,7 @@ const options = {
   if (response.ok){
     //   console.log(response);
         return response.json().then(function(data){
-        console.log("specific movie")
+        console.log("TMDB specific movie")
         title=data.original_title;
         userScore=data.vote_average;
         runtime=data.runtime;
@@ -123,7 +156,7 @@ fetch(reviewUrl)
     if (response.ok){
         //   console.log(response);
             return response.json().then(function(data){
-            // console.log("nyt review")
+            console.log("nyt review")
             // console.log(data);
             // console.log(data.response);
             // console.log(data.response.docs[0]);
@@ -147,17 +180,19 @@ const options1={
 		'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
 	}
 };
-
-fetch(urlStreaming,options1)
-    .then(function(response){
-        if (response.ok){
-    //   console.log(response);
-        return response.json().then(function(data){
-        console.log("streaming service")
-        console.log(data.result)
-        console.log(data.result[0].streamingInfo)
-        services=data.result[0].streamingInfo.us[0].service;
-        })
-    }
-})
+console.log("services section");
+//commenting out to reduce number of calls
+// fetch(urlStreaming,options1)
+//     .then(function(response){
+//         if (response.ok){
+//     //   console.log(response);
+//         return response.json().then(function(data){
+//         // console.log("streaming service")
+//         // console.log(data.result)
+//         // console.log(data.result[0].streamingInfo)
+//         services=data.result[0].streamingInfo.us[0].service;
+//         })
+//     }
+// })
+appendCard();
 }
