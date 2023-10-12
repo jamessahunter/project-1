@@ -86,9 +86,10 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
 }
 
 
-function fetchOMDB(movie){
+function fetchOMDB(movieSearchQuery){
     // fetches based on title
-var omdbUrl = "https://www.omdbapi.com/?t="+ movie +"&plot=short&apikey=704a2c08"
+    console.log(movieSearchQuery);
+var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&plot=short&apikey=704a2c08"
 fetch(omdbUrl)
 .then(function(response){
     if (response.ok){
@@ -251,7 +252,7 @@ function appendCard(){
     createElements();
 
     if(ratedBox[0].checked){
-        titleEl.append(ratedEl);
+        titleEl.append(mpaaRatingEl);
       }
       if(runtimeBox[0].checked){
         titleEl.append(runtimeEl)
@@ -292,7 +293,7 @@ function appendCard(){
 //   movieCards.prepend(movieCard);
 
   
-  if ( popularClicked && count < popularArr.length ){
+  if ( popularClicked && count < popularArr.length -1 ){
     count++;
     fetchOMDB(popularArr[count]);
   }
