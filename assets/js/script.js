@@ -21,10 +21,14 @@ var servicesBox=$("#services");
 var genreBox=$("#genre");
 var movieCard=$("<section>").addClass("movie-card");
 var scoresEl=$("<h3>").text("Scores:");
+
+
+// searchbutton click event listener
 searchButton.on("click", function(event) {
   handleSearch(event);
 });
 
+// search input field "enter key" event listener
 movieInput.on("keypress", function(event) {
   const enterKey = 13;
   if (event.which === enterKey) {
@@ -74,74 +78,76 @@ var queryResult = {
 
 
 function fetchPopular(){
-//fetch for popular movies
-fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
-.then(function(response){
+  //fetch for popular movies
+  fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
+  .then(function(response){
     if (response.ok){
       //   console.log(response);
-          return response.json().then(function(data){
-          console.log("popular movies")
+      return response.json().then(function(data){
+        console.log("popular movies")
         //   console.log(data);
         //   console.log(data.results);
-          for(var i=data.results.length-1;i>=0;i--){
-            // console.log(wait);
-            popularArr.push(data.results[i].title);
+        for(var i=data.results.length-1;i>=0;i--){
+          // console.log(wait);
+          popularArr.push(data.results[i].title);
 
-            // var movieTitle = data.results[i].title;
-            // fetchOMDB(movieTitle);
-            // console.log(data.results[i]);
-          }
-          console.log(popularArr);
-          fetchOMDB(popularArr[count]);
-          })
-      }
-    })
+          // var movieTitle = data.results[i].title;
+          // fetchOMDB(movieTitle);
+          // console.log(data.results[i]);
+        }
+        console.log(popularArr);
+        fetchOMDB(popularArr[count]);
+      });
+    }
+  });
 }
 
 
 function fetchOMDB(movieSearchQuery){
-    // fetches based on title
-    console.log(movieSearchQuery);
-var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&plot=short&apikey=704a2c08"
-fetch(omdbUrl)
-.then(function(response){
+  // fetches based on title
+  console.log(movieSearchQuery);
+  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&plot=short&apikey=704a2c08"
+  fetch(omdbUrl)
+  .then(function(response){
     if (response.ok){
-        //   console.log(response);
-            return response.json().then(function(data){
-            console.log("omdb");
-            console.log(data);
-            queryResult.imdbID = data.imdbID;
-            queryResult.score.imdb = data.imdbRating;
-            if(data.Ratings.length===2){
-                queryResult.score.rotten = data.Ratings[1].Value;
-                queryResult.score.meta = "not found";
-              }
-              else if(data.Ratings.length===1||data.Ratings.length===0){
-                queryResult.score.rotten = "not found";
-                queryResult.score.meta = "not found";
-              }
-              else{
-                queryResult.score.rotten = data.Ratings[1].Value;
-                queryResult.score.meta = data.Ratings[2].Value;
-              }
-            queryResult.genre = data.Genre;
-            queryResult.mpaaRating = data.Rated;
-            queryResult.cast = data.Actors;
-            queryResult.director = data.Director;
-            queryResult.runtime = data.Runtime;
-            // console.log(data.imdbRating);
-            // console.log(data.imdbID);
-            // console.log(data.Ratings);
-            fetchTMDB(movieSearchQuery);
-            })
+      //   console.log(response);
+      return response.json().then(function(data){
+        console.log("omdb");
+        console.log(data);
+        queryResult.imdbID = data.imdbID;
+        queryResult.score.imdb = data.imdbRating;
+        
+        if(data.Ratings.length===2){
+          queryResult.score.rotten = data.Ratings[1].Value;
+          queryResult.score.meta = "not found";
         }
-    });
+        else if(data.Ratings.length===1||data.Ratings.length===0){
+          queryResult.score.rotten = "not found";
+          queryResult.score.meta = "not found";
+        }
+        else{
+          queryResult.score.rotten = data.Ratings[1].Value;
+          queryResult.score.meta = data.Ratings[2].Value;
+        }
+
+        queryResult.genre = data.Genre;
+        queryResult.mpaaRating = data.Rated;
+        queryResult.cast = data.Actors;
+        queryResult.director = data.Director;
+        queryResult.runtime = data.Runtime;
+        // console.log(data.imdbRating);
+        // console.log(data.imdbID);
+        // console.log(data.Ratings);
+        fetchTMDB(movieSearchQuery);
+      });
+    }
+  });
 }
 
 
 function fetchTMDB(movie){
-//fetches based on imdb id
-const options = {
+  //fetches based on imdb id
+  const options = {
     method: 'GET',
     headers: {
       accept: 'application/json',
@@ -150,9 +156,9 @@ const options = {
   };
   fetch('https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US', options)
   .then(function(response){
-  if (response.ok){
-    //   console.log(response);
-        return response.json().then(function(data){
+    if (response.ok){
+      //console.log(response);
+      return response.json().then(function(data){
         console.log("TMDB specific movie");
         console.log(data);
         queryResult.title = data.results[0].title;
@@ -166,7 +172,7 @@ const options = {
 
         fetchNYTReview(queryResult.title);
 
-        });
+      });
     }
   });
 }
