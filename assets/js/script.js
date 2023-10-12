@@ -13,19 +13,33 @@ var movieInput = $("#search");
 var movieCards = $("#movie-cards");
 var scoresBox = $("#scores");
 
-searchButton.on("click", function(event){
-    event.preventDefault();
-    popularClicked = false;
-    var movieSearchQuery = movieInput.val();
-
-    if(movieSearchQuery === ""){
-      // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
-      return;
-    }
-    // console.log(scoresBox[0].checked);
-    console.log(movieSearchQuery);
-    fetchOMDB(movieSearchQuery);
+searchButton.on("click", function(event) {
+  handleSearch(event);
 });
+
+movieInput.on("keypress", function(event) {
+  const enterKey = 13;
+  if (event.which === enterKey) {
+    handleSearch(event);
+  }
+});
+
+function handleSearch(event) {
+  event.preventDefault();
+  popularClicked = false;
+  var movieSearchQuery = movieInput.val();
+
+  if(movieSearchQuery === ""){
+    // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
+    return;
+  }
+  // console.log(scoresBox[0].checked);
+  console.log(movieSearchQuery);
+  fetchOMDB(movieSearchQuery);
+
+  // Clear the input field
+  movieInput.val("");
+}
 
 
 popularButton.on("click",function(){
