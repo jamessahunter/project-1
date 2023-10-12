@@ -1,7 +1,7 @@
 
 
-var movie="barbie";
-var imdbID="tt11858890";
+var movie;
+var imdbID;
 var title;
 var runtime;
 var rated;
@@ -17,6 +17,59 @@ var services;
 var summary;
 var genre;
 
+var searchButton=$(".btn");
+var movieInput=$("#search");
+var movieCards=$("#movie-cards");
+var scoresBox=$("#scores");
+
+searchButton.on("click",function(event){
+    event.preventDefault();
+
+    if(movieInput.val()=== ""){
+      //modal here
+      return;
+    }
+
+    // console.log(scoresBox[0].checked);
+    console.log(movieInput.val());
+    movie=movieInput.val();
+    fetchOMDB(movie)
+  })
+
+  function appendCard(){
+    // console.log("works");
+    movieCards.text("");
+    var movieCard=$("<section>").addClass("movie-card");
+    var scoresEl=$("<h3>").text("Scores:");
+    titleEl=$("<h2>").text(title);
+    runtimeEl=$("<p>").text("Runtime: "+ runtime+" minutes");
+    ratedEl=$("<p>").text("Rated: "+rated);
+    imdbScoreEl=$("<p>").text("IMDB: "+ imdbScore);
+    rottenScoreEl=$("<p>").text("Rotten Tomatoes: "+rottenScore);
+    metaScoreEl=$("<p>").text("Meta Critic: "+metaScore);
+    userScoreEl=$("<p>").text("User Score: "+userScore);
+    directorEl=$("<p>").text("Director: "+ director);
+    castEl=$("<p>").text("Cast: "+cast);
+    nytSnippetEl=$("<p>").text("Review: "+nytSnippet);
+    nytAuthorEl=$("<p>").text("Author: "+nytAuthor);
+    servicesEl=$("<p>").text("services: " +services);
+    summaryEl=$("<p>").text(summary);
+    genreEl=$("<p>").text("Genre: "+ genre);
+    titleEl.append(runtimeEl,ratedEl,genreEl,directorEl,castEl,summaryEl);
+    scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,userScoreEl);
+    nytSnippetEl.append(nytAuthorEl);
+    movieCard.append(titleEl,scoresEl,nytSnippetEl);
+    movieCards.append(movieCard);
+    // console.log("movie card")
+    // console.log(movieCards);
+  }
+
+
+
+
+
+
+function fetchPopular(){
 //fetch for popular movies
 fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
 .then(function(response){
@@ -24,8 +77,8 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
       //   console.log(response);
           return response.json().then(function(data){
           console.log("popular movies")
-          console.log(data);
-          console.log(data.results);
+        //   console.log(data);
+        //   console.log(data.results);
           for(var i=0;i<data.results.length;i++){
             movie=data.results[i].title;
             // console.log("test");
@@ -34,7 +87,10 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
           })
       }
     })
+}
 
+
+function fetchTMDB(imdbID){
 //fetches based on imdb id
 const options = {
     method: 'GET',
@@ -48,21 +104,24 @@ const options = {
   if (response.ok){
     //   console.log(response);
         return response.json().then(function(data){
-        console.log("specific movie")
+        console.log("TMDB specific movie")
         title=data.original_title;
         userScore=data.vote_average;
         runtime=data.runtime;
         summary=data.overview;
-        console.log(data);
-        console.log(data.original_title);
-        console.log(data.vote_average);
-        console.log(data.poster_path);
-        console.log(data.runtime);
+        // console.log(data);
+        // console.log(data.original_title);
+        // console.log(data.vote_average);
+        // console.log(data.poster_path);
+        // console.log(data.runtime);
+            fetchNYTReview(movie);
         })
     }
   })
-
+}
     
+
+function fetchOMDB(movie){
     // fetches based on title
 var omdbUrl = "https://www.omdbapi.com/?t="+ movie +"&plot=short&apikey=704a2c08"
 fetch(omdbUrl)
@@ -79,14 +138,17 @@ fetch(omdbUrl)
             rated=data.Rated;
             cast=data.Actors;
             director=data.Director;
-            console.log(data);
-            console.log(data.imdbRating);
-            console.log(data.imdbID);
-            console.log(data.Ratings);
+            // console.log(data);
+            // console.log(data.imdbRating);
+            // console.log(data.imdbID);
+            // console.log(data.Ratings);
+            fetchTMDB(imdbID);
             })
         }
     })
+}
 
+function fetchNYTReview(movie){
 //fetch to nyt review of movie
 reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
 fetch(reviewUrl)
@@ -95,18 +157,20 @@ fetch(reviewUrl)
         //   console.log(response);
             return response.json().then(function(data){
             console.log("nyt review")
-            console.log(data);
-            console.log(data.response);
-            console.log(data.response.docs[0]);
-            console.log(data.response.docs[0].lead_paragraph);
-            console.log(data.response.docs[0].snippet);
+            // console.log(data);
+            // console.log(data.response);
+            // console.log(data.response.docs[0]);
+            // console.log(data.response.docs[0].lead_paragraph);
+            // console.log(data.response.docs[0].snippet);
             nytSnippet=data.response.docs[0].snippet;
             nytAuthor=data.response.docs[0].byline.original;
+            fetchServices(movie);
             })
         }
     })
+}
 
-
+function fetchServices(movie){
 // sees if movie is streaming based on imdb id
 const urlStreaming = 'https://streaming-availability.p.rapidapi.com/search/title?title='+movie+'&country=us&show_type=movie&output_language=en';
 const options1={
@@ -116,16 +180,19 @@ const options1={
 		'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
 	}
 };
-
-fetch(urlStreaming,options1)
-    .then(function(response){
-        if (response.ok){
-    //   console.log(response);
-        return response.json().then(function(data){
-        console.log("streaming service")
-        console.log(data.result)
-        console.log(data.result[0].streamingInfo)
-        services=data.result[0].streamingInfo.us[0].service;
-        })
-    }
-})
+console.log("services section");
+//commenting out to reduce number of calls
+// fetch(urlStreaming,options1)
+//     .then(function(response){
+//         if (response.ok){
+//     //   console.log(response);
+//         return response.json().then(function(data){
+//         // console.log("streaming service")
+//         // console.log(data.result)
+//         // console.log(data.result[0].streamingInfo)
+//         services=data.result[0].streamingInfo.us[0].service;
+//         })
+//     }
+// })
+appendCard();
+}
