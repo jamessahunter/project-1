@@ -1,7 +1,7 @@
 
 
-var movie="barbie";
-var imdbID="tt11858890";
+var movie;
+var imdbID;
 var title;
 var runtime;
 var rated;
@@ -17,6 +17,8 @@ var services;
 var summary;
 var genre;
 
+
+function fetchPopular(){
 //fetch for popular movies
 fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
 .then(function(response){
@@ -34,7 +36,10 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
           })
       }
     })
+}
 
+
+function fetchTMDB(imdbID){
 //fetches based on imdb id
 const options = {
     method: 'GET',
@@ -61,8 +66,10 @@ const options = {
         })
     }
   })
-
+}
     
+
+function fetchOMDB(movie){
     // fetches based on title
 var omdbUrl = "https://www.omdbapi.com/?t="+ movie +"&plot=short&apikey=704a2c08"
 fetch(omdbUrl)
@@ -86,7 +93,9 @@ fetch(omdbUrl)
             })
         }
     })
+}
 
+function fetchNYTReview(movie){
 //fetch to nyt review of movie
 reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
 fetch(reviewUrl)
@@ -105,8 +114,9 @@ fetch(reviewUrl)
             })
         }
     })
+}
 
-
+function fetchServices(movie){
 // sees if movie is streaming based on imdb id
 const urlStreaming = 'https://streaming-availability.p.rapidapi.com/search/title?title='+movie+'&country=us&show_type=movie&output_language=en';
 const options1={
@@ -129,3 +139,4 @@ fetch(urlStreaming,options1)
         })
     }
 })
+}
