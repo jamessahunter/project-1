@@ -3,14 +3,141 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>Movie Website</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-black">
-    <div
-      class="text-white">Hello</div>
-    </div>
+  <body>
+    <!-- Header Section -->
+    <header class="bg-blue-500 py-4 sm:w-full sm:mx-auto">
+      <div class="container text-center">
+        <!-- Navigation Menu for Movies -->
+        <nav>
+          <a href="#" class="text-white text-center-important">Movies</a>
+        </nav>
+      </div>
+    </header>
 
-    <script src="./assets/js/script.js"></script>
+    <!-- Search Box and Previously Searched Movies -->
+    <div class="container mx-auto flex flex-col sm:flex-row mt-4">
+      <div class="border border-gray-300 rounded-md p-4 mb-4 sm:mb-0">
+        <!-- Search Box and Options (Left Column) -->
+        <div class="flex-1 pr-4">
+          <!-- Search Box -->
+          <div class="mb-4">
+            <input
+              id="search"
+              type="text"
+              class="block w-full bg-white border rounded-md px-4 py-2 mt-2"
+              placeholder="Search"
+            />
+          </div>
+          <!-- Features List -->
+          <p class="text-lg font-semibold mb-2">Features:</p>
+          <ul>
+            <li class="flex items-center mb-2">
+              <button
+                class="mr-2 bg-blue-500 rounded-lg hover:bg-blue-700 text-white"
+              >
+                Search button
+              </button>
+            </li>
+            <li class="flex items-center mb-2">
+              <span class="mr-2"
+                >✔ Tick marks for user input that show a movie card</span
+              >
+            </li>
+            <li class="flex items-center mb-2">
+              <span class="mr-2">✔ Tick ratings</span>
+            </li>
+            <li class="flex items-center mb-2">
+              <span class="mr-2">✔ Tick cast</span>
+            </li>
+            <li class="flex items-center mb-2">
+              <span class="mr-2">✔ Tick description</span>
+            </li>
+            <li class="flex items-center mb-2">
+              <span class="mr-2">✔ Tick reviews</span>
+            </li>
+            <li class="flex items-center mb-2">
+              <span class="mr-2">✔ Popular movies</span>
+            </li>
+          </ul>
+          <!-- Dropdown for Genres -->
+          <label class="text-lg font-semibold" for="genres">Genres:</label>
+          <select
+            id="genres"
+            class="block w-full bg-white border rounded-l-md px-4 py-2 mt-2"
+          >
+            <option value="action">Action</option>
+            <option value="comedy">Comedy</option>
+            <option value="drama">Drama</option>
+          </select>
+        </div>
+        <!-- Move "Movies" buttons to the bottom -->
+        <div class="mt-4 sm:hidden">
+          <button class="bg-blue-500 text-white w-full py-2 rounded-md mb-2">
+            Previously
+          </button>
+          <button class="bg-blue-500 text-white w-full py-2 rounded-md mb-2">
+            Searched
+          </button>
+          <button class="bg-blue-500 text-white w-full py-2 rounded-md">
+            Movies
+          </button>
+        </div>
+      </div>
+      <!-- Search Box and Options (Right Column) -->
+      <div class="flex-1 pl-4">
+        <!-- "Movies" buttons for larger screens -->
+        <div class="hidden sm:block">
+          <button
+            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+          >
+            Previously
+          </button>
+          <button
+            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+          >
+            Searched
+          </button>
+          <button
+            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+          >
+            Movies
+          </button>
+        </div>
+        <div class="grid grid-cols-1 gap-7 mt-4">
+          <!-- Movie 1 Box (large) -->
+          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
+            <button
+              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button large"
+            >
+              Movie 1
+            </button>
+          </div>
+          <!-- Movie 2 Box (vertical) -->
+          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
+            <button
+              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button vertical"
+            >
+              Movie 2
+            </button>
+          </div>
+          <!-- Movie 3 Box (horizontal) -->
+          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
+            <button
+              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button"
+            >
+              Movie 3
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- The rest of your website content goes here -->
   </body>
 </html>
