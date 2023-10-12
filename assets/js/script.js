@@ -8,6 +8,7 @@ var popularArr = [];
 
 var searchButton = $(".btn");
 var popularButton = $(".btn-popular");
+var criteriaSection =$("#criteria");
 var movieInput = $("#search");
 var movieCards = $("#movie-cards");
 var scoresBox = $("#scores");
@@ -59,6 +60,18 @@ popularButton.on("click",function(){
     popularClicked = true;
     fetchPopular();
 });
+
+
+
+// criteriaSection.on("click","li",function(event){
+//     // event.preventDefault();
+//     console.log("works");
+// })
+
+$("li").on("click",".boxId",function(){
+    console.log("works");
+})
+
 
 // queryResult is used to gather the current search result data from our set of queries
 var queryResult = {
