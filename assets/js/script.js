@@ -17,24 +17,39 @@ var services;
 var summary;
 var genre;
 
+var wait=0;
+var popularClicked=0;
+var count=0;
+
+var popularArr=[];
+
 var searchButton=$(".btn");
+var popularButton=$(".btn-popular");
 var movieInput=$("#search");
 var movieCards=$("#movie-cards");
 var scoresBox=$("#scores");
 
 searchButton.on("click",function(event){
     event.preventDefault();
-
+    popularClicked=0;
     if(movieInput.val()=== ""){
       //modal here
       return;
     }
-
     // console.log(scoresBox[0].checked);
     console.log(movieInput.val());
     movie=movieInput.val();
     fetchOMDB(movie)
   })
+
+
+popularButton.on("click",function(){
+    // console.log("works");
+    popularClicked=1;
+    fetchPopular();
+})
+
+
 
   function appendCard(){
     // console.log("works");
@@ -59,14 +74,15 @@ searchButton.on("click",function(event){
     scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,userScoreEl);
     nytSnippetEl.append(nytAuthorEl);
     movieCard.append(titleEl,scoresEl,nytSnippetEl);
-    movieCards.append(movieCard);
+    movieCards.prepend(movieCard);
+    
+    if (popularClicked&&count<popularArr.length){
+        count++
+    fetchOMDB(popularArr[count])
+    }
     // console.log("movie card")
     // console.log(movieCards);
   }
-
-
-
-
 
 
 function fetchPopular(){
@@ -79,11 +95,22 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
           console.log("popular movies")
         //   console.log(data);
         //   console.log(data.results);
-          for(var i=0;i<data.results.length;i++){
+          for(var i=data.results.length-1;i>=0;i--){
+            // console.log(wait);
+            popularArr.push(data.results[i].title);
             movie=data.results[i].title;
+            // fetchOMDB(movie);
+
+            // console.log(movie);
+            // movieEl=$("<p>").text(movie);
+            // movieCards.prepend(movieEl);
+
             // console.log("test");
             // console.log(data.results[i]);
           }
+          console.log(popularArr);
+          fetchOMDB(popularArr[count]);
+        //   loopWithFetch(popularArr);
           })
       }
     })
@@ -122,6 +149,7 @@ const options = {
     
 
 function fetchOMDB(movie){
+
     // fetches based on title
 var omdbUrl = "https://www.omdbapi.com/?t="+ movie +"&plot=short&apikey=704a2c08"
 fetch(omdbUrl)
@@ -130,13 +158,14 @@ fetch(omdbUrl)
         //   console.log(response);
             return response.json().then(function(data){
             console.log("omdb")
+            console.log(data);
             imdbID=data.imdbID;
             imdbScore=data.imdbRating;
             if(data.Ratings.length===2){
                 rottenScore=data.Ratings[1].Value;
                 metaScore="not found";
               }
-              else if(data.Ratings.length===1){
+              else if(data.Ratings.length===1||data.Ratings.length===0){
                 rottenScore="not found";
                 metaScore="not found";
               }
@@ -148,7 +177,7 @@ fetch(omdbUrl)
             rated=data.Rated;
             cast=data.Actors;
             director=data.Director;
-            // console.log(data);
+
             // console.log(data.imdbRating);
             // console.log(data.imdbID);
             // console.log(data.Ratings);
@@ -161,23 +190,24 @@ fetch(omdbUrl)
 function fetchNYTReview(movie){
 //fetch to nyt review of movie
 reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
-fetch(reviewUrl)
-.then(function(response){
-    if (response.ok){
-        //   console.log(response);
-            return response.json().then(function(data){
-            console.log("nyt review")
-            // console.log(data);
-            // console.log(data.response);
-            // console.log(data.response.docs[0]);
-            // console.log(data.response.docs[0].lead_paragraph);
-            // console.log(data.response.docs[0].snippet);
-            nytSnippet=data.response.docs[0].snippet;
-            nytAuthor=data.response.docs[0].byline.original;
-            fetchServices(movie);
-            })
-        }
-    })
+// fetch(reviewUrl)
+// .then(function(response){
+//     if (response.ok){
+//         //   console.log(response);
+//             return response.json().then(function(data){
+//             console.log("nyt review")
+//             // console.log(data);
+//             // console.log(data.response);
+//             // console.log(data.response.docs[0]);
+//             // console.log(data.response.docs[0].lead_paragraph);
+//             // console.log(data.response.docs[0].snippet);
+//             nytSnippet=data.response.docs[0].snippet;
+//             nytAuthor=data.response.docs[0].byline.original;
+//             fetchServices(movie);
+//             })
+//         }
+//     })
+fetchServices(movie);
 }
 
 function fetchServices(movie){
