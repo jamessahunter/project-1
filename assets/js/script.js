@@ -20,8 +20,6 @@ var ratedBox=$("#rated");
 var nytReviewBox=$("#nyt-review");
 var servicesBox=$("#services");
 var genreBox=$("#genre");
-var movieCard=$("<section>").addClass("movie-card");
-var scoresEl=$("<h3>").text("Scores:");
 
 
 // searchbutton click event listener
@@ -47,7 +45,7 @@ function handleSearch(event) {
     return;
   }
   // console.log(scoresBox[0].checked);
-  console.log(movieSearchQuery);
+//   console.log(movieSearchQuery);
   fetchOMDB(movieSearchQuery);
 
   // Clear the input field
@@ -62,14 +60,8 @@ popularButton.on("click",function(){
 });
 
 
-
-// criteriaSection.on("click","li",function(event){
-//     // event.preventDefault();
-//     console.log("works");
-// })
-
 $("li").on("click",".boxId",function(){
-    console.log("works");
+    //do stuff here
 })
 
 
@@ -118,7 +110,6 @@ function fetchPopular(){
 
 function fetchOMDB(movieSearchQuery){
   // fetches based on title
-  console.log(movieSearchQuery);
   var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&plot=short&apikey=704a2c08"
   fetch(omdbUrl)
   .then(function(response){
@@ -126,7 +117,7 @@ function fetchOMDB(movieSearchQuery){
       //   console.log(response);
       return response.json().then(function(data){
         console.log("omdb");
-        console.log(data);
+        // console.log(data);
         queryResult.imdbID = data.imdbID;
         queryResult.score.imdb = data.imdbRating;
         
@@ -159,7 +150,7 @@ function fetchOMDB(movieSearchQuery){
 
 
 function fetchTMDB(movie){
-  //fetches based on imdb id
+  //fetches to TMDB
   const options = {
     method: 'GET',
     headers: {
@@ -173,7 +164,7 @@ function fetchTMDB(movie){
       //console.log(response);
       return response.json().then(function(data){
         console.log("TMDB specific movie");
-        console.log(data);
+        // console.log(data);
         queryResult.title = data.results[0].title;
         queryResult.score.tmdb = data.results[0].vote_average;
         queryResult.summary = data.results[0].overview;
@@ -244,37 +235,24 @@ function fetchServices(movie){
 }
 function createElements(){
       // title and details
-  titleEl=$("<h2>").text(queryResult.title);
+    titleEl=$("<h2>").text(queryResult.title);
+    runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime}`);
 
-  // var runtimeEl=$("<p>").text("Runtime: "+ queryResult.runtime+" minutes");
-runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime} minutes`);
-  // var mpaaRatingEl=$("<p>").text("Rated: "+queryResult.mpaaRating);
-  mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
-  // var genreEl=$("<p>").text("Genre: "+ queryResult.genre);
-  genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
-  // var directorEl=$("<p>").text("Director: "+ queryResult.director);
-  directorEl=$("<p>").text(`Director: ${queryResult.director}`);
-  // var castEl=$("<p>").text("Cast: "+queryResult.cast);
-  castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
-  summaryEl=$("<p>").text(queryResult.summary);
-
+    mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
+    genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
+    directorEl=$("<p>").text(`Director: ${queryResult.director}`);
+    castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
+    summaryEl=$("<p>").text(queryResult.summary);
 
     scoresEl=$("<h3>").text("Scores:");
-
-    // var imdbScoreEl=$("<p>").text("IMDB: "+ queryResult.score.imdb);
     imdbScoreEl=$("<p>").text(`IMDB Score: ${queryResult.score.imdb}`);
-    // var rottenScoreEl=$("<p>").text("Rotten Tomatoes: "+queryResult.score.rotten);
     rottenScoreEl=$("<p>").text(`Rotten Tomatoes Score: ${queryResult.score.rotten}`);
-    // var metaScoreEl=$("<p>").text("Meta Critic: "+queryResult.score.meta);
     metaScoreEl=$("<p>").text(`Meta Critic: ${queryResult.score.meta}`);
-    // var tmdbScoreEl=$("<p>").text("User Score: "+queryResult.score.tmdb);
     tmdbScoreEl=$("<p>").text(`TMDB Score: ${queryResult.score.tmdb}`);
-
-      // var nytSnippetEl=$("<p>").text("Review: "+queryResult.reviews.nyt.snippet);
+    
     nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
-    // var nytAuthorEl=$("<p>").text("Author: "+queryResult.reviews.nyt.author);
     nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
-    // var streamingServicesEl=$("<p>").text("Streaming Services: " +queryResult.streamingServices);
+    
     streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
 }
 
@@ -282,6 +260,8 @@ function appendCard(){
   // console.log("works");
   // movieCards.text("");
     createElements();
+    
+    var movieCard=$("<section>").addClass("movie-card");
 
     if(ratedBox[0].checked){
         titleEl.append(mpaaRatingEl);
@@ -304,7 +284,7 @@ function appendCard(){
       movieCard.append(titleEl);
       // titleEl.append(runtimeEl,ratedEl,genreEl,directorEl,castEl,summaryEl);
       if(scoresBox[0].checked){
-        scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,userScoreEl);
+        scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,tmdbScoreEl);
         movieCard.append(scoresEl);
       }
       if(nytReviewBox[0].checked){
@@ -312,10 +292,11 @@ function appendCard(){
         movieCard.append(nytSnippetEl);
       }
       if(servicesBox[0].checked){
-        movieCard.append(servicesEl);
+        movieCard.append(streamingServicesEl);
       }
-    
+        console.log(movieCard);
       movieCards.prepend(movieCard);
+    //   movieCard.text("");
 //   titleEl.append(runtimeEl, mpaaRatingEl, genreEl, directorEl, castEl, summaryEl);
   // scores
 //   scoresEl.append(imdbScoreEl, rottenScoreEl, metaScoreEl, tmdbScoreEl);
