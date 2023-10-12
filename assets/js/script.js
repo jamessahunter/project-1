@@ -1,7 +1,6 @@
 
 var movie;
 
-// var wait=0; // NOT USED?
 var popularClicked = false;
 var count = 0;
 
@@ -67,17 +66,10 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=
 
             // var movieTitle = data.results[i].title;
             // fetchOMDB(movieTitle);
-
-            // console.log(movieTitle);
-            // movieEl=$("<p>").text(movieTitle);
-            // movieCards.prepend(movieEl);
-
-            // console.log("test");
             // console.log(data.results[i]);
           }
           console.log(popularArr);
           fetchOMDB(popularArr[count]);
-        //   loopWithFetch(popularArr);
           })
       }
     })
@@ -112,7 +104,7 @@ fetch(omdbUrl)
             queryResult.mpaaRating = data.Rated;
             queryResult.cast = data.Actors;
             queryResult.director = data.Director;
-
+            queryResult.runtime = data.Runtime;
             // console.log(data.imdbRating);
             // console.log(data.imdbID);
             // console.log(data.Ratings);
@@ -123,7 +115,7 @@ fetch(omdbUrl)
 }
 
 
-function fetchTMDB(imdbID){
+function fetchTMDB(movie){
 //fetches based on imdb id
 const options = {
     method: 'GET',
@@ -132,16 +124,15 @@ const options = {
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
     }
   };
-  fetch('https://api.themoviedb.org/3/movie/'+ imdbID+'?language=en-US', options)
+  fetch('https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US', options)
   .then(function(response){
   if (response.ok){
     //   console.log(response);
         return response.json().then(function(data){
         console.log("TMDB specific movie");
-        queryResult.title = data.original_title;
-        queryResult.score.tmdb = data.vote_average;
-        queryResult.runtime = data.runtime;
-        queryResult.summary = data.overview;
+        queryResult.title = data[0].title;
+        queryResult.score.tmdb = data[0].vote_average;
+        queryResult.summary = data[0].overview;
         // console.log(data);
         // console.log(data.original_title);
         // console.log(data.vote_average);
