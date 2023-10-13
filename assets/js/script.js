@@ -1,28 +1,30 @@
 
-var movie;
+// var movie;
 
 var popularClicked = false;
+var popularArr = [];
 var count = 0;
 
-var popularArr = [];
-var moviePosterURL = "";
+// var moviePosterURL = "";
 var movieSearchHistory = [];
 
 
-// button pointer variables
+// button and input pointer variables
 
 var searchButton = $("#button-search");
 var popularButton = $("#button-popular");
 var saveConfigButton = $("#button-save-configuration");
 var clearConfigButton = $("#button-clear-configuration");
 var resetHistoryButton = $("#button-reset-history");
+var movieSearchInput = $("#search");
 
-var criteriaSection = $("#criteria");
-var movieInput = $("#search");
-var movieCardsContainer = $("#movie-cards-container");
+
+
+// var criteriaSection = $("#criteria");
 
 var movieSearchHistoryContainerLargeEl = $("#search-history-container-lg");
 var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
+var movieCardsContainer = $("#movie-cards-container");
 
 
 // checkbox pointer variables
@@ -68,7 +70,7 @@ searchButton.on("click", function(event) {
 });
 
 // search input field "enter key" event listener
-movieInput.on("keypress", function(event) {
+movieSearchInput.on("keypress", function(event) {
   const enterKey = 13;
   if (event.which === enterKey) {
     handleSearch(event);
@@ -76,26 +78,25 @@ movieInput.on("keypress", function(event) {
 });
 
 function handleSearch(event) {
+  var currentMovieList = {};
   event.preventDefault();
   popularClicked = false;
-  var movieSearchQuery = movieInput.val();
+  var movieSearchQuery = movieSearchInput.val();
 
   if(movieSearchQuery === ""){
     // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
     return;
   }
-  // console.log(scoresBox[0].checked);
-  // console.log(movieSearchQuery);
   fetchOMDB(movieSearchQuery);
+
   addToSearchHistory(movieSearchQuery);
 
   // Clear the input field
-  movieInput.val("");
+  movieSearchInput.val("");
 }
 
 // event listener for popular button
 popularButton.on("click", function() {
-  // console.log("works");
   popularClicked = true;
   fetchPopular();
 });
@@ -139,7 +140,6 @@ function fetchPopular(){
   fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
   .then(function(response){
     if (response.ok){
-      // console.log(response);
       return response.json().then(function(data){
         // console.log("popular movies")
         //   console.log(data);
@@ -161,14 +161,14 @@ function fetchPopular(){
 
 
 function fetchOMDB(movieSearchQuery){
-  debugger;
   // fetches based on title
   var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&plot=short&apikey=704a2c08"
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
       // console.log(response);
-      return response.json().then(function(data){
+      return response.json()
+      .then(function(data){
         // console.log("omdb");
         // console.log(data);
         
@@ -271,43 +271,58 @@ function fetchServices(movie){
   //       });
   //     }
   //   });
-  console.log("found movie");
-  console.log(foundMovie);
-  console.log("current movie list");
-  console.log(currentMovieList);
-  insertMovie(foundMovie, currentMovieList);
 
-  appendCard(foundMovie);
+  insertMovie(foundMovie, currentMovieList);
 
   if ( popularClicked && count < popularArr.length - 1 ) {
     count++;
     fetchOMDB(popularArr[count]);
   } else {
-    // buildMovieCards(currentMovieList);
+    buildMovieCards(currentMovieList);
   }
 }
 
-function insertMovie(movieObj, targetMoviesObj) {
-  // insert movieObj into the first position of targetObj
-    
-  console.log("movie object");
-  console.log(movieObj);
 
-  console.log("target movies object")
-  console.log(targetMoviesObj);
-
-  
-  for (var i = Object.keys(targetMoviesObj).length; i > 0; i--) {
-
-    targetMoviesObj[i] = targetMoviesObj[i-1];
+function insertMovie(movieObj, list) {
+  for (var i = 0; i < Object.keys(list).length; i++) {
+    if ( movieObj.title === list[i].title ) {
+    console.log("identical");
+    return;
+    }
   }
-  targetMoviesObj[0] = movieObj;
+
+  // insert movieObj into the first position of targetObj using deepCopy
+  for (let i = Object.keys(list).length; i > 0; i--) {
+    list[i] = deepCopy(list[i - 1]);
+  }
+  list[0] = deepCopy(movieObj);
 }
+
+
+function deepCopy(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(deepCopy);
+  }
+
+  const newObj = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      newObj[key] = deepCopy(obj[key]);
+    }
+  }
+
+  return newObj;
+}
+
 
 function buildMovieCards(targetMoviesObj) {
   movieCardsContainer.empty();
-  for (var i = 0; i < Object.keys(targetMoviesObj).length; i++) {
-    appendCard(targetMoviesObj[i]);
+  for (var i = Object.keys(targetMoviesObj).length - 1; i >= 0; i--) {
+      appendCard(targetMoviesObj[i]);
   }
 }
 
@@ -322,9 +337,6 @@ function buildMovieCards(targetMoviesObj) {
 //   }
 //   buildMovieCards(currentMovieList);
 // }
-
-
-
 
 
 
@@ -395,19 +407,8 @@ function appendCard(movieObj){
     movieCard.append(streamingServicesEl);
   }
 
-  // console.log(movieCard);
-
+  // put the new card at the top
   movieCardsContainer.prepend(movieCard);
-
-  //   movieCard.text("");
-
-  
-  // if ( popularClicked && count < popularArr.length - 1 ) {
-  //   count++;
-  //   fetchOMDB(popularArr[count]);
-  // }
-  // console.log("movie card");
-  // console.log(movieCardsContainer);
 }
 
 
@@ -416,10 +417,6 @@ function getHourMin(minutes) {
   var min = minutes % 60;
   return `${hr}h ${min}m`;
 }
-
-
-
-
 
 
 // localStorage: Movie Search History
@@ -435,10 +432,9 @@ function loadMovieSearchHistory() {
 }
 
 function addToSearchHistory(searchQuery) {
-  console.log(searchQuery);
-  isUnique = true;
+  var isUnique = true;
   for (var i = 0; i < movieSearchHistory.length; i++) {
-    if (searchQuery === movieSearchHistory[i]) {
+    if (searchQuery.toLowerCase() === movieSearchHistory[i].toLowerCase()) {
       isUnique = false;
     }
   }
@@ -454,31 +450,30 @@ function saveMovieSearchHistory() {
 }
 
 function buildMovieSearchHistory() {
-  // console.log(movieSearchHistoryContainerLargeEl);
-  // console.log(movieSearchHistoryContainerSmallEl);
   movieSearchHistoryContainerLargeEl.empty();
   movieSearchHistoryContainerSmallEl.empty();
-  // console.log(movieSearchHistory.length);
+
   for (var i = 0; i < movieSearchHistory.length; i++) {
     addMovieSearchHistoryButton(i);
-    // console.log(i);
   }
 }
 
 
 // Add button for each successful search
 function addMovieSearchHistoryButton(j) {
-  // console.log("works");
+  // add button to large page location
   var newButtonLarge = $(document.createElement("button"));
   newButtonLarge.text(movieSearchHistory[j])
   newButtonLarge.addClass("bg-blue-500 text-white px-10 py-2 rounded-md mb-2 mr-2");
   newButtonLarge.attr("data-query", movieSearchHistory[j]);
 
+  // add button to small page location
   var newButtonSmall = $(document.createElement("button"));
   newButtonSmall.text(movieSearchHistory[j])
   newButtonSmall.addClass("bg-blue-500 text-white w-full py-2 rounded-md mb-2");
   newButtonSmall.attr("data-query", movieSearchHistory[j]);
 
+  // append both new button elements; only one is displayed, depending on page width breakpoint
   movieSearchHistoryContainerLargeEl.append(newButtonLarge);
   movieSearchHistoryContainerSmallEl.append(newButtonSmall);
 }
@@ -528,7 +523,7 @@ function resetCheckboxConfig() {
     cast:       true,
     summary:    true,
     scores:     true,
-    nytReview: true,
+    nytReview:  true,
     services:   true
   };
 }
