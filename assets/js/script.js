@@ -81,7 +81,6 @@ var queryResult = {
   cast: "",
   director: "",
   genre: "",
-  imdbID: "",
   mpaaRating: "",
   reviews: { nyt: { author: "", snippet: "" } },
   runtime: 0,
@@ -130,7 +129,6 @@ function fetchOMDB(movieSearchQuery){
       return response.json().then(function(data){
         console.log("omdb");
         // console.log(data);
-        queryResult.imdbID = data.imdbID;
         queryResult.score.imdb = data.imdbRating;
         
         if(data.Ratings.length===2){
@@ -152,7 +150,6 @@ function fetchOMDB(movieSearchQuery){
         queryResult.director = data.Director;
         queryResult.runtime = data.Runtime;
         // console.log(data.imdbRating);
-        // console.log(data.imdbID);
         // console.log(data.Ratings);
         fetchTMDB(movieSearchQuery);
       });
