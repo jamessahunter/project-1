@@ -5,6 +5,7 @@ var popularClicked = false;
 var count = 0;
 
 var popularArr = [];
+var movies=[];
 
 var searchButton = $(".btn");
 var popularButton = $(".btn-popular");
@@ -20,7 +21,53 @@ var ratedBox=$("#rated");
 var nytReviewBox=$("#nyt-review");
 var servicesBox=$("#services");
 var genreBox=$("#genre");
+var carousel=$(".carousel");
 
+carousel.slick({
+  dots: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 3,
+  slidesToScroll:3,
+});
+
+init();
+// initial function
+function init(){
+    // retrieves movies already stored locally
+    var storedMovies=JSON.parse(localStorage.getItem("movies"));
+
+    //checks to see if the object is poplated
+      if (storedMovies!==null){
+        //put the array into the events variable
+        movies=storedMovies;
+      }
+      console.log(movies);
+    // calls display movies
+      displayMovies();
+}
+
+// function to display the cities
+function displayMovies(){
+  var slideIndex=movies.length;
+  for(var i=0;i<movies.length;i++){
+  carousel.slick('slickRemove',slideIndex - 1);
+  if (slideIndex !== 0){
+    slideIndex--;
+  }
+  }
+  // for loop for the length of the stored movies
+  for (let i = 0; i < movies.length; i++) {
+
+      carousel.slick('slickAdd','<div><h3>' + movies[i] + '</h3></div>');
+  }
+  repeat=false;
+}
+
+function storeMovies(){
+  // puts the items into a string
+  localStorage.setItem("movies",JSON.stringify(movies));
+}
 
 // searchbutton click event listener
 searchButton.on("click", function(event) {
@@ -44,12 +91,12 @@ function handleSearch(event) {
     // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
     return;
   }
+
   // console.log(scoresBox[0].checked);
 //   console.log(movieSearchQuery);
   fetchOMDB(movieSearchQuery);
+  
 
-  // Clear the input field
-  movieInput.val("");
 }
 
 
@@ -63,6 +110,15 @@ popularButton.on("click",function(){
 $("li").on("click",".boxId",function(){
     //do stuff here
 })
+
+carousel.on("click","h3",function(event){
+  console.log(event.target);
+  var movieClicked=event.target.textContent;
+  repeat=true;
+  fetchOMDB(movieClicked);
+  console.log("works");
+})
+
 
 
 // queryResult is used to gather the current search result data from our set of queries
@@ -116,6 +172,14 @@ function fetchOMDB(movieSearchQuery){
     if (response.ok){
       //   console.log(response);
       return response.json().then(function(data){
+
+        if(!repeat){
+          movies.push(movieSearchQuery);
+        }
+        storeMovies();
+        displayMovies();
+        // Clear the input field
+        movieInput.val("");
         console.log("omdb");
         // console.log(data);
         queryResult.imdbID = data.imdbID;
@@ -145,7 +209,9 @@ function fetchOMDB(movieSearchQuery){
         fetchTMDB(movieSearchQuery);
       });
     }
+
   });
+
 }
 
 var moviePosterURL = "";
