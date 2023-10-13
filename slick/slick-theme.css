@@ -37,8 +37,8 @@
     cursor: pointer;
 
     color: transparent;
-    border: none;
-    outline: none;
+    border: black;
+    outline: black;
     background: transparent;
 }
 .slick-prev:hover,
@@ -71,7 +71,7 @@
     line-height: 1;
 
     opacity: .75;
-    color: white;
+    color: black;
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

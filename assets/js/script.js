@@ -21,8 +21,9 @@ var ratedBox=$("#rated");
 var nytReviewBox=$("#nyt-review");
 var servicesBox=$("#services");
 var genreBox=$("#genre");
+var carousel=$(".carousel");
 
-$('.carousel').slick({
+carousel.slick({
   dots: true,
   infinite: true,
   speed: 300,
@@ -50,7 +51,7 @@ function init(){
 function displayMovies(){
   var slideIndex=movies.length;
   for(var i=0;i<movies.length;i++){
-  $('.carousel').slick('slickRemove',slideIndex - 1);
+  carousel.slick('slickRemove',slideIndex - 1);
   if (slideIndex !== 0){
     slideIndex--;
   }
@@ -58,9 +59,9 @@ function displayMovies(){
   // for loop for the length of the stored movies
   for (let i = 0; i < movies.length; i++) {
 
-      $('.carousel').slick('slickAdd','<div><h3>' + movies[i] + '</h3></div>');
+      carousel.slick('slickAdd','<div><h3>' + movies[i] + '</h3></div>');
   }
-  repeat=0;
+  repeat=false;
 }
 
 function storeMovies(){
@@ -109,6 +110,15 @@ popularButton.on("click",function(){
 $("li").on("click",".boxId",function(){
     //do stuff here
 })
+
+carousel.on("click","h3",function(event){
+  console.log(event.target);
+  var movieClicked=event.target.textContent;
+  repeat=true;
+  fetchOMDB(movieClicked);
+  console.log("works");
+})
+
 
 
 // queryResult is used to gather the current search result data from our set of queries
@@ -162,7 +172,10 @@ function fetchOMDB(movieSearchQuery){
     if (response.ok){
       //   console.log(response);
       return response.json().then(function(data){
-        movies.push(movieSearchQuery);
+
+        if(!repeat){
+          movies.push(movieSearchQuery);
+        }
         storeMovies();
         displayMovies();
         // Clear the input field
