@@ -218,7 +218,7 @@ function fetchNYTReview(movie){
 
 
 function fetchServices(movie){
-  // sees if movie is streaming based on imdb id
+  // sees if movie is streaming based on movie title
   const urlStreaming = 'https://streaming-availability.p.rapidapi.com/search/title?title='+movie+'&country=us&show_type=movie&output_language=en';
   const options1={
     method: 'GET',
@@ -243,28 +243,6 @@ function fetchServices(movie){
   // })
 
   appendCard();
-}
-function createElements(){
-      // title and details
-    titleEl=$("<h2>").text(queryResult.title);
-    runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime}`);
-
-    mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
-    genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
-    directorEl=$("<p>").text(`Director: ${queryResult.director}`);
-    castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
-    summaryEl=$("<p>").text(queryResult.summary);
-
-    scoresEl=$("<h3>").text("Scores:");
-    imdbScoreEl=$("<p>").text(`IMDB Score: ${queryResult.score.imdb}`);
-    rottenScoreEl=$("<p>").text(`Rotten Tomatoes Score: ${queryResult.score.rotten}`);
-    metaScoreEl=$("<p>").text(`Meta Critic: ${queryResult.score.meta}`);
-    tmdbScoreEl=$("<p>").text(`TMDB Score: ${queryResult.score.tmdb}`);
-    
-    nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
-    nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
-    
-    streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
 }
 
 function appendCard(){
@@ -326,6 +304,29 @@ function appendCard(){
   // console.log(movieCards);
 }
 
+
+function createElements(){
+  // title and details
+titleEl=$("<h2>").text(queryResult.title);
+runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime}`);
+
+mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
+genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
+directorEl=$("<p>").text(`Director: ${queryResult.director}`);
+castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
+summaryEl=$("<p>").text(queryResult.summary);
+
+scoresEl=$("<h3>").text("Scores:");
+imdbScoreEl=$("<p>").text(`IMDB Score: ${queryResult.score.imdb}`);
+rottenScoreEl=$("<p>").text(`Rotten Tomatoes Score: ${queryResult.score.rotten}`);
+metaScoreEl=$("<p>").text(`Meta Critic: ${queryResult.score.meta}`);
+tmdbScoreEl=$("<p>").text(`TMDB Score: ${queryResult.score.tmdb}`);
+
+nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
+nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
+
+streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
+}
 
 
 
