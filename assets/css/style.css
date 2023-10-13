@@ -1,4 +1,38 @@
 img{
     width:200px; /* Set the image width to 100% of its container's width */
-      height:3px;
+    height:3px;
+}
+.movie-card {
+  display: flex; /* Display children elements in a row */
+  align-items: center; /* Vertically center children elements */
+}
+/* CSS for the h2 element */
+h2 {
+  margin: 40px !important;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: bold;
+}
+
+/* CSS for the p element */
+p {
+  font-size: 1rem; /* Adjust font size as needed */
+}
+
+/* CSS for mobile or small screens */
+@media (max-width: 1000px) {
+  h2 {
+    margin: 10px !important; /* Adjust margin for smaller screens */
+    font-size: 1.2rem; /* Adjust font size for smaller screens */
+  }
+
+  p {
+    font-size: 0.9rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Adjust font size for smaller screens */
+  }
+
+  /* Use flexbox to stack h2 and p elements vertically */
+  .movie-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
