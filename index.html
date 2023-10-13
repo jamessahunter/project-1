@@ -9,6 +9,7 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> 
         <!-- Add the slick-theme.css if you want default styling -->
         <link rel="stylesheet" type="text/css" href="./slick/slick.css"/>
         <!-- Add the slick-theme.css if you want default styling -->
@@ -177,7 +178,7 @@
           <!-- <button
             class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2" -->
         <!-- "Movies" buttons for larger screens -->
-        <div class="hidden sm:block">
+        <!-- <div class="hidden sm:block"> -->
           <div class="grid grid-cols-1 gap-7 mt-4">
             <div class="items-center bg-white px-10 py-4 movie-box">
               <div class="carousel">
@@ -199,7 +200,7 @@
           >
             Movies
           </button> -->
-        </div>
+        <!-- </div> -->
         <div class="grid grid-cols-1 gap-7 mt-4" id="movie-cards-container">
           <!-- Movie 1 Box (large) -->
           <div class="bg-white rounded-lg p-14 shadow-md movie-box">
@@ -228,11 +229,17 @@
         </div>
       </div>
     </div>
+    <section id="modals" class="hidden">
+      <div id="blank-search" >
+        <p>Try to entering something in the search bar first</p>
+      </div>
+    </section>
     <!-- The rest of your website content goes here -->
         <!-- calls jquery script -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <!-- calls slick -->
         <script type="text/javascript" src="./slick/slick.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script src="./assets/js/script.js"></script>
   </body>
 </html>

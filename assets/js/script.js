@@ -5,6 +5,7 @@ var popularClicked = false;
 var popularArr = [];
 var count = 0;
 
+var movies=[];
 var popularArr = [];
 
 var searchButton = $("#button-search");
@@ -13,7 +14,7 @@ var saveConfigButton = $("#button-save-configuration");
 var clearConfigButton = $("#button-clear-configuration");
 var resetHistoryButton = $("#button-reset-history");
 var movieSearchInput = $("#search");
-
+var blankSearchModal=$("#blank-search");
 
 
 // var criteriaSection = $("#criteria");
@@ -21,7 +22,7 @@ var movieSearchInput = $("#search");
 var movieSearchHistoryContainerLargeEl = $("#search-history-container-lg");
 var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
 var movieCardsContainer = $("#movie-cards-container");
-
+var movieSearchHistory=[];
 
 // checkbox pointer variables
 
@@ -60,6 +61,11 @@ var pinnedMovies = {};
 var currentMovieList = {};
 var carousel=$(".carousel");
 
+$(blankSearchModal).dialog({
+  autoOpen:false,
+})
+
+
 carousel.slick({
   dots: true,
   infinite: true,
@@ -68,7 +74,7 @@ carousel.slick({
   slidesToScroll:3,
 });
 
-init();
+// init();
 // initial function
 function init(){
     // retrieves movies already stored locally
@@ -127,9 +133,10 @@ function handleSearch(event) {
 
   if(movieSearchQuery === ""){
     // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
+    $(blankSearchModal).dialog("open");
     return;
   }
-
+  console.log("search")
   fetchOMDB(movieSearchQuery);
   
 
@@ -155,12 +162,18 @@ $(".boxId").on("change", function() {
   // isChecked = $(this).prop("checked");
   // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
   buildMovieCards(currentMovieList);
-
+});
 // event listener for clicking on carousel items
 carousel.on("click","h3",function(event){
   console.log(event.target);
   var movieClicked=event.target.textContent;
-  repeat=true;
+  // repeat=true;
+  console.log(movieClicked);
+  if (movieClicked==null){
+    console.log("no null");
+    return;
+  }
+
   fetchOMDB(movieClicked);
   console.log("works");
 });
@@ -182,6 +195,14 @@ clearConfigButton.on("click", function() {
 
 // event listener for reset history button
 resetHistoryButton.on("click", function() {
+  var slideIndex=movieSearchHistory.length;
+  for(var i=0;i<movieSearchHistory.length;i++){
+  carousel.slick('slickRemove',slideIndex - 1);
+  if (slideIndex !== 0){
+    slideIndex--;
+  }
+  }
+  console.log("clear searches")
   movieSearchHistory = [];
   buildMovieSearchHistory();
   localStorage.removeItem("movieSearchHistoryStringify");
@@ -222,15 +243,15 @@ function fetchOMDB(movieSearchQuery){
       //   console.log(response);
       return response.json().then(function(data){
 
-        if(!repeat){
-          movies.push(movieSearchQuery);
-        }
-        storeMovies();
-        displayMovies();
+        // if(!repeat){
+        //   movies.push(movieSearchQuery);
+        // }
+        // storeMovies();
+        // displayMovies();
         // Clear the input field
-        movieInput.val("");
+        // movieInput.val("");
         console.log("omdb");
-        // console.log(data);
+        console.log(data);
         
         foundMovie.scores = data.Ratings;
 
@@ -265,8 +286,8 @@ function fetchTMDB(movie){
     if (response.ok){
       //console.log(response);
       return response.json().then(function(data){
-        // console.log("TMDB specific movie");
-        // console.log(data);
+        console.log("TMDB specific movie");
+        console.log(data);
         foundMovie.title = data.results[0].title;
         // foundMovie.score.tmdb = data.results[0].vote_average;
         foundMovie.summary = data.results[0].overview;
@@ -512,13 +533,24 @@ function saveMovieSearchHistory() {
 }
 
 function buildMovieSearchHistory() {
-  movieSearchHistoryContainerLargeEl.empty();
-  movieSearchHistoryContainerSmallEl.empty();
-
-  for (var i = 0; i < movieSearchHistory.length; i++) {
-    addMovieSearchHistoryButton(i);
+  // movieSearchHistoryContainerLargeEl.empty();
+  // movieSearchHistoryContainerSmallEl.empty();
+  var slideIndex=movieSearchHistory.length;
+  for(var i=0;i<movieSearchHistory.length;i++){
+  carousel.slick('slickRemove',slideIndex - 1);
+  if (slideIndex !== 0){
+    slideIndex--;
   }
-}
+  }
+  // for loop for the length of the stored movies
+  for (let i = 0; i < movieSearchHistory.length; i++) {
+
+      carousel.slick('slickAdd','<div><h3>' + movieSearchHistory[i] + '</h3></div>');
+  }
+  // for (var i = 0; i < movieSearchHistory.length; i++) {
+    // addMovieSearchHistoryButton(i);
+  }
+
 
 
 // Add button for each successful search
@@ -541,15 +573,17 @@ function addMovieSearchHistoryButton(j) {
 }
 
 // event listener for search history buttons, large screens
-movieSearchHistoryContainerLargeEl.on("click", function(event) {
-  // console.log(event.target);
-  handleMovieSearchHistoryClick(event.target);
-});
+// movieSearchHistoryContainerLargeEl.on("click", function(event) {
+//   // console.log(event.target);
+//   console.log("large click");
+//   handleMovieSearchHistoryClick(event.target);
+// });
 // event listener for search history buttons, small screens
-movieSearchHistoryContainerSmallEl.on("click", function(event) {
-  // console.log(event.target);
-  handleMovieSearchHistoryClick(event.target);
-});
+// movieSearchHistoryContainerSmallEl.on("click", function(event) {
+//   // console.log(event.target);
+//   console.log("small click");
+//   handleMovieSearchHistoryClick(event.target);
+// });
 
 function handleMovieSearchHistoryClick(element) {
   // console.log(element);
