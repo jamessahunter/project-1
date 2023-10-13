@@ -313,5 +313,3 @@ function appendCard(){
   // console.log("movie card");
   // console.log(movieCards);
 }
-
-
