@@ -7,8 +7,9 @@ var count = 0;
 var popularArr = [];
 var moviePosterURL = "";
 
-var searchButton = $(".btn");
-var popularButton = $(".btn-popular");
+var searchButton = $("#button-search");
+var popularButton = $("#button-popular");
+var resetHistoryButton = $("#button-reset-history");
 var criteriaSection = $("#criteria");
 var movieInput = $("#search");
 var movieCards = $("#movie-cards");
@@ -57,7 +58,7 @@ function handleSearch(event) {
   // console.log(scoresBox[0].checked);
   // console.log(movieSearchQuery);
   fetchOMDB(movieSearchQuery);
-  saveMovieSearchHistory(movieSearchQuery);
+  addToSearchHistory(movieSearchQuery);
 
   // Clear the input field
   movieInput.val("");
@@ -81,7 +82,11 @@ $(".boxId").on("change", function() {
   // Additional actions based on the checkbox state
 });
 
-
+// event listener for reset history button
+resetHistoryButton.on("click", function() {
+  movieSearchHistory = [];
+  saveMovieSearchHistory();
+});
 
 
 function fetchPopular(){
@@ -344,7 +349,7 @@ function loadMovieSearchHistory() {
   buildMovieSearchHistory();
 }
 
-function saveMovieSearchHistory(searchQuery) {
+function addToSearchHistory(searchQuery) {
   console.log(searchQuery);
   isUnique = true;
   for (var i = 0; i < movieSearchHistory.length; i++) {
@@ -354,9 +359,13 @@ function saveMovieSearchHistory(searchQuery) {
   }
   if (isUnique === true) {
     movieSearchHistory.push(searchQuery);
-    localStorage.setItem("movieSearchHistoryStringify", JSON.stringify(movieSearchHistory));
-    buildMovieSearchHistory();
+    saveMovieSearchHistory();
   }
+}
+
+function saveMovieSearchHistory() {
+  localStorage.setItem("movieSearchHistoryStringify", JSON.stringify(movieSearchHistory));
+  buildMovieSearchHistory();
 }
 
 function buildMovieSearchHistory() {
@@ -367,14 +376,14 @@ function buildMovieSearchHistory() {
   // console.log(movieSearchHistory.length);
   for (var i = 0; i < movieSearchHistory.length; i++) {
     addMovieSearchHistoryButton(i);
-    console.log(i);
+    // console.log(i);
   }
 }
 
 
 // Add button for each successful search
 function addMovieSearchHistoryButton(j) {
-  console.log("works");
+  // console.log("works");
   var newButtonLarge = $(document.createElement("button"));
   newButtonLarge.text(movieSearchHistory[j])
   newButtonLarge.addClass("bg-blue-500 text-white px-10 py-2 rounded-md mb-2 mr-2");
@@ -391,21 +400,21 @@ function addMovieSearchHistoryButton(j) {
 
 // event listener for search history buttons, large screens
 movieSearchHistoryContainerLargeEl.on("click", function(event) {
-  console.log(event.target);
+  // console.log(event.target);
   handleMovieSearchHistoryClick(event.target);
 });
 // event listener for search history buttons, small screens
 movieSearchHistoryContainerSmallEl.on("click", function(event) {
-  console.log(event.target);
+  // console.log(event.target);
   handleMovieSearchHistoryClick(event.target);
 });
 
 function handleMovieSearchHistoryClick(element) {
-  console.log(element);
+  // console.log(element);
   if (element.matches("button")) {
-    console.log("match");
+    // console.log("match");
     var searchQuery = element.getAttribute("data-query");
-    console.log(searchQuery);
+    // console.log(searchQuery);
     fetchOMDB(searchQuery);
   }
 }

@@ -40,17 +40,31 @@
               class="block w-full bg-white border rounded-md px-4 py-2 my-2"
               placeholder="Search"
             />
+
+
+            <!-- Search Button -->
+
             <button
+              id="button-search"
               class="mb-2 py-1 w-full btn bg-blue-500 rounded-md hover:bg-blue-700 text-white">
               Search button
             </button>
+
+
+            <!-- Popular Button -->
+
             <button
-              class="py-1 w-full btn-popular bg-blue-500 rounded-md hover:bg-blue-700 text-white">
+              id="button-popular"
+              class="py-1 w-full bg-blue-500 rounded-md hover:bg-blue-700 text-white">
               Popular movies
             </button>
           </div>
-          <!-- Features List -->
+
+
+          <!-- Features Checkbox List -->
+
           <p class="text-lg font-semibold mb-2">Features:</p>
+
           <ul id="criteria">
             <li class="flex items-center mb-2">
               <input type="checkbox" id="cb-poster" class="mr-2 boxId" name="features" value="poster">
@@ -97,6 +111,7 @@
               <label for="cb-services">Streaming Services</label>
             </li>
           </ul>
+
           <!-- Dropdown for Genres -->
           <label class="text-lg font-semibold" for="genres">Genres:</label>
           <select
@@ -107,6 +122,34 @@
             <option value="comedy">Comedy</option>
             <option value="drama">Drama</option>
           </select>
+
+
+          <!-- Reset History Button -->
+
+          <button
+            id="button-save-configuration"
+            class="mt-2 py-1 w-full btn-popular bg-blue-500 rounded-md hover:bg-blue-700 text-white">
+            Save Config
+          </button>
+
+
+          <!-- Reset History Button -->
+
+          <button
+            id="button-clear-configuration"
+            class="mt-2 py-1 w-full btn-popular bg-red-500 rounded-md hover:bg-red-700 text-white">
+            Clear Config
+          </button>
+
+
+          <!-- Reset History Button -->
+
+          <button
+            id="button-reset-history"
+            class="mt-2 py-1 w-full btn-popular bg-red-500 rounded-md hover:bg-red-700 text-white">
+            Clear Search History
+          </button>
+
         </div>
         <!-- Move "Movies" buttons to the bottom -->
 
