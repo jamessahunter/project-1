@@ -148,6 +148,7 @@ function fetchOMDB(movieSearchQuery){
   });
 }
 
+var moviePosterURL = "";
 
 function fetchTMDB(movie){
   //fetches to TMDB
@@ -173,6 +174,7 @@ function fetchTMDB(movie){
         // console.log(data.vote_average);
         // console.log(data.poster_path);
         // console.log(data.runtime);
+         moviePosterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
 
         fetchNYTReview(queryResult.title);
 
@@ -260,8 +262,9 @@ function appendCard(){
   // console.log("works");
   // movieCards.text("");
     createElements();
-    
     var movieCard=$("<section>").addClass("movie-card");
+    var posterImage = $("<img>").attr("src", moviePosterURL).attr("alt", "Movie Poster");
+     movieCard.append(posterImage);
 
     if(ratedBox[0].checked){
         titleEl.append(mpaaRatingEl);
@@ -313,3 +316,9 @@ function appendCard(){
   // console.log("movie card");
   // console.log(movieCards);
 }
+
+
+
+
+
+
