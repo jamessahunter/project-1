@@ -11,15 +11,19 @@ var popularButton = $(".btn-popular");
 var criteriaSection =$("#criteria");
 var movieInput = $("#search");
 var movieCards = $("#movie-cards");
-var scoresBox = $("#scores");
-var summaryBox=$("#summary");
-var directorBox=$("#director");
-var castBox=$("#cast");
-var runtimeBox=$("#runtime");
-var ratedBox=$("#rated");
-var nytReviewBox=$("#nyt-review");
-var servicesBox=$("#services");
-var genreBox=$("#genre");
+
+// checkbox pointer variables
+var posterBox = $("#cb-poster");
+var yearBox = $("#cb-year");
+var ratingBox=$("#cb-rating");
+var runtimeBox=$("#cb-runtime");
+var scoresBox = $("#cb-scores");
+var genreBox=$("#cb-genre");
+var summaryBox=$("#cb-summary");
+var directorBox=$("#cb-director");
+var castBox=$("#cb-cast");
+var nytReviewBox=$("#cb-review-nyt");
+var servicesBox=$("#cb-services");
 
 
 // searchbutton click event listener
@@ -52,17 +56,24 @@ function handleSearch(event) {
   movieInput.val("");
 }
 
-
-popularButton.on("click",function(){
-    // console.log("works");
-    popularClicked = true;
-    fetchPopular();
+// event listener for popular button
+popularButton.on("click", function() {
+  // console.log("works");
+  popularClicked = true;
+  fetchPopular();
 });
 
 
-$("li").on("click",".boxId",function(){
-    //do stuff here
-})
+// event listener for checkbox change
+$(".boxId").on("change", function() {
+  // Handle checkbox change here
+  var checkboxId = $(this).attr("id");
+  var isChecked = $(this).prop("checked");
+
+  console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
+  // Additional actions based on the checkbox state
+});
+
 
 
 // queryResult is used to gather the current search result data from our set of queries
@@ -77,7 +88,8 @@ var queryResult = {
   score: { imdb: 0, meta: 0, rotten: 0, tmdb: 0 },
   streamingServices: "",
   summary: "",
-  title: ""
+  title: "",
+  year: 0
 };
 
 

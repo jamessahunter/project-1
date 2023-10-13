@@ -41,53 +41,62 @@
               placeholder="Search"
             />
             <button
-            class="mr-2 btn bg-blue-500 rounded-lg hover:bg-blue-700 text-white">
-            Search button
-          </button>
+              class="m-2 w-full btn bg-blue-500 rounded-md hover:bg-blue-700 text-white">
+              Search button
+            </button>
+            <button
+              class="m-2 w-full btn-popular bg-blue-500 rounded-md hover:bg-blue-700 text-white">
+              Popular movies
+            </button>
           </div>
           <!-- Features List -->
           <p class="text-lg font-semibold mb-2">Features:</p>
           <ul id="criteria">
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="scores" class="mr-2 boxId" name="scores" value="scores">
-              <label for="scores">Scores</label>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cast" class="mr-2 boxId" name="cast" value="cast">
-              <label for="cast">Cast</label>
+              <input type="checkbox" id="cb-poster" class="mr-2 boxId" name="features" value="poster">
+              <label for="cb-poster">Poster</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="summary" class="mr-2 boxId" name="summary" value="summary">
-              <label for="summary">Summary</label>
+              <input type="checkbox" id="cb-year" class="mr-2 boxId" name="features" value="year">
+              <label for="cb-year">Release Year</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="director" class="mr-2 boxId" name="director" value="director">
-              <label for="director">Director</label>
+              <input type="checkbox" id="cb-rating" class="mr-2 boxId" name="features" value="rating">
+              <label for="cb-rating">MPAA Rating</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="runtime" class="mr-2 boxId" name="runtime" value="runtime">
-              <label for="runtime">Runtime</label>
+              <input type="checkbox" id="cb-runtime" class="mr-2 boxId" name="features" value="runtime">
+              <label for="cb-runtime">Runtime</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="rated" class="mr-2 boxId" name="rated" value="rated">
-              <label for="rated">Rated</label>
+              <input type="checkbox" id="cb-scores" class="mr-2 boxId" name="features" value="scores">
+              <label for="cb-scores">Scores</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="nyt-review" class="mr-2 boxId" name="nyt-review" value="nyt-review">
-              <label for="nyt-review">NYT Review</label>
+              <input type="checkbox" id="cb-genre" class="mr-2 boxId" name="features" value="genre">
+              <label for="cb-genre">Genre</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="services" class="mr-2 boxId" name="services" value="services">
-              <label for="services">Services</label>
+              <input type="checkbox" id="cb-summary" class="mr-2 boxId" name="features" value="summary">
+              <label for="cb-summary">Summary</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="genre" class="mr-2 boxId" name="genre" value="genre">
-              <label for="genre">Genre</label>
+              <input type="checkbox" id="cb-director" class="mr-2 boxId" name="features" value="director">
+              <label for="cb-director">Director</label>
+            </li>
+            <li class="flex items-center mb-2">
+              <input type="checkbox" id="cb-cast" class="mr-2 boxId" name="features" value="cast">
+              <label for="cb-cast">Cast</label>
+            </li>
+            <li class="flex items-center mb-2">
+              <input type="checkbox" id="cb-review-nyt" class="mr-2 boxId" name="features" value="review-nyt">
+              <label for="cb-review-nyt">NYT Review</label>
+            </li>
+            <li class="flex items-center mb-2">
+              <input type="checkbox" id="cb-services" class="mr-2 boxId" name="features" value="services">
+              <label for="cb-services">Streaming Services</label>
             </li>
           </ul>
-          <button
-          class="mr-2 btn-popular bg-blue-500 rounded-lg hover:bg-blue-700 text-white">
-          Popular movies
-        </button><br/>
           <!-- Dropdown for Genres -->
           <label class="text-lg font-semibold" for="genres">Genres:</label>
           <select
