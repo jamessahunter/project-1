@@ -69,16 +69,8 @@
               <label for="cb-runtime">Runtime</label>
             </li>
             <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-scores" class="mr-2 boxId" name="features" value="scores">
-              <label for="cb-scores">Scores</label>
-            </li>
-            <li class="flex items-center mb-2">
               <input type="checkbox" id="cb-genre" class="mr-2 boxId" name="features" value="genre">
               <label for="cb-genre">Genre</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-summary" class="mr-2 boxId" name="features" value="summary">
-              <label for="cb-summary">Summary</label>
             </li>
             <li class="flex items-center mb-2">
               <input type="checkbox" id="cb-director" class="mr-2 boxId" name="features" value="director">
@@ -87,6 +79,14 @@
             <li class="flex items-center mb-2">
               <input type="checkbox" id="cb-cast" class="mr-2 boxId" name="features" value="cast">
               <label for="cb-cast">Cast</label>
+            </li>
+            <li class="flex items-center mb-2">
+              <input type="checkbox" id="cb-summary" class="mr-2 boxId" name="features" value="summary">
+              <label for="cb-summary">Summary</label>
+            </li>
+            <li class="flex items-center mb-2">
+              <input type="checkbox" id="cb-scores" class="mr-2 boxId" name="features" value="scores">
+              <label for="cb-scores">Scores</label>
             </li>
             <li class="flex items-center mb-2">
               <input type="checkbox" id="cb-review-nyt" class="mr-2 boxId" name="features" value="review-nyt">
@@ -109,8 +109,10 @@
           </select>
         </div>
         <!-- Move "Movies" buttons to the bottom -->
-        <div class="mt-4 sm:hidden">
-          <button class="bg-blue-500 text-white w-full py-2 rounded-md mb-2">
+
+        <!-- Search History buttons for smaller screens -->
+        <div id="search-history-container-sm" class="mt-4 sm:hidden">
+          <!-- <button class="bg-blue-500 text-white w-full py-2 rounded-md mb-2">
             Previously
           </button>
           <button class="bg-blue-500 text-white w-full py-2 rounded-md mb-2">
@@ -118,28 +120,28 @@
           </button>
           <button class="bg-blue-500 text-white w-full py-2 rounded-md">
             Movies
-          </button>
+          </button> -->
         </div>
       </div>
       <!-- Search Box and Options (Right Column) -->
       <div class="flex-1 pl-4">
-        <!-- "Movies" buttons for larger screens -->
-        <div class="hidden sm:block">
-          <button
-            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+        <!-- Search History buttons for larger screens -->
+        <div id="search-history-container-lg" class="hidden sm:block">
+          <!-- <button
+            class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
           >
             Previously
           </button>
           <button
-            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+            class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
           >
             Searched
           </button>
           <button
-            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+            class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
           >
             Movies
-          </button>
+          </button> -->
         </div>
         <div class="grid grid-cols-1 gap-7 mt-4" id="movie-cards">
           <!-- Movie 1 Box (large) -->

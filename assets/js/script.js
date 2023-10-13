@@ -5,13 +5,31 @@ var popularClicked = false;
 var count = 0;
 
 var popularArr = [];
+var moviePosterURL = "";
 
 var searchButton = $(".btn");
 var popularButton = $(".btn-popular");
-var criteriaSection =$("#criteria");
+var criteriaSection = $("#criteria");
 var movieInput = $("#search");
 var movieCards = $("#movie-cards");
 
+var movieSearchHistoryContainerLargeEl = $("#search-history-container-lg");
+var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
+
+// queryResult is used to gather the current search result data from our set of queries
+var queryResult = {
+  cast: "",
+  director: "",
+  genre: "",
+  mpaaRating: "",
+  reviews: { nyt: { author: "", snippet: "" } },
+  runtime: 0,
+  scores: [],
+  streamingServices: "",
+  summary: "",
+  title: "",
+  year: 0
+};
 
 
 // searchbutton click event listener
@@ -37,8 +55,9 @@ function handleSearch(event) {
     return;
   }
   // console.log(scoresBox[0].checked);
-//   console.log(movieSearchQuery);
+  // console.log(movieSearchQuery);
   fetchOMDB(movieSearchQuery);
+  saveMovieSearchHistory(movieSearchQuery);
 
   // Clear the input field
   movieInput.val("");
@@ -58,26 +77,10 @@ $(".boxId").on("change", function() {
   var checkboxId = $(this).attr("id");
   var isChecked = $(this).prop("checked");
 
-  console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
+  // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
   // Additional actions based on the checkbox state
 });
 
-
-
-// queryResult is used to gather the current search result data from our set of queries
-var queryResult = {
-  cast: "",
-  director: "",
-  genre: "",
-  mpaaRating: "",
-  reviews: { nyt: { author: "", snippet: "" } },
-  runtime: 0,
-  score: { imdb: 0, meta: 0, rotten: 0, tmdb: 0 },
-  streamingServices: "",
-  summary: "",
-  title: "",
-  year: 0
-};
 
 
 
@@ -86,7 +89,7 @@ function fetchPopular(){
   fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
   .then(function(response){
     if (response.ok){
-      //   console.log(response);
+      // console.log(response);
       return response.json().then(function(data){
         console.log("popular movies")
         //   console.log(data);
@@ -113,25 +116,12 @@ function fetchOMDB(movieSearchQuery){
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
-      //   console.log(response);
+      // console.log(response);
       return response.json().then(function(data){
-        console.log("omdb");
-        console.log(data);
-        // queryResult.score.imdb = data.imdbRating;
+        // console.log("omdb");
+        // console.log(data);
         
         queryResult.scores = data.Ratings;
-        // if(data.Ratings.length===2){
-        //   queryResult.score.rotten = data.Ratings[1].Value;
-        //   queryResult.score.meta = "not found";
-        // }
-        // else if(data.Ratings.length===1||data.Ratings.length===0){
-        //   queryResult.score.rotten = "not found";
-        //   queryResult.score.meta = "not found";
-        // }
-        // else{
-        //   queryResult.score.rotten = data.Ratings[1].Value;
-        //   queryResult.score.meta = data.Ratings[2].Value;
-        // }
 
         queryResult.year = parseInt(data.Year);
         queryResult.mpaaRating = data.Rated;
@@ -147,7 +137,6 @@ function fetchOMDB(movieSearchQuery){
   });
 }
 
-var moviePosterURL = "";
 
 function fetchTMDB(movie){
   //fetches to TMDB
@@ -163,10 +152,10 @@ function fetchTMDB(movie){
     if (response.ok){
       //console.log(response);
       return response.json().then(function(data){
-        console.log("TMDB specific movie");
+        // console.log("TMDB specific movie");
         // console.log(data);
         queryResult.title = data.results[0].title;
-        queryResult.score.tmdb = data.results[0].vote_average;
+        // queryResult.score.tmdb = data.results[0].vote_average;
         queryResult.summary = data.results[0].overview;
         // console.log(data);
         // console.log(data.original_title);
@@ -188,21 +177,21 @@ function fetchNYTReview(movie){
   reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
   // fetch(reviewUrl)
   // .then(function(response){
-  //     if (response.ok){
-  //         //   console.log(response);
-  //             return response.json().then(function(data){
-  //             console.log("nyt review")
-  //             // console.log(data);
-  //             // console.log(data.response);
-  //             // console.log(data.response.docs[0]);
-  //             // console.log(data.response.docs[0].lead_paragraph);
-  //             // console.log(data.response.docs[0].snippet);
-  //             // queryResult.reviews.nyt.snippet=data.response.docs[0].snippet;
-  //             // queryResult.reviews.nyt.author=data.response.docs[0].byline.original;
-  //             fetchServices(movie);
-  //             })
-  //         }
-  //     })
+  //   if (response.ok) {
+  //     console.log(response);
+  //     return response.json().then( function(data) {
+  //       console.log("nyt review")
+  //       console.log(data);
+  //       console.log(data.response);
+  //       console.log(data.response.docs[0]);
+  //       console.log(data.response.docs[0].lead_paragraph);
+  //       console.log(data.response.docs[0].snippet);
+  //       queryResult.reviews.nyt.snippet=data.response.docs[0].snippet;
+  //       queryResult.reviews.nyt.author=data.response.docs[0].byline.original;
+  //       fetchServices(movie);
+  //     });
+  //   }
+  // });
   fetchServices(queryResult.title);
 }
 
@@ -220,21 +209,20 @@ function fetchServices(movie){
   console.log("services section");
   //commenting out to reduce number of calls
   // fetch(urlStreaming,options1)
-  //     .then(function(response){
-  //         if (response.ok){
-  //     //   console.log(response);
-  //         return response.json().then(function(data){
-  //         // console.log("streaming service")
-  //         // console.log(data.result)
-  //         // console.log(data.result[0].streamingInfo)
-  //         // queryResult.streamingServices = data.result[0].streamingInfo.us[0].service;
-  //         })
+  //   .then(function(response){
+  //     if (response.ok){
+  //       console.log(response);
+  //       return response.json().then( function(data) {
+  //         console.log("streaming service")
+  //         console.log(data.result)
+  //         console.log(data.result[0].streamingInfo)
+  //         queryResult.streamingServices = data.result[0].streamingInfo.us[0].service;
+  //       });
   //     }
-  // })
+  //   });
 
   appendCard();
 }
-
 
 function appendCard(){
   // console.log("works");
@@ -316,7 +304,7 @@ function appendCard(){
     movieCard.append(streamingServicesEl);
   }
 
-  console.log(movieCard);
+  // console.log(movieCard);
 
   movieCards.prepend(movieCard);
 
@@ -341,3 +329,83 @@ function getHourMin(minutes) {
 
 
 
+// localStorage: movieSearchHistory
+
+var movieSearchHistory = [];
+loadMovieSearchHistory();
+
+function loadMovieSearchHistory() {
+  movieSearchHistory = JSON.parse(localStorage.getItem("movieSearchHistoryStringify"));
+
+  // if search history isn't saved in local storage, initialize the array variable
+  if (!movieSearchHistory) {
+    movieSearchHistory = [];
+  }
+  buildMovieSearchHistory();
+}
+
+function saveMovieSearchHistory(searchQuery) {
+  console.log(searchQuery);
+  isUnique = true;
+  for (var i = 0; i < movieSearchHistory.length; i++) {
+    if (searchQuery === movieSearchHistory[i]) {
+      isUnique = false;
+    }
+  }
+  if (isUnique === true) {
+    movieSearchHistory.push(searchQuery);
+    localStorage.setItem("movieSearchHistoryStringify", JSON.stringify(movieSearchHistory));
+    buildMovieSearchHistory();
+  }
+}
+
+function buildMovieSearchHistory() {
+  // console.log(movieSearchHistoryContainerLargeEl);
+  // console.log(movieSearchHistoryContainerSmallEl);
+  movieSearchHistoryContainerLargeEl.empty();
+  movieSearchHistoryContainerSmallEl.empty();
+  // console.log(movieSearchHistory.length);
+  for (var i = 0; i < movieSearchHistory.length; i++) {
+    addMovieSearchHistoryButton(i);
+    console.log(i);
+  }
+}
+
+
+// Add button for each successful search
+function addMovieSearchHistoryButton(j) {
+  console.log("works");
+  var newButtonLarge = $(document.createElement("button"));
+  newButtonLarge.text(movieSearchHistory[j])
+  newButtonLarge.addClass("bg-blue-500 text-white px-10 py-2 rounded-md mb-2 mr-2");
+  newButtonLarge.attr("data-query", movieSearchHistory[j]);
+
+  var newButtonSmall = $(document.createElement("button"));
+  newButtonSmall.text(movieSearchHistory[j])
+  newButtonSmall.addClass("bg-blue-500 text-white w-full py-2 rounded-md mb-2");
+  newButtonSmall.attr("data-query", movieSearchHistory[j]);
+
+  movieSearchHistoryContainerLargeEl.append(newButtonLarge);
+  movieSearchHistoryContainerSmallEl.append(newButtonSmall);
+}
+
+// event listener for search history buttons, large screens
+movieSearchHistoryContainerLargeEl.on("click", function(event) {
+  console.log(event.target);
+  handleMovieSearchHistoryClick(event.target);
+});
+// event listener for search history buttons, small screens
+movieSearchHistoryContainerSmallEl.on("click", function(event) {
+  console.log(event.target);
+  handleMovieSearchHistoryClick(event.target);
+});
+
+function handleMovieSearchHistoryClick(element) {
+  console.log(element);
+  if (element.matches("button")) {
+    console.log("match");
+    var searchQuery = element.getAttribute("data-query");
+    console.log(searchQuery);
+    fetchOMDB(searchQuery);
+  }
+}
