@@ -1,26 +1,63 @@
 
-var movie;
+// var movie;
 
 var popularClicked = false;
+var popularArr = [];
 var count = 0;
 
 var popularArr = [];
-var movies=[];
 
-var searchButton = $(".btn");
-var popularButton = $(".btn-popular");
-var criteriaSection =$("#criteria");
-var movieInput = $("#search");
-var movieCards = $("#movie-cards");
-var scoresBox = $("#scores");
-var summaryBox=$("#summary");
-var directorBox=$("#director");
-var castBox=$("#cast");
-var runtimeBox=$("#runtime");
-var ratedBox=$("#rated");
-var nytReviewBox=$("#nyt-review");
-var servicesBox=$("#services");
-var genreBox=$("#genre");
+var searchButton = $("#button-search");
+var popularButton = $("#button-popular");
+var saveConfigButton = $("#button-save-configuration");
+var clearConfigButton = $("#button-clear-configuration");
+var resetHistoryButton = $("#button-reset-history");
+var movieSearchInput = $("#search");
+
+
+
+// var criteriaSection = $("#criteria");
+
+var movieSearchHistoryContainerLargeEl = $("#search-history-container-lg");
+var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
+var movieCardsContainer = $("#movie-cards-container");
+
+
+// checkbox pointer variables
+
+var posterBox    = $( "#cb-poster"     );
+var yearBox      = $( "#cb-year"       );
+var ratingBox    = $( "#cb-rating"     );
+var runtimeBox   = $( "#cb-runtime"    );
+var genreBox     = $( "#cb-genre"      );
+var directorBox  = $( "#cb-director"   );
+var castBox      = $( "#cb-cast"       );
+var summaryBox   = $( "#cb-summary"    );
+var scoresBox    = $( "#cb-scores"     );
+var nytReviewBox = $( "#cb-review-nyt" );
+var servicesBox  = $( "#cb-services"   );
+
+var checkboxConfig = {};
+
+
+// foundMovie is used to gather the current search result data from our set of queries
+var foundMovie = {
+  cast: "",
+  director: "",
+  genre: "",
+  mpaaRating: "",
+  posterURL: "",
+  reviews: { nyt: { author: "", snippet: "" } },
+  runtime: 0,
+  scores: [],
+  streamingServices: "",
+  summary: "",
+  title: "",
+  year: 0
+};
+
+var pinnedMovies = {};
+var currentMovieList = {};
 var carousel=$(".carousel");
 
 carousel.slick({
@@ -75,7 +112,7 @@ searchButton.on("click", function(event) {
 });
 
 // search input field "enter key" event listener
-movieInput.on("keypress", function(event) {
+movieSearchInput.on("keypress", function(event) {
   const enterKey = 13;
   if (event.which === enterKey) {
     handleSearch(event);
@@ -83,59 +120,72 @@ movieInput.on("keypress", function(event) {
 });
 
 function handleSearch(event) {
+  var currentMovieList = {};
   event.preventDefault();
   popularClicked = false;
-  var movieSearchQuery = movieInput.val();
+  var movieSearchQuery = movieSearchInput.val();
 
   if(movieSearchQuery === ""){
     // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
     return;
   }
 
-  // console.log(scoresBox[0].checked);
-//   console.log(movieSearchQuery);
   fetchOMDB(movieSearchQuery);
   
 
+  addToSearchHistory(movieSearchQuery);
+
+  // Clear the input field
+  movieSearchInput.val("");
 }
 
-
-popularButton.on("click",function(){
-    // console.log("works");
-    popularClicked = true;
-    fetchPopular();
+// event listener for popular button
+popularButton.on("click", function() {
+  popularClicked = true;
+  fetchPopular();
 });
 
 
-$("li").on("click",".boxId",function(){
-    //do stuff here
-})
+// event listener for checkbox change
+$(".boxId").on("change", function() {
+  // update checkbox config
+  checkboxConfig[$(this).attr("value")] = $(this).prop("checked");
 
+  // checkboxId = $(this).attr("value");
+  // isChecked = $(this).prop("checked");
+  // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
+  buildMovieCards(currentMovieList);
+
+// event listener for clicking on carousel items
 carousel.on("click","h3",function(event){
   console.log(event.target);
   var movieClicked=event.target.textContent;
   repeat=true;
   fetchOMDB(movieClicked);
   console.log("works");
-})
+});
 
 
 
-// queryResult is used to gather the current search result data from our set of queries
-var queryResult = {
-  cast: "",
-  director: "",
-  genre: "",
-  imdbID: "",
-  mpaaRating: "",
-  reviews: { nyt: { author: "", snippet: "" } },
-  runtime: 0,
-  score: { imdb: 0, meta: 0, rotten: 0, tmdb: 0 },
-  streamingServices: "",
-  summary: "",
-  title: ""
-};
+// event listener for save configuration button
+saveConfigButton.on("click", function() {
+  saveCheckboxConfig();
+});
 
+// event listener for clear configuration button
+clearConfigButton.on("click", function() {
+  resetCheckboxConfig();
+  updateCheckboxConfig();
+  localStorage.removeItem("checkboxConfigStringify");
+  buildMovieCards(currentMovieList);
+});
+
+// event listener for reset history button
+resetHistoryButton.on("click", function() {
+  movieSearchHistory = [];
+  buildMovieSearchHistory();
+  localStorage.removeItem("movieSearchHistoryStringify");
+});
 
 
 function fetchPopular(){
@@ -143,9 +193,8 @@ function fetchPopular(){
   fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
   .then(function(response){
     if (response.ok){
-      //   console.log(response);
       return response.json().then(function(data){
-        console.log("popular movies")
+        // console.log("popular movies")
         //   console.log(data);
         //   console.log(data.results);
         for(var i=data.results.length-1;i>=0;i--){
@@ -156,7 +205,7 @@ function fetchPopular(){
           // fetchOMDB(movieTitle);
           // console.log(data.results[i]);
         }
-        console.log(popularArr);
+        // console.log(popularArr);
         fetchOMDB(popularArr[count]);
       });
     }
@@ -182,29 +231,16 @@ function fetchOMDB(movieSearchQuery){
         movieInput.val("");
         console.log("omdb");
         // console.log(data);
-        queryResult.imdbID = data.imdbID;
-        queryResult.score.imdb = data.imdbRating;
         
-        if(data.Ratings.length===2){
-          queryResult.score.rotten = data.Ratings[1].Value;
-          queryResult.score.meta = "not found";
-        }
-        else if(data.Ratings.length===1||data.Ratings.length===0){
-          queryResult.score.rotten = "not found";
-          queryResult.score.meta = "not found";
-        }
-        else{
-          queryResult.score.rotten = data.Ratings[1].Value;
-          queryResult.score.meta = data.Ratings[2].Value;
-        }
+        foundMovie.scores = data.Ratings;
 
-        queryResult.genre = data.Genre;
-        queryResult.mpaaRating = data.Rated;
-        queryResult.cast = data.Actors;
-        queryResult.director = data.Director;
-        queryResult.runtime = data.Runtime;
+        foundMovie.year = parseInt(data.Year);
+        foundMovie.mpaaRating = data.Rated;
+        foundMovie.runtime = parseInt(data.Runtime);
+        foundMovie.genre = data.Genre;
+        foundMovie.director = data.Director;
+        foundMovie.cast = data.Actors;
         // console.log(data.imdbRating);
-        // console.log(data.imdbID);
         // console.log(data.Ratings);
         fetchTMDB(movieSearchQuery);
       });
@@ -214,7 +250,6 @@ function fetchOMDB(movieSearchQuery){
 
 }
 
-var moviePosterURL = "";
 
 function fetchTMDB(movie){
   //fetches to TMDB
@@ -230,19 +265,19 @@ function fetchTMDB(movie){
     if (response.ok){
       //console.log(response);
       return response.json().then(function(data){
-        console.log("TMDB specific movie");
+        // console.log("TMDB specific movie");
         // console.log(data);
-        queryResult.title = data.results[0].title;
-        queryResult.score.tmdb = data.results[0].vote_average;
-        queryResult.summary = data.results[0].overview;
+        foundMovie.title = data.results[0].title;
+        // foundMovie.score.tmdb = data.results[0].vote_average;
+        foundMovie.summary = data.results[0].overview;
         // console.log(data);
         // console.log(data.original_title);
         // console.log(data.vote_average);
         // console.log(data.poster_path);
         // console.log(data.runtime);
-         moviePosterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
+        foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
 
-        fetchNYTReview(queryResult.title);
+        fetchNYTReview(foundMovie.title);
 
       });
     }
@@ -255,27 +290,27 @@ function fetchNYTReview(movie){
   reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
   // fetch(reviewUrl)
   // .then(function(response){
-  //     if (response.ok){
-  //         //   console.log(response);
-  //             return response.json().then(function(data){
-  //             console.log("nyt review")
-  //             // console.log(data);
-  //             // console.log(data.response);
-  //             // console.log(data.response.docs[0]);
-  //             // console.log(data.response.docs[0].lead_paragraph);
-  //             // console.log(data.response.docs[0].snippet);
-  //             // queryResult.reviews.nyt.snippet=data.response.docs[0].snippet;
-  //             // queryResult.reviews.nyt.author=data.response.docs[0].byline.original;
-  //             fetchServices(movie);
-  //             })
-  //         }
-  //     })
-  fetchServices(queryResult.title);
+  //   if (response.ok) {
+  //     console.log(response);
+  //     return response.json().then( function(data) {
+  //       console.log("nyt review")
+  //       console.log(data);
+  //       console.log(data.response);
+  //       console.log(data.response.docs[0]);
+  //       console.log(data.response.docs[0].lead_paragraph);
+  //       console.log(data.response.docs[0].snippet);
+  //       foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
+  //       foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
+  //       fetchServices(movie);
+  //     });
+  //   }
+  // });
+  fetchServices(foundMovie.title);
 }
 
 
 function fetchServices(movie){
-  // sees if movie is streaming based on imdb id
+  // sees if movie is streaming based on movie title
   const urlStreaming = 'https://streaming-availability.p.rapidapi.com/search/title?title='+movie+'&country=us&show_type=movie&output_language=en';
   const options1={
     method: 'GET',
@@ -284,107 +319,299 @@ function fetchServices(movie){
       'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
     }
   };
-  console.log("services section");
+  // console.log("services section");
   //commenting out to reduce number of calls
   // fetch(urlStreaming,options1)
-  //     .then(function(response){
-  //         if (response.ok){
-  //     //   console.log(response);
-  //         return response.json().then(function(data){
-  //         // console.log("streaming service")
-  //         // console.log(data.result)
-  //         // console.log(data.result[0].streamingInfo)
-  //         // queryResult.streamingServices = data.result[0].streamingInfo.us[0].service;
-  //         })
+  //   .then(function(response){
+  //     if (response.ok){
+  //       console.log(response);
+  //       return response.json().then( function(data) {
+  //         console.log("streaming service")
+  //         console.log(data.result)
+  //         console.log(data.result[0].streamingInfo)
+  //         foundMovie.streamingServices = data.result[0].streamingInfo.us[0].service;
+  //       });
   //     }
-  // })
+  //   });
 
-  appendCard();
-}
-function createElements(){
-      // title and details
-    titleEl=$("<h2>").text(queryResult.title);
-    runtimeEl=$("<p>").text(`Runtime: ${queryResult.runtime}`);
+  insertMovie(foundMovie, currentMovieList);
 
-    mpaaRatingEl=$("<p>").text(`Rated: ${queryResult.mpaaRating}`);
-    genreEl=$("<p>").text(`Genre: ${queryResult.genre}`);
-    directorEl=$("<p>").text(`Director: ${queryResult.director}`);
-    castEl=$("<p>").text(`Cast: ${queryResult.cast}`);
-    summaryEl=$("<p>").text(queryResult.summary);
-
-    scoresEl=$("<h3>").text("Scores:");
-    imdbScoreEl=$("<p>").text(`IMDB Score: ${queryResult.score.imdb}`);
-    rottenScoreEl=$("<p>").text(`Rotten Tomatoes Score: ${queryResult.score.rotten}`);
-    metaScoreEl=$("<p>").text(`Meta Critic: ${queryResult.score.meta}`);
-    tmdbScoreEl=$("<p>").text(`TMDB Score: ${queryResult.score.tmdb}`);
-    
-    nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
-    nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
-    
-    streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
-}
-
-function appendCard(){
-  // console.log("works");
-  // movieCards.text("");
-    createElements();
-    var movieCard=$("<section>").addClass("movie-card");
-    var posterImage = $("<img>").attr("src", moviePosterURL).attr("alt", "Movie Poster");
-     movieCard.append(posterImage);
-
-    if(ratedBox[0].checked){
-        titleEl.append(mpaaRatingEl);
-      }
-      if(runtimeBox[0].checked){
-        titleEl.append(runtimeEl)
-      }
-      if(genreBox[0].checked){
-        titleEl.append(genreEl);
-      }
-      if(directorBox[0].checked){
-        titleEl.append(directorEl);
-      }
-      if(castBox[0].checked){
-        titleEl.append(castEl);
-      }
-      if(summaryBox[0].checked){
-        titleEl.append(summaryEl);
-      }
-      movieCard.append(titleEl);
-      // titleEl.append(runtimeEl,ratedEl,genreEl,directorEl,castEl,summaryEl);
-      if(scoresBox[0].checked){
-        scoresEl.append(imdbScoreEl,rottenScoreEl,metaScoreEl,tmdbScoreEl);
-        movieCard.append(scoresEl);
-      }
-      if(nytReviewBox[0].checked){
-        nytSnippetEl.append(nytAuthorEl);
-        movieCard.append(nytSnippetEl);
-      }
-      if(servicesBox[0].checked){
-        movieCard.append(streamingServicesEl);
-      }
-        console.log(movieCard);
-      movieCards.prepend(movieCard);
-    //   movieCard.text("");
-//   titleEl.append(runtimeEl, mpaaRatingEl, genreEl, directorEl, castEl, summaryEl);
-  // scores
-//   scoresEl.append(imdbScoreEl, rottenScoreEl, metaScoreEl, tmdbScoreEl);
-  // reviews
-//   nytSnippetEl.append(nytAuthorEl);
-//   movieCard.append(titleEl, scoresEl, nytSnippetEl);
-//   movieCards.prepend(movieCard);
-
-  
-  if ( popularClicked && count < popularArr.length -1 ){
+  if ( popularClicked && count < popularArr.length - 1 ) {
     count++;
     fetchOMDB(popularArr[count]);
+  } else {
+    buildMovieCards(currentMovieList);
   }
-  // console.log("movie card");
-  // console.log(movieCards);
+}
+
+
+function insertMovie(movieObj, list) {
+  for (var i = 0; i < Object.keys(list).length; i++) {
+    if ( movieObj.title === list[i].title ) {
+    console.log("identical");
+    return;
+    }
+  }
+
+  // insert movieObj into the first position of targetObj using deepCopy
+  for (let i = Object.keys(list).length; i > 0; i--) {
+    list[i] = deepCopy(list[i - 1]);
+  }
+  list[0] = deepCopy(movieObj);
+}
+
+
+function deepCopy(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(deepCopy);
+  }
+
+  const newObj = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      newObj[key] = deepCopy(obj[key]);
+    }
+  }
+
+  return newObj;
+}
+
+
+function buildMovieCards(targetMoviesObj) {
+  movieCardsContainer.empty();
+  for (var i = Object.keys(targetMoviesObj).length - 1; i >= 0; i--) {
+      appendCard(targetMoviesObj[i]);
+  }
+}
+
+// function addPin(movieObj) {
+//   insertMovie(movieObj, pinnedMovies);
+// }
+
+// function updateMovieList() {
+//   currentMovieList = {};
+//   for (var i = 0; i < Object.keys(pinnedMovies).length; i++) {
+//     currentMovieList[i] = pinnedMovies[i];
+//   }
+//   buildMovieCards(currentMovieList);
+// }
+
+
+
+function appendCard(movieObj){
+  // console.log("works");
+  // movieCardsContainer.text("");
+
+  var movieCard=$("<section>").addClass("movie-card");
+
+  var titleEl=$("<h2>").text(movieObj.title);
+  titleEl.addClass("movie-card-title");
+
+
+  // movie details
+
+  var posterImage  = $("<img>").attr("src", movieObj.posterURL).attr("alt", "Movie Poster");
+  var yearEl       = $("<p>").text(`Year: ${movieObj.year}`        );
+  var mpaaRatingEl = $("<p>").text(`Rated ${movieObj.mpaaRating}`  );
+  var runtimeEl    = $("<p>").text(getHourMin(movieObj.runtime)    );
+  var genreEl      = $("<p>").text(`Genre: ${movieObj.genre}`      );
+  var directorEl   = $("<p>").text(`Director: ${movieObj.director}`);
+  var castEl       = $("<p>").text(`Cast: ${movieObj.cast}`        );
+  var summaryEl    = $("<p>").text(movieObj.summary                );
+
+  if( posterBox[0].checked   ) { movieCard.append(posterImage); }
+  if( yearBox[0].checked     ) { titleEl.append(yearEl);        }
+  if( ratingBox[0].checked   ) { titleEl.append(mpaaRatingEl);  }
+  if( runtimeBox[0].checked  ) { titleEl.append(runtimeEl);     }
+  if( genreBox[0].checked    ) { titleEl.append(genreEl);       }
+  if( directorBox[0].checked ) { titleEl.append(directorEl);    }
+  if( castBox[0].checked     ) { titleEl.append(castEl);        }
+  if( summaryBox[0].checked  ) { titleEl.append(summaryEl);     }
+
+  movieCard.append(titleEl);
+
+
+  // scores
+  
+  var scoresEl =      $("<h3>").text("Scores:");
+  
+  if ( scoresBox[0].checked && movieObj.scores.length > 0 ) {
+    var scoreEl = [];
+    for (var i = 0; i < movieObj.scores.length; i++ ){
+      scoreEl[i] = $("<p>").text(`${movieObj.scores[i].Source}: ${movieObj.scores[i].Value}`);
+      scoresEl.append( scoreEl[i] );
+    }
+
+    movieCard.append( scoresEl );
+  }
+
+
+  // reviews
+
+  var nytSnippetEl=$("<p>").text(`Review: ${movieObj.reviews.nyt.snippet}`);
+  var nytAuthorEl=$("<p>").text(`Author: ${movieObj.reviews.nyt.author}`);
+
+  if( nytReviewBox[0].checked && movieObj.reviews.nyt.snippet ) {
+    nytSnippetEl.append(nytAuthorEl);
+    movieCard.append(nytSnippetEl);
+  }
+
+
+  // streaming services
+
+  var streamingServicesEl=$("<p>").text(`Streaming Services: ${movieObj.streamingServices}`);
+
+  if( servicesBox[0].checked && movieObj.streamingServices ) { 
+    movieCard.append(streamingServicesEl);
+  }
+
+  // put the new card at the top
+  movieCardsContainer.prepend(movieCard);
+}
+
+
+function getHourMin(minutes) {
+  var hr = Math.floor(minutes / 60);
+  var min = minutes % 60;
+  return `${hr}h ${min}m`;
+}
+
+
+// localStorage: Movie Search History
+
+function loadMovieSearchHistory() {
+  movieSearchHistory = JSON.parse(localStorage.getItem("movieSearchHistoryStringify"));
+
+  // if search history isn't saved in local storage, initialize the array variable
+  if (!movieSearchHistory) {
+    movieSearchHistory = [];
+  }
+  buildMovieSearchHistory();
+}
+
+function addToSearchHistory(searchQuery) {
+  var isUnique = true;
+  for (var i = 0; i < movieSearchHistory.length; i++) {
+    if (searchQuery.toLowerCase() === movieSearchHistory[i].toLowerCase()) {
+      isUnique = false;
+    }
+  }
+  if (isUnique === true) {
+    movieSearchHistory.push(searchQuery);
+    saveMovieSearchHistory();
+  }
+}
+
+function saveMovieSearchHistory() {
+  localStorage.setItem("movieSearchHistoryStringify", JSON.stringify(movieSearchHistory));
+  buildMovieSearchHistory();
+}
+
+function buildMovieSearchHistory() {
+  movieSearchHistoryContainerLargeEl.empty();
+  movieSearchHistoryContainerSmallEl.empty();
+
+  for (var i = 0; i < movieSearchHistory.length; i++) {
+    addMovieSearchHistoryButton(i);
+  }
+}
+
+
+// Add button for each successful search
+function addMovieSearchHistoryButton(j) {
+  // add button to large page location
+  var newButtonLarge = $(document.createElement("button"));
+  newButtonLarge.text(movieSearchHistory[j])
+  newButtonLarge.addClass("bg-blue-500 text-white px-10 py-2 rounded-md mb-2 mr-2");
+  newButtonLarge.attr("data-query", movieSearchHistory[j]);
+
+  // add button to small page location
+  var newButtonSmall = $(document.createElement("button"));
+  newButtonSmall.text(movieSearchHistory[j])
+  newButtonSmall.addClass("bg-blue-500 text-white w-full py-2 rounded-md mb-2");
+  newButtonSmall.attr("data-query", movieSearchHistory[j]);
+
+  // append both new button elements; only one is displayed, depending on page width breakpoint
+  movieSearchHistoryContainerLargeEl.append(newButtonLarge);
+  movieSearchHistoryContainerSmallEl.append(newButtonSmall);
+}
+
+// event listener for search history buttons, large screens
+movieSearchHistoryContainerLargeEl.on("click", function(event) {
+  // console.log(event.target);
+  handleMovieSearchHistoryClick(event.target);
+});
+// event listener for search history buttons, small screens
+movieSearchHistoryContainerSmallEl.on("click", function(event) {
+  // console.log(event.target);
+  handleMovieSearchHistoryClick(event.target);
+});
+
+function handleMovieSearchHistoryClick(element) {
+  // console.log(element);
+  if (element.matches("button")) {
+    // console.log("match");
+    var searchQuery = element.getAttribute("data-query");
+    // console.log(searchQuery);
+    fetchOMDB(searchQuery);
+  }
+}
+
+
+// localStorage: Checkbox Configuration
+
+function loadCheckboxConfig() {
+  checkboxConfig = JSON.parse(localStorage.getItem("checkboxConfigStringify"));
+
+  // if checkbox config isn't saved in local storage, initialize the array variable
+  if (!checkboxConfig) {
+    resetCheckboxConfig();
+  }
+  updateCheckboxConfig();
+}
+
+function resetCheckboxConfig() {
+  checkboxConfig = {
+    poster:     true,
+    year:       true,
+    rating:     true,
+    runtime:    true,
+    genre:      true,
+    director:   true,
+    cast:       true,
+    summary:    true,
+    scores:     true,
+    nytReview:  true,
+    services:   true
+  };
+}
+
+function saveCheckboxConfig() {
+  localStorage.setItem("checkboxConfigStringify", JSON.stringify(checkboxConfig));
+  updateCheckboxConfig();
+}
+
+function updateCheckboxConfig() {
+  posterBox[0].checked    = checkboxConfig.poster;
+  yearBox[0].checked      = checkboxConfig.year;
+  ratingBox[0].checked    = checkboxConfig.rating;
+  runtimeBox[0].checked   = checkboxConfig.runtime;
+  genreBox[0].checked     = checkboxConfig.genre;
+  directorBox[0].checked  = checkboxConfig.director;
+  castBox[0].checked      = checkboxConfig.cast;
+  summaryBox[0].checked   = checkboxConfig.summary;
+  scoresBox[0].checked    = checkboxConfig.scores;
+  nytReviewBox[0].checked = checkboxConfig.nytReview;
+  servicesBox[0].checked  = checkboxConfig.services;
 }
 
 
 
+// run on page load
 
-
-
+loadMovieSearchHistory();
+loadCheckboxConfig();
