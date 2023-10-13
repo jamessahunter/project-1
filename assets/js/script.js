@@ -6,16 +6,41 @@ var count = 0;
 
 var popularArr = [];
 var moviePosterURL = "";
+var movieSearchHistory = [];
+
+
+// button pointer variables
 
 var searchButton = $("#button-search");
 var popularButton = $("#button-popular");
+var saveConfigButton = $("#button-save-configuration");
+var clearConfigButton = $("#button-clear-configuration");
 var resetHistoryButton = $("#button-reset-history");
+
 var criteriaSection = $("#criteria");
 var movieInput = $("#search");
 var movieCards = $("#movie-cards");
 
 var movieSearchHistoryContainerLargeEl = $("#search-history-container-lg");
 var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
+
+
+// checkbox pointer variables
+
+var posterBox    = $( "#cb-poster"     );
+var yearBox      = $( "#cb-year"       );
+var ratingBox    = $( "#cb-rating"     );
+var runtimeBox   = $( "#cb-runtime"    );
+var genreBox     = $( "#cb-genre"      );
+var directorBox  = $( "#cb-director"   );
+var castBox      = $( "#cb-cast"       );
+var summaryBox   = $( "#cb-summary"    );
+var scoresBox    = $( "#cb-scores"     );
+var nytReviewBox = $( "#cb-review-nyt" );
+var servicesBox  = $( "#cb-services"   );
+
+var checkboxConfig = {};
+
 
 // queryResult is used to gather the current search result data from our set of queries
 var queryResult = {
@@ -74,18 +99,30 @@ popularButton.on("click", function() {
 
 // event listener for checkbox change
 $(".boxId").on("change", function() {
-  // Handle checkbox change here
-  var checkboxId = $(this).attr("id");
-  var isChecked = $(this).prop("checked");
+  // update checkbox config
+  checkboxConfig[$(this).attr("value")] = $(this).prop("checked");
 
   // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
-  // Additional actions based on the checkbox state
+
+});
+
+// event listener for save configuration button
+saveConfigButton.on("click", function() {
+  saveCheckboxConfig();
+});
+
+// event listener for clear configuration button
+clearConfigButton.on("click", function() {
+  resetCheckboxConfig();
+  updateCheckboxConfig();
+  localStorage.removeItem("checkboxConfigStringify");
 });
 
 // event listener for reset history button
 resetHistoryButton.on("click", function() {
   movieSearchHistory = [];
-  saveMovieSearchHistory();
+  buildMovieSearchHistory();
+  localStorage.removeItem("movieSearchHistoryStringify");
 });
 
 
@@ -250,15 +287,6 @@ function appendCard(){
   var castEl       = $("<p>").text(`Cast: ${queryResult.cast}`        );
   var summaryEl    = $("<p>").text(queryResult.summary                );
 
-  var posterBox   = $( "#cb-poster"   );
-  var yearBox     = $( "#cb-year"     );
-  var ratingBox   = $( "#cb-rating"   );
-  var runtimeBox  = $( "#cb-runtime"  );
-  var genreBox    = $( "#cb-genre"    );
-  var directorBox = $( "#cb-director" );
-  var castBox     = $( "#cb-cast"     );
-  var summaryBox  = $( "#cb-summary"  );
-
   if( posterBox[0].checked   ) { movieCard.append(posterImage); }
   if( yearBox[0].checked     ) { titleEl.append(yearEl);        }
   if( ratingBox[0].checked   ) { titleEl.append(mpaaRatingEl);  }
@@ -273,7 +301,6 @@ function appendCard(){
 
   // scores
   
-  var scoresBox = $("#cb-scores");
   var scoresEl =      $("<h3>").text("Scores:");
   
   if ( scoresBox[0].checked && queryResult.scores.length > 0 ) {
@@ -292,8 +319,6 @@ function appendCard(){
   var nytSnippetEl=$("<p>").text(`Review: ${queryResult.reviews.nyt.snippet}`);
   var nytAuthorEl=$("<p>").text(`Author: ${queryResult.reviews.nyt.author}`);
 
-  var nytReviewBox=$("#cb-review-nyt");
-
   if( nytReviewBox[0].checked && queryResult.reviews.nyt.snippet ) {
     nytSnippetEl.append(nytAuthorEl);
     movieCard.append(nytSnippetEl);
@@ -303,7 +328,6 @@ function appendCard(){
   // streaming services
 
   var streamingServicesEl=$("<p>").text(`Streaming Services: ${queryResult.streamingServices}`);
-  var servicesBox=$("#cb-services");
 
   if( servicesBox[0].checked && queryResult.streamingServices ) { 
     movieCard.append(streamingServicesEl);
@@ -334,10 +358,7 @@ function getHourMin(minutes) {
 
 
 
-// localStorage: movieSearchHistory
-
-var movieSearchHistory = [];
-loadMovieSearchHistory();
+// localStorage: Movie Search History
 
 function loadMovieSearchHistory() {
   movieSearchHistory = JSON.parse(localStorage.getItem("movieSearchHistoryStringify"));
@@ -418,3 +439,58 @@ function handleMovieSearchHistoryClick(element) {
     fetchOMDB(searchQuery);
   }
 }
+
+
+// localStorage: Checkbox Configuration
+
+function loadCheckboxConfig() {
+  checkboxConfig = JSON.parse(localStorage.getItem("checkboxConfigStringify"));
+
+  // if checkbox config isn't saved in local storage, initialize the array variable
+  if (!checkboxConfig) {
+    resetCheckboxConfig();
+  }
+  updateCheckboxConfig();
+}
+
+function resetCheckboxConfig() {
+  checkboxConfig = {
+    poster:    true,
+    year:      true,
+    rating:    true,
+    runtime:   true,
+    genre:     true,
+    director:  true,
+    cast:      true,
+    summary:   true,
+    scores:    true,
+    nytReview: true,
+    services:  true
+  };
+}
+
+function saveCheckboxConfig() {
+  localStorage.setItem("checkboxConfigStringify", JSON.stringify(checkboxConfig));
+  updateCheckboxConfig();
+}
+
+function updateCheckboxConfig() {
+  posterBox[0].checked    = checkboxConfig.poster;
+  yearBox[0].checked      = checkboxConfig.year;
+  ratingBox[0].checked    = checkboxConfig.rating;
+  runtimeBox[0].checked   = checkboxConfig.runtime;
+  genreBox[0].checked     = checkboxConfig.genre;
+  directorBox[0].checked  = checkboxConfig.director;
+  castBox[0].checked      = checkboxConfig.cast;
+  summaryBox[0].checked   = checkboxConfig.summary;
+  scoresBox[0].checked    = checkboxConfig.scores;
+  nytReviewBox[0].checked = checkboxConfig.nytReview;
+  servicesBox[0].checked  = checkboxConfig.services;
+}
+
+
+
+// run on page load
+
+loadMovieSearchHistory();
+loadCheckboxConfig();
