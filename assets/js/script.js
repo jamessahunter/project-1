@@ -15,7 +15,8 @@ var clearConfigButton = $("#button-clear-configuration");
 var resetHistoryButton = $("#button-reset-history");
 var movieSearchInput = $("#search");
 var blankSearchModal=$("#blank-search");
-
+var notFoundModal=$("#movie-not-found");
+var modals=$(".modals")
 
 // var criteriaSection = $("#criteria");
 
@@ -62,6 +63,9 @@ var currentMovieList = {};
 var carousel=$(".carousel");
 
 $(blankSearchModal).dialog({
+  autoOpen:false,
+})
+$(notFoundModal).dialog({
   autoOpen:false,
 })
 
@@ -252,7 +256,11 @@ function fetchOMDB(movieSearchQuery){
         // movieInput.val("");
         console.log("omdb");
         console.log(data);
-        
+        if(data.Response=="False"){
+          $(notFoundModal).dialog("open");
+          console.log("not found");
+          return;
+        }
         foundMovie.scores = data.Ratings;
 
         foundMovie.year = parseInt(data.Year);
@@ -266,7 +274,6 @@ function fetchOMDB(movieSearchQuery){
         fetchTMDB(movieSearchQuery);
       });
     }
-
   });
 
 }
