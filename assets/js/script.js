@@ -1,5 +1,6 @@
 
-// var movie;
+var movie;
+var movies;
 
 var popularClicked = false;
 var popularArr = [];
@@ -9,6 +10,8 @@ var repeat=true;
 
 var movies=[];
 var popularArr = [];
+
+var movieSearchHistory = [];
 
 var searchButton = $("#button-search");
 var popularButton = $("#button-popular");
@@ -26,6 +29,8 @@ var movieSearchHistoryContainerLargeEl = $("#search-history-container-lg");
 var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
 var movieCardsContainer = $("#movie-cards-container");
 var movieSearchHistory=[];
+var carouselContainer = $("#carousel-container");
+
 
 // checkbox pointer variables
 
@@ -62,7 +67,6 @@ var foundMovie = {
 
 var pinnedMovies = {};
 var currentMovieList = {};
-var carousel=$(".carousel");
 
 $(blankSearchModal).dialog({
   autoOpen:false,
@@ -82,7 +86,7 @@ carousel.slick({
   slidesToScroll:3,
 });
 
-// init();
+// // init();
 // initial function
 function init(){
     // retrieves movies already stored locally
@@ -91,18 +95,18 @@ function init(){
     //checks to see if the object is poplated
       if (storedMovies!==null){
         //put the array into the events variable
-        movies=storedMovies;
+        var movies=storedMovies;
       }
-      console.log(movies);
+      // console.log(movies);
     // calls display movies
-      displayMovies();
+      // displayMovies();
 }
 
 // function to display the cities
 function displayMovies(){
   var slideIndex=movies.length;
   for(var i=0;i<movies.length;i++){
-  carousel.slick('slickRemove',slideIndex - 1);
+  carouselContainer.slick('slickRemove',slideIndex - 1);
   if (slideIndex !== 0){
     slideIndex--;
   }
@@ -110,7 +114,7 @@ function displayMovies(){
   // for loop for the length of the stored movies
   for (let i = 0; i < movies.length; i++) {
 
-      carousel.slick('slickAdd','<div><h3>' + movies[i] + '</h3></div>');
+      carouselContainer.slick('slickAdd','<div><h3>' + movies[i] + '</h3></div>');
   }
   repeat=false;
 }
@@ -136,7 +140,7 @@ movieSearchInput.on("keypress", function(event) {
 var movieSearchQuery;
 
 function handleSearch(event) {
-  var currentMovieList = {};
+  // var currentMovieList = {};
   event.preventDefault();
   popularClicked = false;
   //define global instead
@@ -184,7 +188,13 @@ carousel.on("click","h3",function(event){
     console.log("no null");
     return;
   }
+})
 
+// event listener for clicking on carouselContainer items
+carouselContainer.on("click","h3", function(event) {
+  console.log(event.target);
+  var movieClicked = event.target.textContent;
+  // repeat=true;
   fetchOMDB(movieClicked);
   // console.log("works");
 });
@@ -206,14 +216,7 @@ clearConfigButton.on("click", function() {
 
 // event listener for reset history button
 resetHistoryButton.on("click", function() {
-  var slideIndex=movieSearchHistory.length;
-  for(var i=0;i<movieSearchHistory.length;i++){
-  carousel.slick('slickRemove',slideIndex - 1);
-  if (slideIndex !== 0){
-    slideIndex--;
-  }
-  }
-  console.log("clear searches")
+  console.log("Clear search history");
   movieSearchHistory = [];
   buildMovieSearchHistory();
   localStorage.removeItem("movieSearchHistoryStringify");
@@ -615,6 +618,22 @@ function saveMovieSearchHistory() {
   buildMovieSearchHistory();
 }
 
+// function clearCarousel() {
+//   for(var i = movieSearchHistory.length - 1; i > 0; i--){
+//     carouselContainer.slick('slickRemove', i);
+//   }
+//   movieSearchHistory = [];
+// }
+
+carouselContainer.slick({
+  dots: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 3,
+  slidesToScroll:3,
+});
+
+
 function buildMovieSearchHistory() {
   // movieSearchHistoryContainerLargeEl.empty();
   // movieSearchHistoryContainerSmallEl.empty();
@@ -623,6 +642,39 @@ function buildMovieSearchHistory() {
   carousel.slick('slickRemove',slideIndex - 1);
   if (slideIndex !== 0){
     slideIndex--;
+  carouselContainer.slick('unslick');
+  carouselContainer.empty();
+
+  carouselContainer.slick({
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 3,
+    slidesToScroll:3,
+  });
+  
+  // var slideIndex = movieSearchHistory.length;
+
+  // for(var i = 0; i < movieSearchHistory.length; i++){
+  //   carouselContainer.slick('slickRemove', slideIndex - 1);
+  //   if (slideIndex !== 0){
+  //     slideIndex--;
+  //   }
+  // }
+
+  // for(var i = movieSearchHistory.length; i > 0; i--){
+  //   carouselContainer.slick('slickRemove', i);
+  // }
+
+  // carouselContainer.slick('getslick');
+  // movieSearchHistoryContainerLargeEl.empty();
+  // movieSearchHistoryContainerSmallEl.empty();
+
+  for (var i = 0; i < movieSearchHistory.length; i++) {
+
+    carouselContainer.slick('slickAdd','<div><h3>' + movieSearchHistory[i] + '</h3></div>');
+
+    // addMovieSearchHistoryButton(i);
   }
   }
   // for loop for the length of the stored movies
@@ -635,6 +687,14 @@ function buildMovieSearchHistory() {
   }
 
 
+// var $status = $('.pagingInfo');
+// var $slickElement = $('.slideshow');
+
+// carouselContainer.on('init reInit afterChange', function (event, slick, currentSlide, nextSlide) {
+//   //currentSlide is undefined on init -- set it to 0 in this case (currentSlide is 0 based)
+//   var i = (currentSlide ? currentSlide : 0) + 1;
+//   $status.text(i + '/' + slick.slideCount);
+// });
 
 // Add button for each successful search
 function addMovieSearchHistoryButton(j) {
