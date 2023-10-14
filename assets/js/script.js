@@ -78,13 +78,13 @@ $(duplicateTitlesModal).dialog({
   autoOpen:false,
 })
 
-carousel.slick({
-  dots: true,
-  infinite: true,
-  speed: 300,
-  slidesToShow: 3,
-  slidesToScroll:3,
-});
+// carouselContainer.slick({
+//   dots: true,
+//   infinite: true,
+//   speed: 300,
+//   slidesToShow: 3,
+//   slidesToScroll:3,
+// });
 
 // // init();
 // initial function
@@ -178,17 +178,6 @@ $(".boxId").on("change", function() {
   // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
   buildMovieCards(currentMovieList);
 });
-// event listener for clicking on carousel items
-carousel.on("click","h3",function(event){
-  // console.log(event.target);
-  var movieClicked=event.target.textContent;
-  // repeat=true;
-  // console.log(movieClicked);
-  if (movieClicked==null){
-    console.log("no null");
-    return;
-  }
-})
 
 // event listener for clicking on carouselContainer items
 carouselContainer.on("click","h3", function(event) {
@@ -263,12 +252,15 @@ function selectYear(data,movieSearchQuery){
   $(duplicateTitlesModal).dialog("open");
 }
 
-duplicateTitlesModal.on("click",".year",{movieToPass: movieToPass},function(event){
+duplicateTitlesModal.on("click",".year",function(event){
   // console.log("works");
   // console.log(event.target.textContent);
   repeat=false;
   var yearChosen=event.target.textContent;
   console.log(movieToPass);
+  duplicateCount=0;
+  console.log("repeat "+ repeat);
+  console.log("dup count " +duplicateCount);
   fetchOMDBSpecific(movieToPass,yearChosen);
   $(duplicateTitlesModal).dialog("close");
 })
@@ -278,7 +270,7 @@ function fetchOMDB(movieSearchQuery,year){
   console.log(movieSearchQuery);
   movieToPass=movieSearchQuery;
   // fetches based on title
-  var omdbUrl = "https://www.omdbapi.com/?s="+ movieSearchQuery +"&apikey=704a2c08"
+  var omdbUrl = "https://www.omdbapi.com/?s="+ movieSearchQuery +"&type=movie&apikey=704a2c08"
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
@@ -296,9 +288,13 @@ function fetchOMDB(movieSearchQuery,year){
         for(var i=0;i<data.Search.length;i++){
           // console.log(data.Search[i].Title.toLowerCase());
           if(movieSearchQuery==data.Search[i].Title.toLowerCase()){
+            console.log("match")
+            console.log(data.Search[i].Title);
             duplicateCount++;
           }
         }
+        console.log("repeat "+ repeat);
+        console.log("dup count " +duplicateCount);
         if(duplicateCount>1&&repeat){
           selectYear(data.Search,movieSearchQuery);
           return;
@@ -333,7 +329,7 @@ function fetchOMDBSpecific(movieSearchQuery,year){
     if (response.ok){
       //   console.log(response);
       return response.json().then(function(data){ 
-
+        duplicateCount=0;
         console.log("omdb specific");
         console.log(data);
         // console.log(data.Search);
@@ -637,14 +633,14 @@ carouselContainer.slick({
 function buildMovieSearchHistory() {
   // movieSearchHistoryContainerLargeEl.empty();
   // movieSearchHistoryContainerSmallEl.empty();
-  var slideIndex=movieSearchHistory.length;
-  for(var i=0;i<movieSearchHistory.length;i++){
-  carousel.slick('slickRemove',slideIndex - 1);
-  if (slideIndex !== 0){
-    slideIndex--;
+  // var slideIndex=movieSearchHistory.length;
+  // for(var i=0;i<movieSearchHistory.length;i++){
+  // carouselContainer.slick('slickRemove',slideIndex - 1);
+  // if (slideIndex !== 0){
+  //   slideIndex--;
   carouselContainer.slick('unslick');
   carouselContainer.empty();
-
+  // }
   carouselContainer.slick({
     dots: true,
     infinite: true,
@@ -676,15 +672,7 @@ function buildMovieSearchHistory() {
 
     // addMovieSearchHistoryButton(i);
   }
-  }
-  // for loop for the length of the stored movies
-  for (let i = 0; i < movieSearchHistory.length; i++) {
-
-      carousel.slick('slickAdd','<div><h3>' + movieSearchHistory[i] + '</h3></div>');
-  }
-  // for (var i = 0; i < movieSearchHistory.length; i++) {
-    // addMovieSearchHistoryButton(i);
-  }
+}
 
 
 // var $status = $('.pagingInfo');
