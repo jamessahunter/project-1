@@ -432,7 +432,7 @@ function fetchOMDBSpecific(movieSearchQuery,year){
         foundMovie.director = data.Director;
         foundMovie.cast = data.Actors;
         addToSearchHistory(movieSearchQuery);
-        fetchTMDB(data.Title,year);
+        fetchTMDB(data.Title,foundMovie.year);
       })
     }
   })
@@ -469,7 +469,7 @@ function fetchTMDB(movie,year){
         // console.log(data.runtime);
         foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
 
-        fetchNYTReview(foundMovie.title);
+        fetchNYTReview(foundMovie.title,year);
 
       });
     }
@@ -477,28 +477,32 @@ function fetchTMDB(movie,year){
 }
     
 
-function fetchNYTReview(movie){
+function fetchNYTReview(movie,year){
   //fetch to nyt review of movie
+  if(popularClicked){
+    fetchServices(movie);
+  }else{
   console.log("NYT");
-  reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
-  // fetch(reviewUrl)
-  // .then(function(response){
-  //   if (response.ok) {
-  //     console.log(response);
-  //     return response.json().then( function(data) {
-  //       console.log("nyt review")
-  //       console.log(data);
-  //       console.log(data.response);
-  //       console.log(data.response.docs[0]);
-  //       console.log(data.response.docs[0].lead_paragraph);
-  //       console.log(data.response.docs[0].snippet);
-  //       foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
-  //       foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
-  //       fetchServices(movie);
-  //     });
-  //   }
-  // });
-  fetchServices(foundMovie.title);
+  reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22%20AND%20pub_year%3A%22"+year+"%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
+  fetch(reviewUrl)
+  .then(function(response){
+    if (response.ok) {
+      console.log(response);
+      return response.json().then( function(data) {
+        console.log("nyt review")
+        console.log(data);
+        console.log(data.response);
+        console.log(data.response.docs[0]);
+        console.log(data.response.docs[0].lead_paragraph);
+        console.log(data.response.docs[0].snippet);
+        foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
+        foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
+        fetchServices(movie);
+      });
+    }
+  });
+  // fetchServices(foundMovie.title);
+}
 }
 
 
