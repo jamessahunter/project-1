@@ -169,7 +169,6 @@ popularButton.on("click", function() {
   popularClicked = true;
   $(popSearchModal).dialog("open");
   fetchPopular(genreSelect.val());
-  fetchPopular();
 });
 
 
@@ -216,10 +215,83 @@ resetHistoryButton.on("click", function() {
   localStorage.removeItem("movieSearchHistoryStringify");
 });
 
+function getGenreId(genre){
+  var genreID;
+  switch(genre){
+    case "action":
+        genreID="28"
+        break;
+    case "adventure":
+        genreID="12"
+        break;
+    case "animation":
+        genreID="16"
+        break;
+    case "comedy":
+        genreID="35"
+        break;
+    case "crime":
+        genreID="80"
+        break;
+    case "documentary":
+        genreID="99"
+        break;
+    case "drama":
+        genreID="18"
+        break;
+    case "family":
+        genreID="10751"
+        break;
+    case "fantasy":
+        genreID="14"
+        break;
+    case "history":
+        genreID="36"
+        break;
+    case "horror":
+        genreID="27"
+        break;
+    case "music":
+        genreID="10402"
+        break;
+    case "mystery":
+        genreID="9648"
+        break;
+    case "romance":
+        genreID="10749"
+        break;
+    case "science fiction":
+        genreID="878"
+        break;
+    case "thriller":
+        genreID="53"
+        break;
+    case "war":
+        genreID="10752"
+        break;
+    case "western":
+        genreID="37";
+        break;
+    default:
+        genreID="";
 
-function fetchPopular(){
+    }
+    return genreID;
+}
+
+
+function fetchPopular(genre){
   //fetch for popular movies
-  fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=c1d1230036e0337907fcb53ffae91703')
+  var genreID=getGenreId(genre);
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
+    }
+  }
+  var popUrl="https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres="+genreID;
+  fetch(popUrl,options)
   .then(function(response){
     if (response.ok){
       return response.json().then(function(data){
@@ -235,7 +307,7 @@ function fetchPopular(){
           // console.log(data.results[i]);
         }
         // console.log(popularArr);
-        fetchOMDB(popularArr[count]);
+        fetchOMDBSpecific(popularArr[count]);
       });
     }
   });
