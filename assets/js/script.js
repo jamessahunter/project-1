@@ -398,7 +398,7 @@ function fetchOMDB(movieSearchQuery,year){
 
 
 function fetchOMDBSpecific(movieSearchQuery,year){
-  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&type=movie&apikey=704a2c08&y="+year;
+  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&y="+year+"&type=movie&apikey=704a2c08";
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
@@ -431,7 +431,9 @@ function fetchOMDBSpecific(movieSearchQuery,year){
         foundMovie.genre = data.Genre;
         foundMovie.director = data.Director;
         foundMovie.cast = data.Actors;
-        addToSearchHistory(movieSearchQuery);
+        if(!popularClicked){
+          addToSearchHistory(movieSearchQuery);
+        }
         fetchTMDB(data.Title,foundMovie.year);
       })
     }
@@ -458,17 +460,19 @@ function fetchTMDB(movie,year){
       //console.log(response);
       return response.json().then(function(data){
         console.log("TMDB specific movie");
-        // console.log(data);
+        console.log(data);
         foundMovie.title = data.results[0].title;
-        // foundMovie.score.tmdb = data.results[0].vote_average;
         foundMovie.summary = data.results[0].overview;
+        foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
+
+
+        foundMovie.scores.push({Source:'User Score',Value:data.results[0].vote_average});
         // console.log(data);
         // console.log(data.original_title);
         // console.log(data.vote_average);
         // console.log(data.poster_path);
         // console.log(data.runtime);
-        foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
-
+        
         fetchNYTReview(foundMovie.title,year);
 
       });
@@ -654,7 +658,7 @@ function appendCard(movieObj){
   // scores
   
   var scoresEl =      $("<h3>").text("Scores:");
-  console.log(movieObj);
+  console.log(movieObj.scores);
   if ( scoresBox[0].checked && movieObj.scores.length > 0 ) {
     var scoreEl = [];
     for (var i = 0; i < movieObj.scores.length; i++ ){
@@ -667,13 +671,13 @@ function appendCard(movieObj){
 
 
   // reviews
-
+  var extrasEl=$("<h4>");
   var nytSnippetEl=$("<p>").text(`Review: ${movieObj.reviews.nyt.snippet}`);
   var nytAuthorEl=$("<p>").text(`Author: ${movieObj.reviews.nyt.author}`);
 
   if( nytReviewBox[0].checked && movieObj.reviews.nyt.snippet ) {
     nytSnippetEl.append(nytAuthorEl);
-    movieCard.append(nytSnippetEl);
+    extrasEl.append(nytSnippetEl);
   }
 
 
@@ -682,9 +686,9 @@ function appendCard(movieObj){
   var streamingServicesEl=$("<p>").text(`Streaming Services: ${movieObj.streamingServices}`);
 
   if( servicesBox[0].checked && movieObj.streamingServices ) { 
-    movieCard.append(streamingServicesEl);
+    extrasEl.append(streamingServicesEl);
   }
-
+  titleEl.append(extrasEl);
   // put the new card at the top
   movieCardsContainer.prepend(movieCard);
 }
