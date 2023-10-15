@@ -220,29 +220,33 @@
         <!-- </div> -->
         <div class="grid grid-cols-1 gap-7 mt-4" id="movie-cards-container">
           <!-- Movie 1 Box (large) -->
-          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button large"
-            >
-              Movie 1
-            </button>
-          </div>
-          <!-- Movie 2 Box (vertical) -->
-          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button vertical"
-            >
-              Movie 2
-            </button>
-          </div>
-          <!-- Movie 3 Box (horizontal) -->
-          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button"
-            >
-              Movie 3
-            </button>
-          </div>
+         <!-- Movie 1 Box (large) -->
+<div class="relative bg-cover bg-center bg-blue-800 hover:bg-blue-900 text-white rounded-lg p-14 shadow-xl movie-box" style="background-image: url('movie1-poster.jpg');">
+  <button
+    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full transition duration-300 transform hover:scale-105 movie-button large"
+  >
+    Movie 1
+  </button>
+</div>
+
+<!-- Movie 2 Box (vertical) -->
+<div class="relative bg-cover bg-center bg-gradient-to-r from-purple-400 to-pink-600 text-white rounded-lg p-14 shadow-xl movie-box" style="background-image: url('movie2-poster.jpg');">
+  <button
+    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full transition duration-300 transform hover:scale-105 movie-button vertical"
+  >
+    Movie 2
+  </button>
+</div>
+
+<!-- Movie 3 Box (horizontal) -->
+<div class="relative bg-cover bg-center bg-green-600 hover:bg-green-700 text-white rounded-lg p-14 shadow-xl movie-box" style="background-image: url('movie3-poster.jpg');">
+  <button
+    class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-full transition duration-300 transform hover:scale-105 movie-button"
+  >
+    Movie 3
+  </button>
+</div>
+
         </div>
       </div>
     </div>

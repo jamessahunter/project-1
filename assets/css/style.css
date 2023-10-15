@@ -1,11 +1,28 @@
-img{
-    width:200px; /* Set the image width to 100% of its container's width */
-    height:3px;
+img {
+  width: 200px; /* Set the image width to 200px */
+  height: 3px;
+  transition: transform 0.3s ease;
 }
+
+img:hover {
+  transform: scale(1.2); /* Adjust the scale factor as needed for the desired zoom level */
+}
+
+/* Additional CSS for the movie card container */
 .movie-card {
-  display: flex; /* Display children elements in a row */
-  align-items: center; /* Vertically center children elements */
+  display: flex;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    rgb(255, 252, 252) 0%,
+    rgb(255, 255, 255) 50%,
+    rgb(255, 255, 255) 100%
+  );
+  background-size: 200% 100%;
+  animation: gradient-x 15s linear forwards; /* Use 'forwards' to keep the final state */
+  animation-iteration-count: 1; /* Set to 1 to run the animation only once */
 }
+
 /* CSS for the h2 element */
 h2 {
   margin: 40px !important;
@@ -14,25 +31,23 @@ h2 {
 }
 
 /* CSS for the p element */
-p {
-  font-size: 1rem; /* Adjust font size as needed */
+h3 h2 {
+  font-size: 0.2rem; /* Adjust font size as needed */
+  margin: 0;
+  text-align: ce;
 }
 
-/* CSS for mobile or small screens */
-@media (max-width: 1000px) {
-  h2 {
-    margin: 10px !important; /* Adjust margin for smaller screens */
-    font-size: 1.2rem; /* Adjust font size for smaller screens */
-  }
+/* Add hover effect for the .movie-card container */
+.movie-card:hover {
+  transform: scale(1.1); /* Adjust the scale factor as needed for the desired zoom level */
+}
 
-  p {
-    font-size: 0.9rem;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Adjust font size for smaller screens */
+/* Keyframes for the gradient animation */
+@keyframes gradient-x {
+  0% {
+    background-position: 200% 0;
   }
-
-  /* Use flexbox to stack h2 and p elements vertically */
-  .movie-card {
-    flex-direction: column;
-    align-items: flex-start;
+  100% {
+    background-position: -200% 0;
   }
 }
