@@ -22,6 +22,7 @@ var movieSearchInput = $("#search");
 var blankSearchModal=$("#blank-search");
 var notFoundModal=$("#movie-not-found");
 var duplicateTitlesModal=$("#title-duplicate");
+var popSearchModal=$(("#pop-search"));
 
 // var criteriaSection = $("#criteria");
 
@@ -30,7 +31,7 @@ var movieSearchHistoryContainerSmallEl = $("#search-history-container-sm");
 var movieCardsContainer = $("#movie-cards-container");
 var movieSearchHistory=[];
 var carouselContainer = $("#carousel-container");
-
+var genreSelect=$("#genres");
 
 // checkbox pointer variables
 
@@ -77,7 +78,9 @@ $(notFoundModal).dialog({
 $(duplicateTitlesModal).dialog({
   autoOpen:false,
 })
-
+$(popSearchModal).dialog({
+  autoOpen:false,
+})
 // carouselContainer.slick({
 //   dots: true,
 //   infinite: true,
@@ -164,6 +167,8 @@ function handleSearch(event) {
 // event listener for popular button
 popularButton.on("click", function() {
   popularClicked = true;
+  $(popSearchModal).dialog("open");
+  fetchPopular(genreSelect.val());
   fetchPopular();
 });
 
