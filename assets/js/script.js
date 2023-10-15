@@ -508,6 +508,15 @@ function fetchNYTReview(movie,year){
 
 function fetchServices(movie){
   console.log("services");
+  if(popularClicked){
+    insertMovie(foundMovie, currentMovieList);
+    if (count < popularArr.length - 1 ) {
+      count++;
+      fetchOMDB(popularArr[count]);
+    } else {
+      buildMovieCards(currentMovieList);
+    }
+  }else{
   // sees if movie is streaming based on movie title
   const urlStreaming = 'https://streaming-availability.p.rapidapi.com/search/title?title='+movie+'&country=us&show_type=movie&output_language=en';
   const options1={
@@ -517,29 +526,38 @@ function fetchServices(movie){
       'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
     }
   };
-  // console.log("services section");
-  //commenting out to reduce number of calls
-  // fetch(urlStreaming,options1)
-  //   .then(function(response){
-  //     if (response.ok){
-  //       console.log(response);
-  //       return response.json().then( function(data) {
-  //         console.log("streaming service")
-  //         console.log(data.result)
-  //         console.log(data.result[0].streamingInfo)
-  //         foundMovie.streamingServices = data.result[0].streamingInfo.us[0].service;
-  //       });
-  //     }
-  //   });
+  console.log("services section");
+  // commenting out to reduce number of calls
+  fetch(urlStreaming,options1)
+    .then(function(response){
+      if (response.ok){
+        console.log(response);
+        return response.json().then( function(data) {
+          console.log("streaming service")
+          console.log(data.result)
+          console.log(data.result[0].streamingInfo)
+          foundMovie.streamingServices = data.result[0].streamingInfo.us[0].service;
+          insertMovie(foundMovie, currentMovieList);
+  
+          if ( popularClicked && count < popularArr.length - 1 ) {
+            count++;
+            fetchOMDB(popularArr[count]);
+          } else {
+            buildMovieCards(currentMovieList);
+          }
+        });
+      }
+    });
 
-  insertMovie(foundMovie, currentMovieList);
+  // insertMovie(foundMovie, currentMovieList);
 
-  if ( popularClicked && count < popularArr.length - 1 ) {
-    count++;
-    fetchOMDB(popularArr[count]);
-  } else {
-    buildMovieCards(currentMovieList);
-  }
+  // if ( popularClicked && count < popularArr.length - 1 ) {
+  //   count++;
+  //   fetchOMDB(popularArr[count]);
+  // } else {
+  //   buildMovieCards(currentMovieList);
+  // }
+}
 }
 
 
