@@ -158,7 +158,7 @@ function handleSearch(event) {
   fetchOMDB(movieSearchQuery);
   
 
-  addToSearchHistory(movieSearchQuery);
+  
 
   // Clear the input field
   movieSearchInput.val("");
@@ -357,21 +357,19 @@ function fetchOMDB(movieSearchQuery,year){
         console.log("omdb");
         console.log(data);
         if(data.Response=="False"){
-          $(notFoundModal).dialog("open");
-          console.log("not found");
-          return;
+          fetchOMDBSpecific(movieSearchQuery);
         }
         // console.log(movieSearchQuery);
         for(var i=0;i<data.Search.length;i++){
           // console.log(data.Search[i].Title.toLowerCase());
           if(movieSearchQuery==data.Search[i].Title.toLowerCase()){
-            console.log("match")
-            console.log(data.Search[i].Title);
+            // console.log("match")
+            // console.log(data.Search[i].Title);
             duplicateCount++;
           }
         }
-        console.log("repeat "+ repeat);
-        console.log("dup count " +duplicateCount);
+        // console.log("repeat "+ repeat);
+        // console.log("dup count " +duplicateCount);
         if(duplicateCount>1&&repeat){
           selectYear(data.Search,movieSearchQuery);
           return;
@@ -400,12 +398,27 @@ function fetchOMDB(movieSearchQuery,year){
 
 
 function fetchOMDBSpecific(movieSearchQuery,year){
-  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&apikey=704a2c08&y="+year;
+  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&type=movie&apikey=704a2c08&y="+year;
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
       //   console.log(response);
       return response.json().then(function(data){ 
+        if(data.Response=="False"){
+          if(popularClicked){
+            notFoundModal.text(movieSearchQuery+" was not found");
+            $(notFoundModal).dialog("open");
+            count++;
+            fetchOMDBSpecific(popularArr[count]);
+          return;
+        }
+        else{
+          notFoundModal.text(movieSearchQuery+" was not found");
+          $(notFoundModal).dialog("open");
+          console.log("not found");
+          return; 
+        }
+      }
         duplicateCount=0;
         console.log("omdb specific");
         console.log(data);
@@ -418,6 +431,7 @@ function fetchOMDBSpecific(movieSearchQuery,year){
         foundMovie.genre = data.Genre;
         foundMovie.director = data.Director;
         foundMovie.cast = data.Actors;
+        addToSearchHistory(movieSearchQuery);
         fetchTMDB(data.Title,year);
       })
     }
@@ -444,7 +458,7 @@ function fetchTMDB(movie,year){
       //console.log(response);
       return response.json().then(function(data){
         console.log("TMDB specific movie");
-        console.log(data);
+        // console.log(data);
         foundMovie.title = data.results[0].title;
         // foundMovie.score.tmdb = data.results[0].vote_average;
         foundMovie.summary = data.results[0].overview;
