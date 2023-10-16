@@ -70,6 +70,7 @@ var foundMovie = {
   year: 0
 };
 
+// object variables to hold nested collections of foundMovie objects
 var pinnedMovies = {};
 var currentMovieList = {};
 
@@ -100,16 +101,16 @@ movieSearchInput.on("keypress", function(event) {
 });
 
 var movieSearchQuery;
-
+// retrieve and process search input query
 function handleSearch(event) {
-  // var currentMovieList = {};
+
   event.preventDefault();
   popularClicked = false;
   //define global instead
   var movieSearchQuery = movieSearchInput.val();
 
   if(movieSearchQuery === ""){
-    // MODAL HERE 
+    // modal to inform user of blank search query
     $(blankSearchModal).dialog("open");
     return;
   }
@@ -142,7 +143,7 @@ $(".boxId").on("change", function() {
   // checkboxId = $(this).attr("value");
   // isChecked = $(this).prop("checked");
   // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
-  buildMovieCards(currentMovieList);
+  // buildMovieCards(currentMovieList); // not necessary
 });
 
 // event listener for clicking on carouselContainer items
@@ -969,7 +970,7 @@ function resetCheckboxConfig() {
 
 function saveCheckboxConfig() {
   localStorage.setItem("checkboxConfigStringify", JSON.stringify(checkboxConfig));
-  updateCheckboxConfig();
+  // updateCheckboxConfig(); // not necessary
 }
 
 function updateCheckboxConfig() {
