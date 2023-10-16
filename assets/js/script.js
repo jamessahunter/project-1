@@ -81,51 +81,6 @@ $(duplicateTitlesModal).dialog({
 $(popSearchModal).dialog({
   autoOpen:false,
 })
-// carouselContainer.slick({
-//   dots: true,
-//   infinite: true,
-//   speed: 300,
-//   slidesToShow: 3,
-//   slidesToScroll:3,
-// });
-
-// // init();
-// initial function
-function init(){
-    // retrieves movies already stored locally
-    var storedMovies=JSON.parse(localStorage.getItem("movies"));
-
-    //checks to see if the object is poplated
-      if (storedMovies!==null){
-        //put the array into the events variable
-        var movies=storedMovies;
-      }
-      // console.log(movies);
-    // calls display movies
-      // displayMovies();
-}
-
-// function to display the cities
-function displayMovies(){
-  var slideIndex=movies.length;
-  for(var i=0;i<movies.length;i++){
-  carouselContainer.slick('slickRemove',slideIndex - 1);
-  if (slideIndex !== 0){
-    slideIndex--;
-  }
-  }
-  // for loop for the length of the stored movies
-  for (let i = 0; i < movies.length; i++) {
-
-      carouselContainer.slick('slickAdd','<div><h3>' + movies[i] + '</h3></div>');
-  }
-  repeat=false;
-}
-
-function storeMovies(){
-  // puts the items into a string
-  localStorage.setItem("movies",JSON.stringify(movies));
-}
 
 // searchbutton click event listener
 searchButton.on("click", function(event) {
@@ -150,16 +105,13 @@ function handleSearch(event) {
   var movieSearchQuery = movieSearchInput.val();
 
   if(movieSearchQuery === ""){
-    // MODAL HERE ********************************** (or nothing happens if you click when it's empty?)
+    // MODAL HERE 
     $(blankSearchModal).dialog("open");
     return;
   }
   console.log("search")
   fetchOMDB(movieSearchQuery);
   
-
-  
-
   // Clear the input field
   movieSearchInput.val("");
 }
@@ -295,18 +247,12 @@ function fetchPopular(genre){
   .then(function(response){
     if (response.ok){
       return response.json().then(function(data){
-        // console.log("popular movies")
-        //   console.log(data);
-        //   console.log(data.results);
-        for(var i=data.results.length-1;i>=0;i--){
-          // console.log(wait);
-          popularArr.push(data.results[i].title);
 
-          // var movieTitle = data.results[i].title;
-          // fetchOMDB(movieTitle);
-          // console.log(data.results[i]);
+        for(var i=data.results.length-1;i>=0;i--){
+
+          popularArr.push(data.results[i].title);
         }
-        // console.log(popularArr);
+
         fetchOMDBSpecific(popularArr[count]);
       });
     }
@@ -316,7 +262,6 @@ function fetchPopular(genre){
 var movieToPass;
 
 function selectYear(data,movieSearchQuery){
-  // console.log(data);
   for(var i = 0; i<data.length;i++){
     if(movieSearchQuery==data[i].Title.toLowerCase()){
       var yearP=$("<p>").text(data[i].Year).addClass("year");
@@ -330,66 +275,38 @@ function selectYear(data,movieSearchQuery){
 }
 
 duplicateTitlesModal.on("click",".year",function(event){
-  // console.log("works");
-  // console.log(event.target.textContent);
+
   repeat=false;
   var yearChosen=event.target.textContent;
-  console.log(movieToPass);
   duplicateCount=0;
-  console.log("repeat "+ repeat);
-  console.log("dup count " +duplicateCount);
   fetchOMDBSpecific(movieToPass,yearChosen);
   $(duplicateTitlesModal).dialog("close");
 })
 
 
 function fetchOMDB(movieSearchQuery,year){
-  console.log(movieSearchQuery);
+
   movieToPass=movieSearchQuery;
   // fetches based on title
   var omdbUrl = "https://www.omdbapi.com/?s="+ movieSearchQuery +"&type=movie&apikey=704a2c08"
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
-      //   console.log(response);
       return response.json().then(function(data){
-
-        console.log("omdb");
-        console.log(data);
         if(data.Response=="False"){
           fetchOMDBSpecific(movieSearchQuery);
         }
-        // console.log(movieSearchQuery);
         for(var i=0;i<data.Search.length;i++){
-          // console.log(data.Search[i].Title.toLowerCase());
           if(movieSearchQuery==data.Search[i].Title.toLowerCase()){
-            // console.log("match")
-            // console.log(data.Search[i].Title);
             duplicateCount++;
           }
         }
-        // console.log("repeat "+ repeat);
-        // console.log("dup count " +duplicateCount);
         if(duplicateCount>1&&repeat){
           selectYear(data.Search,movieSearchQuery);
           return;
         }
 
-        // console.log(data.Search);
-        // console.log(data.Search[0])
-        // foundMovie.scores = data.Search[0].Ratings;
-        // foundMovie.year = parseInt(data.Search[0].Year);
-        // foundMovie.mpaaRating = data.Search[0].Rated;
-        // foundMovie.runtime = parseInt(data.Search[0].Runtime);
-        // foundMovie.genre = data.Search[0].Genre;
-        // foundMovie.director = data.Search[0].Director;
-        // foundMovie.cast = data.Search[0].Actors;
-
-        console.log(foundMovie);
-        fetchOMDBSpecific(movieSearchQuery);
-        // console.log(data.imdbRating);
-        // console.log(data.Ratings);
-        // fetchTMDB(data.Search[0].Title,year);
+        fetchOMDBSpecific(movieSearchQuery,year);
       });
     }
   });
@@ -398,11 +315,10 @@ function fetchOMDB(movieSearchQuery,year){
 
 
 function fetchOMDBSpecific(movieSearchQuery,year){
-  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&type=movie&apikey=704a2c08&y="+year;
+  var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&y="+year+"&type=movie&apikey=704a2c08";
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
-      //   console.log(response);
       return response.json().then(function(data){ 
         if(data.Response=="False"){
           if(popularClicked){
@@ -421,9 +337,6 @@ function fetchOMDBSpecific(movieSearchQuery,year){
       }
         duplicateCount=0;
         console.log("omdb specific");
-        console.log(data);
-        // console.log(data.Search);
-        // console.log(data.Search[0])
         foundMovie.scores = data.Ratings;
         foundMovie.year = parseInt(data.Year);
         foundMovie.mpaaRating = data.Rated;
@@ -431,7 +344,6 @@ function fetchOMDBSpecific(movieSearchQuery,year){
         foundMovie.genre = data.Genre;
         foundMovie.director = data.Director;
         foundMovie.cast = data.Actors;
-        addToSearchHistory(movieSearchQuery);
         fetchTMDB(data.Title,foundMovie.year);
       })
     }
@@ -450,25 +362,17 @@ function fetchTMDB(movie,year){
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
     }
   };
-  console.log(movie);
-  // console.log(year);
   fetch('https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US&year='+year, options)
   .then(function(response){
     if (response.ok){
-      //console.log(response);
+
       return response.json().then(function(data){
         console.log("TMDB specific movie");
-        // console.log(data);
-        foundMovie.title = data.results[0].title;
-        // foundMovie.score.tmdb = data.results[0].vote_average;
-        foundMovie.summary = data.results[0].overview;
-        // console.log(data);
-        // console.log(data.original_title);
-        // console.log(data.vote_average);
-        // console.log(data.poster_path);
-        // console.log(data.runtime);
-        foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
 
+        foundMovie.title = data.results[0].title;
+        foundMovie.summary = data.results[0].overview;
+        foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
+        foundMovie.scores.push({Source:'User Score',Value:data.results[0].vote_average});
         fetchNYTReview(foundMovie.title,year);
 
       });
@@ -526,17 +430,16 @@ function fetchServices(movie){
       'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
     }
   };
-  console.log("services section");
-  // commenting out to reduce number of calls
   fetch(urlStreaming,options1)
     .then(function(response){
       if (response.ok){
-        console.log(response);
         return response.json().then( function(data) {
           console.log("streaming service")
-          console.log(data.result)
-          console.log(data.result[0].streamingInfo)
-          foundMovie.streamingServices = data.result[0].streamingInfo.us[0].service;
+          console.log(data.result[0].streamingInfo.us[0]);
+          foundMovie.streamingServices = {service:data.result[0].streamingInfo.us[0].service,type:data.result[0].streamingInfo.us[0].streamingType};
+          if(!popularClicked){
+            addToSearchHistory(movie);
+          }
           insertMovie(foundMovie, currentMovieList);
   
           if ( popularClicked && count < popularArr.length - 1 ) {
@@ -654,7 +557,7 @@ function appendCard(movieObj){
   // scores
   
   var scoresEl =      $("<h3>").text("Scores:");
-  console.log(movieObj);
+  console.log(movieObj.scores);
   if ( scoresBox[0].checked && movieObj.scores.length > 0 ) {
     var scoreEl = [];
     for (var i = 0; i < movieObj.scores.length; i++ ){
@@ -667,24 +570,24 @@ function appendCard(movieObj){
 
 
   // reviews
-
+  var extrasEl=$("<h4>");
   var nytSnippetEl=$("<p>").text(`Review: ${movieObj.reviews.nyt.snippet}`);
   var nytAuthorEl=$("<p>").text(`Author: ${movieObj.reviews.nyt.author}`);
 
   if( nytReviewBox[0].checked && movieObj.reviews.nyt.snippet ) {
     nytSnippetEl.append(nytAuthorEl);
-    movieCard.append(nytSnippetEl);
+    extrasEl.append(nytSnippetEl);
   }
 
 
   // streaming services
 
-  var streamingServicesEl=$("<p>").text(`Streaming Services: ${movieObj.streamingServices}`);
+  var streamingServicesEl=$("<p>").text(`Streaming Services: ${movieObj.streamingServices.service} Type: ${movieObj.streamingServices.type}`);
 
   if( servicesBox[0].checked && movieObj.streamingServices ) { 
-    movieCard.append(streamingServicesEl);
+    extrasEl.append(streamingServicesEl);
   }
-
+  titleEl.append(extrasEl);
   // put the new card at the top
   movieCardsContainer.prepend(movieCard);
 }
@@ -738,8 +641,39 @@ carouselContainer.slick({
   dots: true,
   infinite: true,
   speed: 300,
-  slidesToShow: 3,
-  slidesToScroll:3,
+  slidesToShow: 6,
+  slidesToScroll:6,
+  responsive: [
+    {
+      breakpoint: 1200,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 4,
+      }
+      },
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+
+      }
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+  ]
 });
 
 
@@ -758,8 +692,38 @@ function buildMovieSearchHistory() {
     dots: true,
     infinite: true,
     speed: 300,
-    slidesToShow: 3,
-    slidesToScroll:3,
+    slidesToShow: 6,
+    slidesToScroll:6,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+        }
+        },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   });
   
   // var slideIndex = movieSearchHistory.length;
