@@ -508,7 +508,15 @@ function fetchServices(movie){
             buildMovieCards(currentMovieList);
           }
         });
-      }
+      }else{
+                  insertMovie(foundMovie, currentMovieList);
+  
+          if ( popularClicked && count < popularArr.length - 1 ) {
+            count++;
+            fetchOMDB(popularArr[count]);
+          } else {
+            buildMovieCards(currentMovieList);
+          }
     });
 
   }
