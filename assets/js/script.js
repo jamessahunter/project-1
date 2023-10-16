@@ -491,6 +491,7 @@ function fetchServices(movie){
       }
     };
     fetch(urlStreaming,options1).then(function(response){
+      console.log(response);
       if (response.ok){
         return response.json().then( function(data) {
           console.log("streaming service")
@@ -508,6 +509,16 @@ function fetchServices(movie){
             buildMovieCards(currentMovieList);
           }
         });
+      }
+      else{
+        insertMovie(foundMovie, currentMovieList);
+  
+          if ( popularClicked && count < popularArr.length - 1 ) {
+            count++;
+            fetchOMDB(popularArr[count]);
+          } else {
+            buildMovieCards(currentMovieList);
+          }
       }
     });
 
