@@ -1,5 +1,21 @@
 # What to Watch
 
+## Technology Used 
+
+| Technology Used         | Resource URL           | 
+| ------------- |:-------------:| 
+| HTML    | [https://developer.mozilla.org/en-US/docs/Web/HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) | 
+| CSS     | [https://developer.mozilla.org/en-US/docs/Web/CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)      |   
+| Git | [https://git-scm.com/](https://git-scm.com/)     |    
+| JavaScrpit | [https://www.w3schools.com/js/default.asp](https://www.w3schools.com/js/default.asp) |
+| JQuery | [https://api.jquery.com/](https://api.jquery.com/) |
+| JQuery UI | [https://jqueryui.com/](https://jqueryui.com/) |
+| Slick Carousel | [https://github.com/kenwheeler/slick](https://github.com/kenwheeler/slick) |
+| TMDB API | [https://developer.themoviedb.org/docs](https://developer.themoviedb.org/docs) |
+| OMDB API | [https://www.omdbapi.com/](https://www.omdbapi.com/) |
+| NYT API |  [https://developer.nytimes.com/apis](https://developer.nytimes.com/apis) |
+| Streaming Availability API | [https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability) |
+
 ## Description 
 
 Your GitHub profile is an extremely important aspect of your public identity as a developer. A well-crafted one allows you to show off your work to other developers as well as potential employers. An important component of your GitHub profile—and one that many new developers often overlook—is the README.md file.
@@ -38,6 +54,11 @@ N/A
 
 ## Usage 
 
+For the user story of I want to search for and review side-by-side my desired categories of movie information. 
+
+
+
+
 Provide instructions and examples for use. Include screenshots as needed. 
 
 To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
@@ -48,6 +69,11 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 
 ## Credits
+
+
+### Ken Wheeler
+Created the Slick carousel that contains the previously searched for movies
+[Github](https://github.com/kenwheeler/slick)
 
 List your collaborators, if any, with links to their GitHub profiles.
 
