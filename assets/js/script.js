@@ -515,6 +515,9 @@ function fetchServices(movie){
           }
         });
       }else{
+        if(!popularClicked){
+          addToSearchHistory(movie);
+        }
           insertMovie(foundMovie, currentMovieList);
   
           if ( popularClicked && count < popularArr.length - 1 ) {
