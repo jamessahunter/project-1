@@ -452,25 +452,26 @@ function fetchNYTReview(movie,year){
   }else{
   console.log("NYT");
   reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22%20AND%20pub_year%3A%22"+year+"%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
-  fetch(reviewUrl)
-  .then(function(response){
-    if (response.ok) {
-      console.log(response);
-      return response.json().then( function(data) {
-        console.log("nyt review")
-        console.log(data);
-        console.log(data.response);
-        console.log(data.response.docs[0]);
-        console.log(data.response.docs[0].lead_paragraph);
-        console.log(data.response.docs[0].snippet);
-        foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
-        foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
-        fetchServices(movie);
-      });
-    }
-  });
+  // fetch(reviewUrl)
+  // .then(function(response){
+  //   if (response.ok) {
+  //     console.log(response);
+  //     return response.json().then( function(data) {
+  //       console.log("nyt review")
+  //       console.log(data);
+  //       console.log(data.response);
+  //       console.log(data.response.docs[0]);
+  //       console.log(data.response.docs[0].lead_paragraph);
+  //       console.log(data.response.docs[0].snippet);
+  //       foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
+  //       foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
+  //       fetchServices(movie);
+  //     });
+  //   }
+  // });
   // fetchServices(foundMovie.title);
-}
+  fetchServices(movie);
+  }
 }
 
 
@@ -611,7 +612,7 @@ function appendCard(movieObj){
   }
   
 
-  var movieCard       = $(`<div class="movie-card flex flex-col sm:flex-row snap-start box-border border-2 ${borderColor} h-200 bg-white rounded-md p-2 shadow-md" data-pinned=${isPinned}></div>`);
+  var movieCard       = $(`<div class="movie-card flex flex-col sm:flex-row snap-start box-border border-8 ${borderColor} h-200 bg-white rounded-md p-2 shadow-md" data-pinned=${isPinned}></div>`);
   
   var moviePoster     = $(`<div class="movie-poster object-left flex-none mr-2"><img class="fixed-width-image grow-0" src=${movieObj.posterURL} alt="Movie Poster"></div>`);
 
