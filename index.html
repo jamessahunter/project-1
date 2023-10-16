@@ -3,13 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Website</title>
+    <title>What to Watch</title>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <!-- Add the slick-theme.css if you want default styling -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> 
+        <!-- Add the slick-theme.css if you want default styling -->
         <link rel="stylesheet" type="text/css" href="./slick/slick.css"/>
         <!-- Add the slick-theme.css if you want default styling -->
             <link rel="stylesheet" type="text/css" href="./slick/slick-theme.css"/>
@@ -22,19 +25,20 @@
   </head>
   <body>
     <!-- Header Section -->
-    <header class="bg-blue-500 py-4 sm:w-full sm:mx-auto sticky top-0">
-    <!-- <header class="bg-blue-500 py-4 sm:w-full sm:mx-auto top-0"> -->
-        <div class="container text-center">
-        <!-- Navigation Menu for Movies -->
-        <nav>
-          <a href="#" class="text-white text-center-important">Movies</a>
-        </nav>
-      </div>
-    </header>
+<header class="bg-blue-500 py-4 sm:w-full sm:mx-auto sticky top-0">
+  <div class="container text-center">
+    <!-- Navigation Menu for Movies -->
+    <nav>
+      <a href="#" class="text-white text-center-important">
+        <i class="fas fa-film"></i> Movies
+      </a>
+    </nav>
+  </div>
+</header>
+
 
     <div class="container mx-auto flex flex-col sm:flex-row mt-4">
-      <div class="border border-gray-300 rounded-md p-4 mb-4 sm:mb-0">
-
+      <div class="border bg-white border-gray-300 rounded-md p-4 mb-4 sm:mb-0">
         <!-- Search Box and Options (Left Column) -->
         <div class="flex-1 sm:sticky sm:top-20 sm:mt-0 ">
 
@@ -149,9 +153,25 @@
             id="genres"
             class="block w-full bg-white border rounded-l-md px-4 py-2 mt-2"
           >
+            <option value="none">None</option>
             <option value="action">Action</option>
+            <option value="adventure">Adventure</option>
+            <option value="animation">Animation</option>
             <option value="comedy">Comedy</option>
+            <option value="crime">Crime</option>
+            <option value="documentary">Documentary</option>
             <option value="drama">Drama</option>
+            <option value="family">Family</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="history">History</option>
+            <option value="horror">Horror</option>
+            <option value="music">Music</option>
+            <option value="myster">Mystery</option>
+            <option value="romance">Romance</option>
+            <option value="science fictiom">Science Fiction</option>
+            <option value="thriller">Thriller</option>
+            <option value="western">Western</option>
+            <option value="war">War</option>
           </select>
 
 
@@ -210,19 +230,35 @@
       <div id="right-column" class="flex-1 pl-4">
 
         <!-- Search History buttons for larger screens -->
-        <div id="search-history-container-lg" class="hidden sm:block ">
-
-          <!-- Slick carousel for larger screens -->
-          <div class="hidden sm:block">
-            <div class="grid grid-cols-1 gap-7 mt-4">
-              <div class="items-center bg-white px-10 py-4 movie-box">
-                <div id="carousel-container"></div>
+        <div id="search-history-container-lg" class="sm:block">
+          <!-- <button
+            class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2" -->
+        <!-- "Movies" buttons for larger screens -->
+        <!-- <div class="hidden sm:block"> -->
+          <div class="grid grid-cols-1 gap-7 mt-4 sticky top-14">
+            <div class="items-center bg-white px-10 py-4 movie-box">
+              <span class="pagingInfo"></span>
+              <div id="carousel-container">
               </div>
             </div>
           </div>
 
         </div>  
-
+        <!-- <button
+          class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+        >
+          Previously
+        </button>
+        <button
+          class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
+        >
+          Searched
+        </button>
+        <button
+          class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
+        >
+          Movies
+        </button> -->
         <!-- Movie Cards Container -->
         <div id="movie-cards-container" class="grid grid-cols-1 gap-7 mt-4 snap-y snap-mandatory overflow-scroll">
           
@@ -283,11 +319,26 @@
 
       </div>
     </div>
-
-    <!-- calls jquery script -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <!-- calls slick -->
-    <script type="text/javascript" src="./slick/slick.min.js"></script>
-    <script src="./assets/js/script.js"></script>
+    <section id="modals" class="hidden">
+      <div id="blank-search" >
+        <p>Try to entering something in the search bar first</p>
+      </div>
+      <div id="movie-not-found">
+        <p>Hmm no movie seemed to have that title try searching again</p>
+      </div>
+      <div id="title-duplicate">
+        <p> there seem to be multiple movies with the same title please click the year you want to search for</p>
+      </div>
+      <div id="pop-search">
+        <p>Please note both NYT Review and Streaming Services are unavailable for this method. If you wish to see either search individually.</p>
+      </div>
+    </section>
+    <!-- The rest of your website content goes here -->
+        <!-- calls jquery script -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <!-- calls slick -->
+        <script type="text/javascript" src="./slick/slick.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="./assets/js/script.js"></script>
   </body>
 </html>

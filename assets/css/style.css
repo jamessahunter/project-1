@@ -1,3 +1,8 @@
+body{
+  background-image: url(JCX30W-2T.jpg);
+  background-size: 250px;
+  background-repeat: repeat;
+}
 img{
     width:200px; /* Set the image width to 100% of its container's width */
     height:auto;
