@@ -20,6 +20,10 @@
 
 [Supportive Gif of your App doing it]
 
+What to Watch is a web application to search for movies and only display the specific result information the user is iterested in. 
+
+What to Watch is a web application to search for movies and only display the specific result information the user is iterested in. 
+
 
 At a minimum, your project README needs a title and a short description explaining the what, why, and how. What was your motivation? Why did you build this project? (Note: The answer is not "Because it was a homework assignment.") What problem does it solve? What did you learn? What makes your project stand out? 
 
@@ -84,7 +88,22 @@ For the user story of I want to search for and review side-by-side my desired ca
 
 
 
-Provide instructions and examples for use. Include screenshots as needed. 
+On page load, the user is presented in the left column with a search input field and **Search** button, a **Popular movies** button, a set of *Features* checkboxes labeled with movie information categories, and a *Genres* drop down. There are four additional buttons at the bottom: **Save Config**, **Clear Config**, **Clear Search History**, and **Clear Unpinned Movies**.
+
+Upon searching for a movie title using the search field, the designated film is presented in a movie card on the right column. The search query is also added to the *Search History* carousel at the top of the right column. Additional searches will continue to populate the right colum with additional movie cards.
+
+Changing checkbox selections will alter the information displayed on the movie cards. For example, unchecking the *Poster* checkbox will remove the movie poster image from the collection of movie cards. The user can save the current checkbox selection to local storage by clicking the **Save Config** button, while the **Clear Config** button will reset the checkboxes to a state of "all on".
+
+If desired, the searh history carousel can be cleared by clicking the **Clear Search History** button.
+
+The user can click on individual movie cards to pin them to the page. A pinned card is designated by a blue border. The set of pinned movie cards is also saved to local storage and will be generated again when the page is reloaded or revisited from the same browser, together with the search history carousel and any saved checkbox configuration.
+
+At any time, the user can click the **Clear Unpinned Movies** button, and any unpinned movie card will be removed. If a previously searched for movie was removed, the user can recover that title by clicking on the query term in the search history carousel.
+
+Finally, clicking on the **Popular movies** button will present the user with movie cards for the current top 20 movies from [TMDB](https://www.themoviedb.org/?language=en-US). If the user first selects a genre from the dropown, the top 20 movies in that genre will be returned.
+
+
+
 
 To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
 
