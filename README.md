@@ -10,7 +10,11 @@ There's no one right way to structure a good README. There is one very wrong way
 
 At a minimum, your project README needs a title and a short description explaining the what, why, and how. What was your motivation? Why did you build this project? (Note: The answer is not "Because it was a homework assignment.") What problem does it solve? What did you learn? What makes your project stand out? 
 
-Lastly, if your project is deployed, include a link to the deployed application here.
+
+
+We deployed the application on [GitHub](https://github.com/) [Pages](https://pages.github.com/), and it can be found [here](https://jamessahunter.github.io/What-to-watch/).
+
+
 
 If you're new to Markdown, read the GitHub guide on [Mastering Markdown](https://guides.github.com/features/mastering-markdown/).
 
@@ -29,7 +33,7 @@ If your README is very long, add a table of contents to make it easy for users t
 
 ## Installation
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+N/A
 
 
 ## Usage 
