@@ -139,7 +139,7 @@ $(".boxId").on("change", function() {
   // checkboxId = $(this).attr("value");
   // isChecked = $(this).prop("checked");
   // console.log(checkboxId + " is now " + (isChecked ? "checked" : "unchecked"));
-  buildMovieCards(currentMovieList);
+  // buildMovieCards(currentMovieList); // not necessary
 });
 
 // event listener for clicking on carouselContainer items
@@ -933,7 +933,7 @@ function resetCheckboxConfig() {
 
 function saveCheckboxConfig() {
   localStorage.setItem("checkboxConfigStringify", JSON.stringify(checkboxConfig));
-  updateCheckboxConfig();
+  // updateCheckboxConfig(); // not necessary
 }
 
 function updateCheckboxConfig() {
