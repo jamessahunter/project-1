@@ -37,11 +37,11 @@
 </header>
 
 
-    <!-- Search Box and Previously Searched Movies -->
     <div class="container mx-auto flex flex-col sm:flex-row mt-4">
       <div class="border bg-white border-gray-300 rounded-md p-4 mb-4 sm:mb-0">
         <!-- Search Box and Options (Left Column) -->
         <div class="flex-1 sm:sticky sm:top-20 sm:mt-0 ">
+
           <!-- Search Box -->
           <div class="mb-4">
             <input
@@ -72,55 +72,80 @@
 
 
           <!-- Features Checkbox List -->
+          <div>
+            <p class="text-lg font-semibold mb-2">Features:</p>
 
-          <p class="text-lg font-semibold mb-2">Features:</p>
+            <!-- Checkboxes -->
+            <ul id="criteria">
 
-          <ul id="criteria">
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-poster" class="mr-2 boxId" name="features" value="poster">
-              <label for="cb-poster">Poster</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-year" class="mr-2 boxId" name="features" value="year">
-              <label for="cb-year">Release Year</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-rating" class="mr-2 boxId" name="features" value="rating">
-              <label for="cb-rating">MPAA Rating</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-runtime" class="mr-2 boxId" name="features" value="runtime">
-              <label for="cb-runtime">Runtime</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-genre" class="mr-2 boxId" name="features" value="genre">
-              <label for="cb-genre">Genre</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-director" class="mr-2 boxId" name="features" value="director">
-              <label for="cb-director">Director</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-cast" class="mr-2 boxId" name="features" value="cast">
-              <label for="cb-cast">Cast</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-summary" class="mr-2 boxId" name="features" value="summary">
-              <label for="cb-summary">Summary</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-scores" class="mr-2 boxId" name="features" value="scores">
-              <label for="cb-scores">Scores</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-review-nyt" class="mr-2 boxId" name="features" value="nytReview">
-              <label for="cb-review-nyt">NYT Review</label>
-            </li>
-            <li class="flex items-center mb-2">
-              <input type="checkbox" id="cb-services" class="mr-2 boxId" name="features" value="services">
-              <label for="cb-services">Streaming Services</label>
-            </li>
-          </ul>
+              <!-- Movie Poster -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-poster" class="mr-2 boxId" name="features" value="movie-poster">
+                <label for="cb-poster">Poster</label>
+              </li>
+
+              <!-- MPAA Rating -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-rating" class="mr-2 boxId" name="features" value="movie-rating">
+                <label for="cb-rating">MPAA Rating</label>
+              </li>
+
+              <!-- Release Year -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-year" class="mr-2 boxId" name="features" value="movie-year">
+                <label for="cb-year">Release Year</label>
+              </li>
+
+              <!-- Runtime -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-runtime" class="mr-2 boxId" name="features" value="movie-runtime">
+                <label for="cb-runtime">Runtime</label>
+              </li>
+
+              <!-- Genre -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-genre" class="mr-2 boxId" name="features" value="movie-genre">
+                <label for="cb-genre">Genre</label>
+              </li>
+
+              <!-- Director -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-director" class="mr-2 boxId" name="features" value="movie-director">
+                <label for="cb-director">Director</label>
+              </li>
+
+              <!-- Cast -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-cast" class="mr-2 boxId" name="features" value="movie-cast">
+                <label for="cb-cast">Cast</label>
+              </li>
+
+              <!-- Summary -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-summary" class="mr-2 boxId" name="features" value="movie-summary">
+                <label for="cb-summary">Summary</label>
+              </li>
+
+              <!-- NYT Review -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-review-nyt" class="mr-2 boxId" name="features" value="movie-review-nyt">
+                <label for="cb-review-nyt">NYT Review</label>
+              </li>
+
+              <!-- Streaming Services -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-services" class="mr-2 boxId" name="features" value="movie-services">
+                <label for="cb-services">Streaming Services</label>
+              </li>
+
+              <!-- Scores -->
+              <li class="flex items-center mb-2">
+                <input type="checkbox" id="cb-scores" class="mr-2 boxId" name="features" value="movie-scores">
+                <label for="cb-scores">Scores</label>
+              </li>
+            </ul>
+
+          </div>
 
           <!-- Dropdown for Genres -->
           <label class="text-lg font-semibold" for="genres">Genres:</label>
@@ -176,6 +201,15 @@
             Clear Search History
           </button>
 
+
+          <!-- Clear Unpinned Movies Button -->
+
+          <button
+            id="button-clear-unpinned"
+            class="mt-2 py-1 w-full btn-popular bg-red-500 rounded-md hover:bg-red-700 text-white">
+            Clear Unpinned Movies
+          </button>
+
         </div>
 
         <!-- Search History buttons for smaller screens -->
@@ -192,8 +226,9 @@
         </div>
       </div>
       
-      <!-- Search Box and Options (Right Column) -->
-      <div class="flex-1 pl-4">
+      <!-- Search history carousel and Movie cards (Right Column) -->
+      <div id="right-column" class="flex-1 pl-4">
+
         <!-- Search History buttons for larger screens -->
         <div id="search-history-container-lg" class="sm:block">
           <!-- <button
@@ -207,48 +242,81 @@
               </div>
             </div>
           </div>
-          <!-- <button
-            class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
-          >
-            Previously
-          </button>
-          <button
-            class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
-          >
-            Searched
-          </button>
-          <button
-            class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
-          >
-            Movies
-          </button> -->
-        <!-- </div> -->
-        <div class="grid grid-cols-1 bg-white gap-7 mt-4"  id="movie-cards-container">
+
+        </div>  
+        <!-- <button
+          class="bg-blue-500 text-white px-10 py-2 rounded-md movie-button mb-2"
+        >
+          Previously
+        </button>
+        <button
+          class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
+        >
+          Searched
+        </button>
+        <button
+          class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2"
+        >
+          Movies
+        </button> -->
+        <!-- Movie Cards Container -->
+        <div id="movie-cards-container" class="grid grid-cols-1 gap-7 mt-4 snap-y snap-mandatory overflow-scroll">
+          
+          <!-- the below card is an example for testing purposes -- it is not displayed because the js clears the container div -->
+          <!-- <div class="movie-card flex flex-col sm:flex-row snap-start box-border border-8 border-gray-200 h-200 bg-white rounded-md p-2 shadow-md" data-pinned="false">
+            <div class="movie-poster object-left flex-none mr-2">
+              <img class="fixed-width-image grow-0" src="https://image.tmdb.org/t/p/w500/6FfCtAuVAW8XJjZ7eWeLibRLWTw.jpg" alt="Movie Poster">
+            </div>
+            <div class="movie-details flex-1 pr-2">
+              <div class="movie-header">
+                <div class="movie-title text-4xl">Star Wars</div>
+                <div class="movie-properties flex -ml-6 mt-1">
+                  <div class="movie-rating ml-6">PG</div>
+                  <div class="movie-year ml-6">1977</div>
+                  <div class="movie-runtime ml-6">2 h 1 m</div>
+                  <div class="movie-genre ml-6">Action, Adventure, Fantasy</div>
+                </div>
+              </div>
+              <div class="movie-director mt-1"><span class="info-name">Directed by: </span>George Lucas</div>
+              <div class="movie-cast"><span class="info-name">Top cast: </span>Mark Hamill, Harrison Ford, Carrie Fisher</div>
+              <div class="movie-summary mt-1 text-justify"><span class="info-name">Summary: </span>Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.</div>
+              <div class="movie-review mt-1">
+                <div class="review-snippet text-justify"><span class="info-name">NYT Review: </span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dictum pretium congue. Proin ultrices enim nec imperdiet blandit. Sed nec diam aliquam, vestibulum velit non, suscipit lectus. Aliquam dapibus dolor eros, eget feugiat dui consequat non.</div>
+                <div class="review-author"><span class="info-name">Author: </span>John Smith</div>
+              </div>
+              <div class="movie-services mt-1"></div>
+            </div>
+            <div class="movie-scores">
+              <div class="score mb-2"><span class="info-name">Internet Movie Database: </span>8.6/10</div>
+              <div class="score mb-2"><span class="info-name">Rotten Tomatoes: </span>93%</div>
+              <div class="score mb-2"><span class="info-name">Metacritic: </span>90/100</div>
+            </div>
+          </div> -->
+
+
           <!-- Movie 1 Box (large) -->
-          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button large"
-            >
+          <!-- <div class="movie-box snap-start bg-white rounded-lg p-14 shadow-md">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button large">
               Movie 1
             </button>
-          </div>
+          </div> -->
+          
           <!-- Movie 2 Box (vertical) -->
-          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button vertical"
-            >
+          <!-- <div class="movie-box snap-start bg-white rounded-lg p-14 shadow-md">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button vertical">
               Movie 2
             </button>
-          </div>
+          </div> -->
+          
           <!-- Movie 3 Box (horizontal) -->
-          <div class="bg-white rounded-lg p-14 shadow-md movie-box">
-            <button
-              class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button"
-            >
+          <!-- <div class="movie-box snap-start bg-white rounded-lg p-14 shadow-md">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md movie-button">
               Movie 3
             </button>
-          </div>
+          </div> -->
+
         </div>
+
       </div>
     </div>
     <section id="modals" class="hidden">
