@@ -454,12 +454,18 @@ function fetchNYTReview(movie,year){
   reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22%20AND%20pub_year%3A%22"+year+"%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
   fetch(reviewUrl)
   .then(function(response){
+    console.log(response);
     if (response.ok) {
       console.log(response);
       return response.json().then( function(data) {
         console.log("nyt review")
+        console.log(data);
+        if(data.response.docs.length===0){
+
+        }else{
         foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
         foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
+        }
         fetchServices(movie);
       });
     }
@@ -509,6 +515,9 @@ function fetchServices(movie){
           }
         });
       }else{
+        if(!popularClicked){
+          addToSearchHistory(movie);
+        }
           insertMovie(foundMovie, currentMovieList);
   
           if ( popularClicked && count < popularArr.length - 1 ) {
