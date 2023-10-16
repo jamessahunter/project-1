@@ -9,7 +9,7 @@ var popularArr = [];
 var count = 0;
 var duplicateCount=0;
 var repeat=true;
-
+var movieToPass;
 var movies=[];
 var popularArr = [];
 
@@ -123,8 +123,11 @@ function handleSearch(event) {
 
 // event listener for popular button
 popularButton.on("click", function() {
+  //sets the popular clicked to true
   popularClicked = true;
+  // opens the modal to notify user that some apis are not calles
   $(popSearchModal).dialog("open");
+  //calls fetch popular with the a genre selected
   fetchPopular(genreSelect.val());
 });
 
@@ -145,11 +148,10 @@ $(".boxId").on("change", function() {
 
 // event listener for clicking on carouselContainer items
 carouselContainer.on("click","h3", function(event) {
-  // console.log(event.target);
+  //gets the name of movie clicked on
   var movieClicked = event.target.textContent;
-  // repeat=true;
+  // calls fetchOMDB function
   fetchOMDB(movieClicked);
-  // console.log("works");
 });
 
 // event listener for clicking on a movie card
@@ -231,7 +233,7 @@ resetHistoryButton.on("click", function() {
 // event listener for clear unpinned Movies button
 clearUnpinnedButton.on("click", clearUnpinnedMovies );
 
-
+//function to get the id from the genre dropdown
 function getGenreId(genre){
   var genreID;
   switch(genre){
@@ -293,13 +295,15 @@ function getGenreId(genre){
         genreID="";
 
     }
+    //returns the id number
     return genreID;
 }
 
-
+// function to get the popular movies
 function fetchPopular(genre){
-  //fetch for popular movies
+  //gets the genre ID
   var genreID=getGenreId(genre);
+  //options for the api search
   const options = {
     method: 'GET',
     headers: {
@@ -307,70 +311,55 @@ function fetchPopular(genre){
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
     }
   }
+  //api url with the genre able to be changed
   var popUrl="https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres="+genreID;
+  //fetches the data
   fetch(popUrl,options)
   .then(function(response){
+    //checks that the response is ok
     if (response.ok){
       return response.json().then(function(data){
-
+        //for loop to get all the results and push them into an array
         for(var i=data.results.length-1;i>=0;i--){
 
           popularArr.push(data.results[i].title);
         }
-
+        //calls the specific search for the each movie
         fetchOMDBSpecific(popularArr[count]);
       });
     }
   });
 }
 
-var movieToPass;
-
-function selectYear(data,movieSearchQuery){
-  for(var i = 0; i<data.length;i++){
-    if(movieSearchQuery==data[i].Title.toLowerCase()){
-      var yearP=$("<p>").text(data[i].Year).addClass("year");
-      $(duplicateTitlesModal).append(yearP);
-    }
-  }
-
-  // const variable=$(movieSearchQuery.target).data(movieToPass);
-
-  $(duplicateTitlesModal).dialog("open");
-}
-
-duplicateTitlesModal.on("click",".year",function(event){
-
-  repeat=false;
-  var yearChosen=event.target.textContent;
-  duplicateCount=0;
-  fetchOMDBSpecific(movieToPass,yearChosen);
-  $(duplicateTitlesModal).dialog("close");
-})
-
-
+// function to call OMDB to get list of movies
 function fetchOMDB(movieSearchQuery,year){
-
+  // setting the variable to get the movei title
   movieToPass=movieSearchQuery;
-  // fetches based on title
+  // api url
   var omdbUrl = "https://www.omdbapi.com/?s="+ movieSearchQuery +"&type=movie&apikey=704a2c08"
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
       return response.json().then(function(data){
+        //checks to see if the response is good
         if(data.Response=="False"){
+          //calls specific fetch
           fetchOMDBSpecific(movieSearchQuery);
         }
+        //checks to see if the movie has duplicates with the same title
         for(var i=0;i<data.Search.length;i++){
+          //checks to see if the movie name matches the results
           if(movieSearchQuery==data.Search[i].Title.toLowerCase()){
             duplicateCount++;
           }
         }
+        //checks that there are more than 1 match
         if(duplicateCount>1&&repeat){
+          //calls the select year function
           selectYear(data.Search,movieSearchQuery);
           return;
         }
-
+        //calls the omdb specific function
         fetchOMDBSpecific(movieSearchQuery,year);
       });
     }
@@ -378,21 +367,56 @@ function fetchOMDB(movieSearchQuery,year){
 
 }
 
+//function to select the year if there are duplicates
+function selectYear(data,movieSearchQuery){
+  //adds all the duplicate years to a modal
+  for(var i = 0; i<data.length;i++){
+    if(movieSearchQuery==data[i].Title.toLowerCase()){
+      //creates a new element and gives it the class of year
+      var yearP=$("<p>").text(data[i].Year).addClass("year");
+      $(duplicateTitlesModal).append(yearP);
+    }
+  }
 
+  //opens the modal
+  $(duplicateTitlesModal).dialog("open");
+}
+//event listener on the years for the modal
+duplicateTitlesModal.on("click",".year",function(event){
+  //sets repeat to false
+  repeat=false;
+  //gets the year that was clicked on
+  var yearChosen=event.target.textContent;
+  // resets the duplicate count
+  duplicateCount=0;
+  // calls the OMDB specific
+  fetchOMDBSpecific(movieToPass,yearChosen);
+  // closes the modal
+  $(duplicateTitlesModal).dialog("close");
+})
+
+// function to get a specific movie from OMDB
 function fetchOMDBSpecific(movieSearchQuery,year){
+  // url containing movie and year
   var omdbUrl = "https://www.omdbapi.com/?t="+ movieSearchQuery +"&y="+year+"&type=movie&apikey=704a2c08";
   fetch(omdbUrl)
   .then(function(response){
     if (response.ok){
       return response.json().then(function(data){ 
+        //checks if there is no data sent back
         if(data.Response=="False"){
+          //checks to see if the popular button was clicked
           if(popularClicked){
+            //opens a modal saying the movie was not found
             notFoundModal.text(movieSearchQuery+" was not found");
             $(notFoundModal).dialog("open");
+            //adds one to the count
             count++;
+            //calls for the next movie in the popular list
             fetchOMDBSpecific(popularArr[count]);
           return;
         }
+        // same as above
         else{
           notFoundModal.text(movieSearchQuery+" was not found");
           $(notFoundModal).dialog("open");
@@ -400,8 +424,9 @@ function fetchOMDBSpecific(movieSearchQuery,year){
           return; 
         }
       }
+        // resets the duplicate count
         duplicateCount=0;
-        console.log("omdb specific");
+        // parses the data and adds it the the found movie object
         foundMovie.scores = data.Ratings;
         foundMovie.year = parseInt(data.Year);
         foundMovie.mpaaRating = data.Rated;
@@ -409,6 +434,7 @@ function fetchOMDBSpecific(movieSearchQuery,year){
         foundMovie.genre = data.Genre;
         foundMovie.director = data.Director;
         foundMovie.cast = data.Actors;
+        //calls the fetchTMDB function
         fetchTMDB(data.Title,foundMovie.year);
       })
     }
@@ -417,7 +443,7 @@ function fetchOMDBSpecific(movieSearchQuery,year){
 
 
 
-
+//functino to get the info from TMDB
 function fetchTMDB(movie,year){
   //fetches to TMDB
   const options = {
@@ -427,17 +453,18 @@ function fetchTMDB(movie,year){
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWQxMjMwMDM2ZTAzMzc5MDdmY2I1M2ZmYWU5MTcwMyIsInN1YiI6IjY1MjMwZGRiNzQ1MDdkMDExYzEyODM2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O5EWPbqvxAEJyHaV2DsyabODm4vtfg8Bh8V_ZZUkO8M'
     }
   };
+  //fetches using the movie and year
   fetch('https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US&year='+year, options)
   .then(function(response){
     if (response.ok){
 
       return response.json().then(function(data){
-        console.log("TMDB specific movie");
-
+        //parse the data and adds it to the object
         foundMovie.title = data.results[0].title;
         foundMovie.summary = data.results[0].overview;
         foundMovie.posterURL = "https://image.tmdb.org/t/p/w500" + data.results[0].poster_path;
         foundMovie.scores.push({Source:'User Score',Value:data.results[0].vote_average});
+        //calls the NYT review function
         fetchNYTReview(foundMovie.title,year);
 
       });
@@ -445,50 +472,52 @@ function fetchTMDB(movie,year){
   });
 }
     
-
+//gets a review from the NYT
 function fetchNYTReview(movie,year){
-  //fetch to nyt review of movie
+  //checks to see if popular movie is clicked to avoid API restrictions
   if(popularClicked){
+    // calls the fetch services function
     fetchServices(movie);
   }else{
-  console.log("NYT");
+    //url with input of movie and year
   reviewUrl="https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A%22Movies%22%20AND%20type_of_material%3A%22Review%22%20AND%20pub_year%3A%22"+year+"%22&q="+movie+"&api-key=pf1jPMp9J2Gq6kH3AyhwAUUl2zEIlDBm";
   fetch(reviewUrl)
   .then(function(response){
     console.log(response);
     if (response.ok) {
-      console.log(response);
       return response.json().then( function(data) {
-        console.log("nyt review")
-        console.log(data);
+        //checks to see if there is a review
         if(data.response.docs.length===0){
 
         }else{
+          // parses the info
         foundMovie.reviews.nyt.snippet=data.response.docs[0].snippet;
         foundMovie.reviews.nyt.author=data.response.docs[0].byline.original;
         }
+        // calls fetch services function
         fetchServices(movie);
       });
     }
   });
-  // fetchServices(foundMovie.title);
-  // fetchServices(movie);
   }
 }
 
-
+// function to get the streaming services
 function fetchServices(movie){
-  console.log("services");
+  //checks to see if popular is clicked
   if(popularClicked){
+    // inserts the movie to the current movies list
     insertMovie(foundMovie, currentMovieList);
+    //checks to see if there are more items to go through in the popular array
     if (count < popularArr.length - 1 ) {
       count++;
       fetchOMDB(popularArr[count]);
     } else {
+      // calls the build movie card list
       buildMovieCards(currentMovieList);
     }
   }else{
-    // sees if movie is streaming based on movie title
+    // url for streaming availability using movie
     const urlStreaming = 'https://streaming-availability.p.rapidapi.com/search/title?title='+movie+'&country=us&show_type=movie&output_language=en';
     const options1={
       method: 'GET',
@@ -500,8 +529,7 @@ function fetchServices(movie){
     fetch(urlStreaming,options1).then(function(response){
       if (response.ok){
         return response.json().then( function(data) {
-          console.log("streaming service")
-          console.log(data.result[0].streamingInfo.us[0]);
+          //parse the data and adds it to the array
           foundMovie.streamingServices = {service:data.result[0].streamingInfo.us[0].service,type:data.result[0].streamingInfo.us[0].streamingType};
           if(!popularClicked){
             addToSearchHistory(movie);
@@ -516,6 +544,7 @@ function fetchServices(movie){
           }
         });
       }else{
+        //if a bad response do the same as above
         if(!popularClicked){
           addToSearchHistory(movie);
         }
@@ -738,12 +767,19 @@ function saveMovieSearchHistory() {
   buildMovieSearchHistory();
 }
 
+//uses the 3rd party api Slick
 carouselContainer.slick({
+  // adds dots below the titles
   dots: true,
+  // adds infinite scrolling
   infinite: true,
+  //sets the speed of the scroll
   speed: 300,
+  //shows 6 slides
   slidesToShow: 6,
+  //scrolls 6 slides
   slidesToScroll:6,
+  //chages slides shown and scrolled based off break points
   responsive: [
     {
       breakpoint: 1200,
