@@ -2,6 +2,9 @@
 
 ## Description 
 
+[Supportive Gif of your App doing it]
+
+
 Your GitHub profile is an extremely important aspect of your public identity as a developer. A well-crafted one allows you to show off your work to other developers as well as potential employers. An important component of your GitHub profile—and one that many new developers often overlook—is the README.md file.
 
 The quality of a README often differentiates a good project from a bad project. A good one takes advantage of the opportunity to explain and showcase what your application does, justify the technologies used, and even talk about some of the challenges you faced and features you hope to implement in the future. A good README helps you stand out among the large crowd of developers putting their work on GitHub.
@@ -31,9 +34,36 @@ If your README is very long, add a table of contents to make it easy for users t
 * [License](#license)
 
 
-## Installation
+## Technologies Used
 
-N/A
+
+
+## User Stories
+
+![Supportive Gif of that feature](assets/images/screenshot.png)
+![Supportive Gif of that feature](assets/images/screenshot.png)
+![Supportive Gif of that feature](assets/images/screenshot.png)
+
+```javascript
+// Any relevant code snippets
+```
+
+## User Stories Related to API Calls
+
+
+
+## Description of CSS Framework Tailwind
+
+
+
+## Learning Objectives
+
+
+
+## Authors / Contact
+
+
+
 
 
 ## Usage 
@@ -49,7 +79,11 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
+James Hunter: [github.com/jamessahunter](https://github.com/jamessahunter)
+Fiqre Tezare: [github.com/Fiqre-Ab](https://github.com/Fiqre-Ab)
+David Wright: [github.com/d-a-v-i-d-w-r-i-g-h-t](https://github.com/d-a-v-i-d-w-r-i-g-h-t)
+
+
 
 If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
 
@@ -69,27 +103,3 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---
-
-🏆 The sections listed above are the minimum for a good README, but your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
-
-## Badges
-
-![badmath](https://img.shields.io/github/languages/top/nielsenjared/badmath)
-
-Badges aren't _necessary_, per se, but they demonstrate street cred. Badges let other developers know that you know what you're doing. Check out the badges hosted by [shields.io](https://shields.io/). You may not understand what they all represent now, but you will in time.
-
-## Features
-
-If your project has a lot of features, consider adding a heading called "Features" and listing them there.
-
-## Contributing
-
-If you created an application or package and would like other developers to contribute it, you will want to add guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own.
-
-## Tests
-
-Go the extra mile and write tests for your application. Then provide examples on how to run them.
-
----
-
-© 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
