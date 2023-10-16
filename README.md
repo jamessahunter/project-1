@@ -72,6 +72,8 @@ If your README is very long, add a table of contents to make it easy for users t
 
 On page load, the user is presented in the left column with a search input field and **Search** button, a **Popular movies** button, a set of *Features* checkboxes labeled with movie information categories, and a *Genres* drop down. There are four additional buttons at the bottom: **Save Config**, **Clear Config**, **Clear Search History**, and **Clear Unpinned Movies**.
 
+![Left column](assets/images/left-column.png)
+
 Upon searching for a movie title using the search field, the designated film is presented in a movie card on the right column. The search query is also added to the *Search History* carousel at the top of the right column. Additional searches will continue to populate the right colum with additional movie cards.
 
 Changing checkbox selections will alter the information displayed on the movie cards. For example, unchecking the *Poster* checkbox will remove the movie poster image from the collection of movie cards. The user can save the current checkbox selection to local storage by clicking the **Save Config** button, while the **Clear Config** button will reset the checkboxes to a state of "all on".
