@@ -509,7 +509,7 @@ function fetchServices(movie){
           }
         });
       }else{
-                  insertMovie(foundMovie, currentMovieList);
+          insertMovie(foundMovie, currentMovieList);
   
           if ( popularClicked && count < popularArr.length - 1 ) {
             count++;
@@ -521,7 +521,7 @@ function fetchServices(movie){
 
   })
 }
-
+}
 
 function insertMovie(movieObj, list) {
   for (var i = 0; i < Object.keys(list).length; i++) {
