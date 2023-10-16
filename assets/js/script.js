@@ -509,18 +509,17 @@ function fetchServices(movie){
           }
         });
       }else{
-        insertMovie(foundMovie, currentMovieList);
+                  insertMovie(foundMovie, currentMovieList);
   
-        if ( popularClicked && count < popularArr.length - 1 ) {
-          count++;
-          fetchOMDB(popularArr[count]);
-        } else {
-          buildMovieCards(currentMovieList);
-        }
-      }
-    });
+          if ( popularClicked && count < popularArr.length - 1 ) {
+            count++;
+            fetchOMDB(popularArr[count]);
+          } else {
+            buildMovieCards(currentMovieList);
+          }
+    }
 
-  }
+  })
 }
 
 
