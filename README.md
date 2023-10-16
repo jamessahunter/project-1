@@ -82,7 +82,7 @@ The user can click on individual movie cards to pin them to the page. A pinned c
 
 At any time, the user can click the **Clear Unpinned Movies** button, and any unpinned movie card will be removed. If a previously searched for movie was removed, the user can recover that title by clicking on the query term in the search history carousel.
 
-Finally, clicking on the **Popular movies** button will present the user with movie cards for the current top 20 movies from [TMDB](https://www.themoviedb.org/?language=en-US). If the
+Finally, clicking on the **Popular movies** button will present the user with movie cards for the current top 20 movies from [TMDB](https://www.themoviedb.org/?language=en-US). If the user first selects a genre from the dropown, the top 20 movies in that genre will be returned.
 
 
 
