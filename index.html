@@ -9,6 +9,7 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> 
         <!-- Add the slick-theme.css if you want default styling -->
@@ -24,14 +25,17 @@
   </head>
   <body>
     <!-- Header Section -->
-    <header class="bg-blue-500 py-4 sm:w-full sm:mx-auto sticky top-0">
-      <div class="container text-center">
-        <!-- Navigation Menu for Movies -->
-        <nav>
-          <a href="#" class="text-white text-center-important">Movies</a>
-        </nav>
-      </div>
-    </header>
+<header class="bg-blue-500 py-4 sm:w-full sm:mx-auto sticky top-0">
+  <div class="container text-center">
+    <!-- Navigation Menu for Movies -->
+    <nav>
+      <a href="#" class="text-white text-center-important">
+        <i class="fas fa-film"></i> Movies
+      </a>
+    </nav>
+  </div>
+</header>
+
 
     <!-- Search Box and Previously Searched Movies -->
     <div class="container mx-auto flex flex-col sm:flex-row mt-4">
@@ -191,12 +195,12 @@
       <!-- Search Box and Options (Right Column) -->
       <div class="flex-1 pl-4">
         <!-- Search History buttons for larger screens -->
-        <div id="search-history-container-lg" class="hidden sm:block">
+        <div id="search-history-container-lg" class="sm:block">
           <!-- <button
             class="bg-blue-500 text-white px-10 py-2 rounded-md mb-2" -->
         <!-- "Movies" buttons for larger screens -->
         <!-- <div class="hidden sm:block"> -->
-          <div class="grid grid-cols-1 gap-7 mt-4">
+          <div class="grid grid-cols-1 gap-7 mt-4 sticky top-14">
             <div class="items-center bg-white px-10 py-4 movie-box">
               <span class="pagingInfo"></span>
               <div id="carousel-container">
