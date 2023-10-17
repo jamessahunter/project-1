@@ -5,10 +5,11 @@
 
 ## Technology Used
 
-| Technology         | Resource URL                                      |
+| Technology         | Resource URL                                    |
 | -------------------|:-----------------------------------------------:|
 | HTML               | [MDN Web Docs - HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) |
 | CSS                | [MDN Web Docs - CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) |
+| Tailwind CSS       | [tailwindcss - Official Website](https://tailwindcss.com) |
 | Git                | [Git - Official Website](https://git-scm.com/) |
 | JavaScript         | [W3Schools - JavaScript](https://www.w3schools.com/js/default.asp) |
 | jQuery             | [jQuery API Documentation](https://api.jquery.com/) |
@@ -38,7 +39,6 @@ The motivation behind this project was to provide users with a comprehensive mov
 
 ## Table of Contents
 
-- [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technology-used)
 - [User Stories](#user-stories)
@@ -49,27 +49,35 @@ The motivation behind this project was to provide users with a comprehensive mov
 - [Credits](#credits)
 - [License](#license)
 
-## Installation
-
-Provide installation instructions or a link to the live version of the application.
-
 ## Usage
 
 On page load, the user is presented with a feature-rich interface divided into two columns:
 
-### Left Column
+### Left Column: Search
 
 - Search Input Field and Search Button.
 - Popular Movies Button.
-- Feature Checkboxes to customize information.
+- Feature Checkboxes to customize displayed information.
 - Genres Dropdown.
 - Save Config, Clear Config, Clear Search History, and Clear Unpinned Movies buttons.
 
-### Right Column
+![Left Column](./assets/images/left-column.png)
 
-- Dynamic display of movie cards based on user actions.
+### Popular Movies
+
+The "Popular Movies" button presents users with the current top 20 movies from TMDB. Selecting a genre from the dropdown filters the top 20 movies by genre.
+
+### Right Column: Results
+
 - Search History Carousel.
+- Dynamic display of movie cards based on user actions.
 - Pinned Movie Cards.
+
+![Overall screenshot](./assets/images/Screenshot%202023-10-16%20191538.png)
+
+### Search History Carousel
+
+Successful search queries are presented in a carousel for easy access and saved to local storage, so they persist across page reloads.
 
 ### Movie Cards
 
@@ -77,34 +85,45 @@ Movie cards provide a wealth of information, including posters, release year, MP
 
 ### Pinned Movies
 
-Pinned movie cards are stored in local storage, ensuring they persist across page reloads.
-
-### Popular Movies
-
-The "Popular Movies" button presents users with the current top 20 movies from TMDB. Selecting a genre from the dropdown filters the top 20 movies by genre.
-
-## Technologies Used
-
-- HTML, CSS, JavaScript
-- jQuery and jQuery UI for interactive elements
-- Slick Carousel for the search history carousel
-- Tailwind CSS for styling
+Pinned movie cards are stored in local storage, ensuring they also persist across page reloads.
 
 ## User Stories
 
-- I want to search for and review side-by-side my desired categories of movie information.
-- I want to explore movies in various genres.
-- ...
+- I want to see my search history somewhere on the page.
 
-![Supportive GIFs of user stories](./assets/images/Screenshot%202023-10-16%20191538.png)
+After each successful search, the search query is stored in local storage and added to the search history carousel at the top of the results section. Each query term is a clickable link that will redo the search and replace the result in the movie card window.
+
+![Search history carousel](./assets/images/gifs/What%20to%20Watch%20Carousel.gif)
+
+- I want to be able to select the info I care about.
+
+Checkboxes on the left column allow the user to select which categories of information they want to see on the movie cards. An event listener detects any checkbox change, updating an object variable that stores the checkbox state and toggling the display status for the designated category using a class selector. If the user clicks the **Save Config** button, the current checkbox state will be saved to local storage and will persist on page reload. Clicking **Clear Config** will reset the checkboxes to an all-on state.  
+
+![Select criteria](./assets/images/gifs/What%20to%20Watch%20select%20criteria.gif)
+
+- I want to pin certain movies on the page while I’m searching.
+
+When a search query is run, movie data is collected from various API calls (see below) and saved to an object variable. This object variable is then appended to a nested movie list object variable, as additional searches are performed, and this nested object variable is used to append the movie cards to the page.
+
+An event listener on the movie card container uses event delegation to return clicks on individual movie cards. Their "data-pinned" tag is toggled between "true" and "false", and their element index is correleated with the object index in the movie list object variable to update a pinned key there as well. The code then loops through all the currently displayed movie card objects and saves the pinned === true objects into a separate object variable which is also saved to local storage. These pinned movies will be restored on page reload.
+
+![Select criteria](./assets/images/gifs/What%20to%20Watch%20Pinned%20movies.gif)
+
+
 
 ## User Stories Related to API Calls
 
-For the user story of I want to search for and review side-by-side my desired categories of movie information. Once the movie has been entered into the search bar and the search button has been clicked or the enter key has been pressed. This calls a function that handles the search and ensure something was enterd into the search box and starts the API calls. First there is a call to the OMDB API using the input of movie. This is a general search for a list of 10 movies containing the searched for movie in the title. The results are then checked to see if there are duplicates of the title in which case the user is prompted through a modal to select the year of the movie they would like to search for. If there are no duplicate or after the year is selected another call is made to OMDB this time searching for the specific title and year. The reponse to this call is then checked to see if there is a matching title if so it parse the data and enters it into an obejct. If there is no match the user is informed through a modal. Then the TMDB API is called with the movie and the year and more data is parsed and added to the movie object. Then the NYT API is called which uses the year and the movie to get the appropriate review and adds it to the movie object. Then the streaming availabiltiy API is called which finds out where the movie is streaming and if it is available to rent, buy etc. The information is then appended to the page with the only the information that the user wants to see shown.
+- I want to input my search query.
+- I want to search for and review side-by-side my desired categories of movie information.
+
+Once the movie has been entered into the search bar and the search button has been clicked or the enter key has been pressed. This calls a function that handles the search and ensure something was enterd into the search box and starts the API calls. First there is a call to the OMDB API using the input of movie. This is a general search for a list of 10 movies containing the searched for movie in the title. The results are then checked to see if there are duplicates of the title in which case the user is prompted through a modal to select the year of the movie they would like to search for. If there are no duplicate or after the year is selected another call is made to OMDB this time searching for the specific title and year. The reponse to this call is then checked to see if there is a matching title if so it parse the data and enters it into an obejct. If there is no match the user is informed through a modal. Then the TMDB API is called with the movie and the year and more data is parsed and added to the movie object. Then the NYT API is called which uses the year and the movie to get the appropriate review and adds it to the movie object. Then the streaming availabiltiy API is called which finds out where the movie is streaming and if it is available to rent, buy etc. The information is then appended to the page with the only the information that the user wants to see shown.
 
 ![Usage Example Searc](/assets/images/gifs/What%20to%20Watch%20Search.gif)
 
-For the user story of I want to see popular movies in general or of a specifc genre. First the user can select a genre from the drop down. The user can then click the popular movies button. Once the button is clicked a function gets the id of the genre if there is one. Then a call is made to the TMDB API for popular movies. This then iterates through the array of movie and repeats the process above.
+- I want to click a button to see popular movies.
+- I want to explore movies in various genres.
+
+First the user can select a genre from the drop down. The user can then click the popular movies button. Once the button is clicked a function gets the id of the genre if there is one. Then a call is made to the TMDB API for popular movies. This then iterates through the array of movie and repeats the process above.
 
 ![Usage Example](/assets/images/gifs/What%20to%20Watch%20popular.gif)
 
