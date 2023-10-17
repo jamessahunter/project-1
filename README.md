@@ -85,6 +85,8 @@ Pinned movie cards are stored in local storage, ensuring they persist across pag
 
 The "Popular Movies" button presents users with the current top 20 movies from TMDB. Selecting a genre from the dropdown filters the top 20 movies by genre.
 
+![Left Column](placeholder-left-column.png)
+
 ## Technologies Used
 
 - HTML, CSS, JavaScript
