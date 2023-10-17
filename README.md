@@ -20,8 +20,11 @@
 
 ## Description
 
+![Usage Example Full Site](/assets/images/gifs/What%20to%20Watch%20full%20use.gif)
+
 "What to Watch" is a web application that simplifies the process of searching for movies and customizing the information displayed according to the user's interests.
 
+The purpose of the project was to allow the user to search for a movie in an input field and have the information that they found relevent shown for the movie that was searched. The previously searched for movies would be stored on the page. The user could check the criteria they were interested in and that would dynamically update the page. The user could save their cirteria configuration until they want to clear it. The user could also find popular movie in general or for a specific genre by selecting the the genre from a drop down. The user could pin movie they wanted to the page so that they would remain persistent even when the page was refreshed. This project used a 3rd party Application User Interface called Slick that created a carousel for the searched movie titles. There were also server side APIs used such as OMDB, TMDB, New York Times and Streaming Availability. These server side APIs were used to get the criteria that is displayed on the page.
 The motivation behind this project was to provide users with a comprehensive movie search experience, where they can easily find, review, and pin their desired categories of movie information. By leveraging multiple APIs, such as OMDB, TMDB, New York Times, and Streaming Availability, users can explore detailed movie data and discover where movies are available to stream or rent.
 
 "What to Watch" sets itself apart by offering an intuitive interface with the following key features:
@@ -96,6 +99,16 @@ The "Popular Movies" button presents users with the current top 20 movies from T
 
 ![Supportive GIFs of user stories](./assets/images/Screenshot%202023-10-16%20191538.png)
 
+## User Stories Related to API Calls
+
+For the user story of I want to search for and review side-by-side my desired categories of movie information. Once the movie has been entered into the search bar and the search button has been clicked or the enter key has been pressed. This calls a function that handles the search and ensure something was enterd into the search box and starts the API calls. First there is a call to the OMDB API using the input of movie. This is a general search for a list of 10 movies containing the searched for movie in the title. The results are then checked to see if there are duplicates of the title in which case the user is prompted through a modal to select the year of the movie they would like to search for. If there are no duplicate or after the year is selected another call is made to OMDB this time searching for the specific title and year. The reponse to this call is then checked to see if there is a matching title if so it parse the data and enters it into an obejct. If there is no match the user is informed through a modal. Then the TMDB API is called with the movie and the year and more data is parsed and added to the movie object. Then the NYT API is called which uses the year and the movie to get the appropriate review and adds it to the movie object. Then the streaming availabiltiy API is called which finds out where the movie is streaming and if it is available to rent, buy etc. The information is then appended to the page with the only the information that the user wants to see shown.
+
+![Usage Example Searc](/assets/images/gifs/What%20to%20Watch%20Search.gif)
+
+For the user story of I want to see popular movies in general or of a specifc genre. First the user can select a genre from the drop down. The user can then click the popular movies button. Once the button is clicked a function gets the id of the genre if there is one. Then a call is made to the TMDB API for popular movies. This then iterates through the array of movie and repeats the process above.
+
+![Usage Example](/assets/images/gifs/What%20to%20Watch%20popular.gif)
+
 ## API Calls
 
 The user story of searching for desired movie information involves several API calls:
@@ -113,9 +126,11 @@ Only the information that the user selects is displayed.
 
 Tailwind CSS, a utility-first CSS framework, was used to style the "What to Watch" web application. It streamlines the styling process by providing a set of pre-defined classes for consistent and visually appealing user interface components.
 
+![Usage Example Mobile Responsive](/assets/images/gifs/What%20to%20Watch%20Mobile%20Responsize.gif)
+
 ## Learning Objectives
 
-Share the key learning objectives or takeaways from the project.
+This project we learned about the git work flow when working with others. We learned about how to read new documentation that we had not been introduced to previously whether that was a new CSS framework, JS library, or Server Side API.
 
 ## Authors / Contact
 
@@ -125,17 +140,9 @@ Share the key learning objectives or takeaways from the project.
 
 ## Credits
 
-### Collaborators
-
-- James Hunter: [GitHub Profile](https://github.com/jamessahunter)
-- Fiqre Tezare: [GitHub Profile](https://github.com/Fiqre-Ab)
-- David Wright: [GitHub Profile](https://github.com/d-a-v-i-d-w-r-i-g-h-t)
-
 ### Third-Party Contributions
 
 - Ken Wheeler: Created the Slick carousel that contains the previously searched for movies. [GitHub Profile](https://github.com/kenwheeler)
-
-List third-party assets and their creators with links to their primary web presence.
 
 ## License
 
