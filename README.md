@@ -18,6 +18,8 @@
 | NYT API            | [New York Times API](https://developer.nytimes.com/apis) |
 | Streaming Availability API | [Streaming Availability API](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability) |
 
+## Description
+
 ![Usage Example Full Site](/assets/images/gifs/What%20to%20Watch%20full%20use.gif)
 
 "What to Watch" is a web application that simplifies the process of searching for movies and customizing the information displayed according to the user's interests.
@@ -106,6 +108,7 @@ For the user story of I want to search for and review side-by-side my desired ca
 For the user story of I want to see popular movies in general or of a specifc genre. First the user can select a genre from the drop down. The user can then click the popular movies button. Once the button is clicked a function gets the id of the genre if there is one. Then a call is made to the TMDB API for popular movies. This then iterates through the array of movie and repeats the process above.
 
 ![Usage Example](/assets/images/gifs/What%20to%20Watch%20popular.gif)
+
 ## API Calls
 
 The user story of searching for desired movie information involves several API calls:
