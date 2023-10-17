@@ -61,9 +61,11 @@ On page load, the user is presented with a feature-rich interface divided into t
 
 - Search Input Field and Search Button.
 - Popular Movies Button.
-- Feature Checkboxes to customize information.
+- Feature Checkboxes to customize displayed information.
 - Genres Dropdown.
 - Save Config, Clear Config, Clear Search History, and Clear Unpinned Movies buttons.
+
+![Left Column](./assets/images/left-column.png)
 
 ### Right Column
 
