@@ -1,6 +1,7 @@
 # What to Watch
 
-![Supportive GIF of your App in action](./assets/images/Screenshot%202023-10-16%20191043.png)
+![Supportive GIF of your App in action](./assets/images/Screenshot%202023-10-16%20191043.png) 
+[![DEPLOY](https://img.shields.io/badge/DEPLOY-%E2%9C%93-brightgreen)](https://jamessahunter.github.io/What-to-watch/)
 
 ## Technology Used
 
@@ -151,3 +152,4 @@ This project is licensed under the MIT License. For detailed information, see th
 MIT License © 2023 James Hunter, David Wright, Fiqre Tezare
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software")...
+
