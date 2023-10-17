@@ -89,16 +89,23 @@ Pinned movie cards are stored in local storage, ensuring they also persist acros
 
 ## User Stories
 
+- I want to see my search history somewhere on the page.
 
-- I want to movies I have previously searched for somewhere on the page.
+After each successful search, the search query is stored in local storage and added to the search history carousel at the top of the results section. Each query term is a clickable link that will redo the search and replace the result in the movie card window.
 
 ![Search history carousel](./assets/images/gifs/What%20to%20Watch%20Carousel.gif)
 
 - I want to be able to select the info I care about.
 
+Checkboxes on the left column allow the user to select which categories of information they want to see on the movie cards. An event listener detects any checkbox change, updating an object variable that stores the checkbox state and toggling the display status for the designated category using a class selector. If the user clicks the **Save Config** button, the current checkbox state will be saved to local storage and will persist on page reload. Clicking **Clear Config** will reset the checkboxes to an all-on state.  
+
 ![Select criteria](./assets/images/gifs/What%20to%20Watch%20select%20criteria.gif)
 
 - I want to pin certain movies on the page while I’m searching.
+
+When a search query is run, movie data is collected from various API calls (see below) and saved to an object variable. This object variable is then appended to a nested movie list object variable, as additional searches are performed, and this nested object variable is used to append the movie cards to the page.
+
+An event listener on the movie card container uses event delegation to return clicks on individual movie cards. Their "data-pinned" tag is toggled between "true" and "false", and their element index is correleated with the object index in the movie list object variable to update a pinned key there as well. The code then loops through all the currently displayed movie card objects and saves the pinned === true objects into a separate object variable which is also saved to local storage. These pinned movies will be restored on page reload.
 
 ![Select criteria](./assets/images/gifs/What%20to%20Watch%20Pinned%20movies.gif)
 
