@@ -156,11 +156,9 @@ carouselContainer.on("click","h3", function(event) {
 
 // event listener for clicking on a movie card
 movieCardsContainer.on("click", ".movie-card", function(event) {
-  // console.log(event.target);
   // get the current value of "data-pinned"
   var isPinned = $(this).data("pinned");
   var index = $(this).index();
-  // console.log(isPinned);
 
   // toggle the value of "pinned"
   $(this).data("pinned", !isPinned);
@@ -173,9 +171,6 @@ movieCardsContainer.on("click", ".movie-card", function(event) {
     $(this).removeClass(unpinnedColor).addClass(pinnedColor)
   }
   updatePinnedMovies();
-  // console.log(index);
-  // console.log(currentMovieList[index].title);
-  // console.log(currentMovieList[index].pinned);
 });
 
 function updatePinnedMovies() {
