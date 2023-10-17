@@ -1,20 +1,33 @@
 # What to Watch
 
+## Technology Used 
+
+| Technology Used         | Resource URL           | 
+| ------------- |:-------------:| 
+| HTML    | [https://developer.mozilla.org/en-US/docs/Web/HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) | 
+| CSS     | [https://developer.mozilla.org/en-US/docs/Web/CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)      |   
+| Git | [https://git-scm.com/](https://git-scm.com/)     |    
+| JavaScrpit | [https://www.w3schools.com/js/default.asp](https://www.w3schools.com/js/default.asp) |
+| JQuery | [https://api.jquery.com/](https://api.jquery.com/) |
+| JQuery UI | [https://jqueryui.com/](https://jqueryui.com/) |
+| Slick Carousel | [https://github.com/kenwheeler/slick](https://github.com/kenwheeler/slick) |
+| TMDB API | [https://developer.themoviedb.org/docs](https://developer.themoviedb.org/docs) |
+| OMDB API | [https://www.omdbapi.com/](https://www.omdbapi.com/) |
+| NYT API |  [https://developer.nytimes.com/apis](https://developer.nytimes.com/apis) |
+| Streaming Availability API | [https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability) |
+
 ## Description 
 
 [Supportive Gif of your App doing it]
 
 What to Watch is a web application to search for movies and only display the specific result information the user is iterested in. 
 
+What to Watch is a web application to search for movies and only display the specific result information the user is iterested in. 
 
-Your GitHub profile is an extremely important aspect of your public identity as a developer. A well-crafted one allows you to show off your work to other developers as well as potential employers. An important component of your GitHub profile—and one that many new developers often overlook—is the README.md file.
-
-The quality of a README often differentiates a good project from a bad project. A good one takes advantage of the opportunity to explain and showcase what your application does, justify the technologies used, and even talk about some of the challenges you faced and features you hope to implement in the future. A good README helps you stand out among the large crowd of developers putting their work on GitHub.
-
-There's no one right way to structure a good README. There is one very wrong way, however, and that is to not include a README at all or to create a very anemic one. This guide outlines a few best practices. As you progress in your career, you will develop your own ideas about what makes a good README.
 
 At a minimum, your project README needs a title and a short description explaining the what, why, and how. What was your motivation? Why did you build this project? (Note: The answer is not "Because it was a homework assignment.") What problem does it solve? What did you learn? What makes your project stand out? 
 
+The purpose of the project was to allow the user to search for a movie in an input field and have the information that they found relevent shown for the movie that was searched. The previously searched for movies would be stored on the page. The user could check the criteria they were interested in and that would dynamically update the page. The user could save their cirteria configuration until they want to clear it. The user could also find popular movie in general or for a specific genre by selecting the the genre from a drop down. The user could pin movie they wanted to the page so that they would remain persistent even when the page was refreshed. This project used a 3rd party Application User Interface called Slick that created a carousel for the searched movie titles. There were also server side APIs used such as OMDB, TMDB, New York Times and Streaming Availability. These server side APIs were used to get the criteria that is displayed on the page.
 
 
 We deployed the application on [GitHub](https://github.com/) [Pages](https://pages.github.com/), and it can be found [here](https://jamessahunter.github.io/What-to-watch/).
@@ -51,7 +64,7 @@ If your README is very long, add a table of contents to make it easy for users t
 ```
 
 ## User Stories Related to API Calls
-
+For the user story of I want to search for and review side-by-side my desired categories of movie information. First there is a call to the OMDB API using the input of movie. This is a general search for a list of 10 movies containing the searched for movie in the title. The results are then checked to see if there are duplicates of the title in which case the user is prompted through a modal to select the year of the movie they would like to search for. If there are no duplicate or after the year is selected another call is made to OMDB this time searching for the specific title and year. The reponse to this call is then checked to see if there is a matching title if so it parse the data and enters it into an obejct. If there is no match the user is informed through a modal. Then the TMDB API is called with the movie and the year and more data is parsed and added to the movie object. Then the NYT API is called which uses the year and the movie to get the appropriate review and adds it to the movie object. Then the streaming availabiltiy API is called which finds out where the movie is streaming and if it is available to rent, buy etc. The information is then appended to the page with the only the information that the user wants to see shown.
 
 
 ## Description of CSS Framework Tailwind
@@ -69,6 +82,11 @@ If your README is very long, add a table of contents to make it easy for users t
 
 
 ## Usage 
+
+
+
+
+
 
 On page load, the user is presented in the left column with a search input field and **Search** button, a **Popular movies** button, a set of *Features* checkboxes labeled with movie information categories, and a *Genres* drop down. There are four additional buttons at the bottom: **Save Config**, **Clear Config**, **Clear Search History**, and **Clear Unpinned Movies**.
 
@@ -98,10 +116,18 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ## Credits
 
+
+
+
+
+
+List your collaborators, if any, with links to their GitHub profiles.
 James Hunter: [github.com/jamessahunter](https://github.com/jamessahunter)
 Fiqre Tezare: [github.com/Fiqre-Ab](https://github.com/Fiqre-Ab)
 David Wright: [github.com/d-a-v-i-d-w-r-i-g-h-t](https://github.com/d-a-v-i-d-w-r-i-g-h-t)
 
+Created the Slick carousel that contains the previously searched for movies
+Ken Wheeler [https://github.com/kenwheeler](https://github.com/kenwheeler)
 
 
 If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
