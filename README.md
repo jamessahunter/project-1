@@ -82,8 +82,6 @@ Pinned movie cards are stored in local storage, ensuring they persist across pag
 
 The "Popular Movies" button presents users with the current top 20 movies from TMDB. Selecting a genre from the dropdown filters the top 20 movies by genre.
 
-![Left Column](placeholder-left-column.png)
-
 ## Technologies Used
 
 - HTML, CSS, JavaScript
@@ -125,6 +123,8 @@ Only the information that the user selects is displayed.
 ## Description of CSS Framework Tailwind
 
 Tailwind CSS, a utility-first CSS framework, was used to style the "What to Watch" web application. It streamlines the styling process by providing a set of pre-defined classes for consistent and visually appealing user interface components.
+
+You can see an exampe of the responsiveness of the website below.
 
 ![Usage Example Mobile Responsive](/assets/images/gifs/What%20to%20Watch%20Mobile%20Responsize.gif)
 
