@@ -619,7 +619,7 @@ function initializeMovieCardOptions() {
   $('.movie-director'   ).hide();
   $('.movie-cast'       ).hide();
   $('.movie-summary'    ).hide();
-  $('.movie-review-nyt' ).hide();
+  $('.movie-review' ).hide();
   $('.movie-services'   ).hide();
   $('.movie-scores'     ).hide();
 
@@ -631,7 +631,7 @@ function initializeMovieCardOptions() {
   if( directorBox[0]  .checked ) { $('.movie-director'   ).show(); }
   if( castBox[0]      .checked ) { $('.movie-cast'       ).show(); }
   if( summaryBox[0]   .checked ) { $('.movie-summary'    ).show(); }
-  if( nytReviewBox[0] .checked ) { $('.movie-review-nyt' ).show(); }
+  if( nytReviewBox[0] .checked ) { $('.movie-review'     ).show(); }
   if( servicesBox[0]  .checked ) { $('.movie-services'   ).show(); }
   if( scoresBox[0]    .checked ) { $('.movie-scores'     ).show(); }
 }
