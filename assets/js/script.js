@@ -605,6 +605,7 @@ function buildMovieCards(targetMoviesObj) {
   for (var i = Object.keys(targetMoviesObj).length - 1; i >= 0; i--) {
       appendCard(targetMoviesObj[i]);
   }
+  console.log(nytReviewBox[0].checked);
   initializeMovieCardOptions();
 }
 
@@ -715,7 +716,6 @@ function appendCard(movieObj){
   if( movieObj.reviews.nyt.snippet ) {
     movieDetails  .append(movieReview);
   }
-  
   // only append streaming info if it includes content
   if( movieObj.streamingServices ) { 
     movieDetails  .append(movieServices);
@@ -724,7 +724,6 @@ function appendCard(movieObj){
   movieCard       .append(moviePoster)
                   .append(movieDetails)
                   .append(movieScores);
-
   // put the new card at the top
   movieCardsContainer.prepend(movieCard);
 }
