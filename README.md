@@ -1,50 +1,101 @@
 # What to Watch
 
-## Technology Used 
+![Supportive GIF of your App in action](./assets/images/Screenshot%202023-10-16%20191043.png)
 
-| Technology Used         | Resource URL           | 
-| ------------- |:-------------:| 
-| HTML    | [https://developer.mozilla.org/en-US/docs/Web/HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) | 
-| CSS     | [https://developer.mozilla.org/en-US/docs/Web/CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)      |   
-| Git | [https://git-scm.com/](https://git-scm.com/)     |    
-| JavaScrpit | [https://www.w3schools.com/js/default.asp](https://www.w3schools.com/js/default.asp) |
-| JQuery | [https://api.jquery.com/](https://api.jquery.com/) |
-| JQuery UI | [https://jqueryui.com/](https://jqueryui.com/) |
-| Slick Carousel | [https://github.com/kenwheeler/slick](https://github.com/kenwheeler/slick) |
-| TMDB API | [https://developer.themoviedb.org/docs](https://developer.themoviedb.org/docs) |
-| OMDB API | [https://www.omdbapi.com/](https://www.omdbapi.com/) |
-| NYT API |  [https://developer.nytimes.com/apis](https://developer.nytimes.com/apis) |
-| Streaming Availability API | [https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability) |
+## Technology Used
 
-## Description 
+| Technology         | Resource URL                                      |
+| -------------------|:-----------------------------------------------:|
+| HTML               | [MDN Web Docs - HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) |
+| CSS                | [MDN Web Docs - CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) |
+| Git                | [Git - Official Website](https://git-scm.com/) |
+| JavaScript         | [W3Schools - JavaScript](https://www.w3schools.com/js/default.asp) |
+| jQuery             | [jQuery API Documentation](https://api.jquery.com/) |
+| jQuery UI          | [jQuery UI - Official Website](https://jqueryui.com/) |
+| Slick Carousel     | [Slick Carousel on GitHub](https://github.com/kenwheeler/slick) |
+| TMDB API           | [TMDB API Documentation](https://developer.themoviedb.org/docs) |
+| OMDB API           | [OMDB API](https://www.omdbapi.com/) |
+| NYT API            | [New York Times API](https://developer.nytimes.com/apis) |
+| Streaming Availability API | [Streaming Availability API](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability) |
 
 ![Usage Example Full Site](/assets/images/gifs/What%20to%20Watch%20full%20use.gif)
 
-What to Watch is a web application to search for movies and only display the specific result information the user is iterested in. 
+"What to Watch" is a web application that simplifies the process of searching for movies and customizing the information displayed according to the user's interests.
 
 The purpose of the project was to allow the user to search for a movie in an input field and have the information that they found relevent shown for the movie that was searched. The previously searched for movies would be stored on the page. The user could check the criteria they were interested in and that would dynamically update the page. The user could save their cirteria configuration until they want to clear it. The user could also find popular movie in general or for a specific genre by selecting the the genre from a drop down. The user could pin movie they wanted to the page so that they would remain persistent even when the page was refreshed. This project used a 3rd party Application User Interface called Slick that created a carousel for the searched movie titles. There were also server side APIs used such as OMDB, TMDB, New York Times and Streaming Availability. These server side APIs were used to get the criteria that is displayed on the page.
+The motivation behind this project was to provide users with a comprehensive movie search experience, where they can easily find, review, and pin their desired categories of movie information. By leveraging multiple APIs, such as OMDB, TMDB, New York Times, and Streaming Availability, users can explore detailed movie data and discover where movies are available to stream or rent.
 
+"What to Watch" sets itself apart by offering an intuitive interface with the following key features:
 
-We deployed the application on [GitHub](https://github.com/) [Pages](https://pages.github.com/), and it can be found [here](https://jamessahunter.github.io/What-to-watch/).
+- Dynamic movie card display based on user searches.
+- The ability to customize displayed movie information.
+- Persistent storage for search history and user configurations.
+- Genre-based movie selection from a dropdown menu.
+- Pinned movie cards that remain visible even after page refresh.
 
-## Table of Contents (Optional)
+## Table of Contents
 
-If your README is very long, add a table of contents to make it easy for users to find what they need.
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies Used](#technology-used)
+- [User Stories](#user-stories)
+- [API Calls](#user-stories-related-to-api-calls)
+- [Description of CSS Framework Tailwind](#description-of-css-framework-tailwind)
+- [Learning Objectives](#learning-objectives)
+- [Authors / Contact](#authors--contact)
+- [Credits](#credits)
+- [License](#license)
 
-* [Installation](#installation)
-* [Usage](#usage)
-* [Credits](#credits)
-* [License](#license)
+## Installation
+
+Provide installation instructions or a link to the live version of the application.
+
+## Usage
+
+On page load, the user is presented with a feature-rich interface divided into two columns:
+
+### Left Column
+
+- Search Input Field and Search Button.
+- Popular Movies Button.
+- Feature Checkboxes to customize information.
+- Genres Dropdown.
+- Save Config, Clear Config, Clear Search History, and Clear Unpinned Movies buttons.
+
+### Right Column
+
+- Dynamic display of movie cards based on user actions.
+- Search History Carousel.
+- Pinned Movie Cards.
+
+### Movie Cards
+
+Movie cards provide a wealth of information, including posters, release year, MPAA rating, runtime, genre, director, cast, summary, scores, NYT reviews, and streaming availability. Users can customize the information displayed by altering checkbox selections.
+
+### Pinned Movies
+
+Pinned movie cards are stored in local storage, ensuring they persist across page reloads.
+
+### Popular Movies
+
+The "Popular Movies" button presents users with the current top 20 movies from TMDB. Selecting a genre from the dropdown filters the top 20 movies by genre.
+
+![Left Column](placeholder-left-column.png)
+
+## Technologies Used
+
+- HTML, CSS, JavaScript
+- jQuery and jQuery UI for interactive elements
+- Slick Carousel for the search history carousel
+- Tailwind CSS for styling
 
 ## User Stories
 
-![Supportive Gif of that feature](assets/images/screenshot.png)
-![Supportive Gif of that feature](assets/images/screenshot.png)
-![Supportive Gif of that feature](assets/images/screenshot.png)
+- I want to search for and review side-by-side my desired categories of movie information.
+- I want to explore movies in various genres.
+- ...
 
-```javascript
-// Any relevant code snippets
-```
+![Supportive GIFs of user stories](./assets/images/Screenshot%202023-10-16%20191538.png)
 
 ## User Stories Related to API Calls
 
@@ -55,79 +106,45 @@ For the user story of I want to search for and review side-by-side my desired ca
 For the user story of I want to see popular movies in general or of a specifc genre. First the user can select a genre from the drop down. The user can then click the popular movies button. Once the button is clicked a function gets the id of the genre if there is one. Then a call is made to the TMDB API for popular movies. This then iterates through the array of movie and repeats the process above.
 
 ![Usage Example](/assets/images/gifs/What%20to%20Watch%20popular.gif)
+## API Calls
+
+The user story of searching for desired movie information involves several API calls:
+
+1. An initial call to the OMDB API with the movie title to retrieve a list of relevant movies.
+2. Handling duplicates and, if necessary, prompting the user to select the year of the movie.
+3. A second call to OMDB with the selected title and year.
+4. A call to the TMDB API for additional movie data.
+5. Using the NYT API to fetch the appropriate review.
+6. Using the Streaming Availability API to check where the movie is available to stream, rent, or buy.
+
+Only the information that the user selects is displayed.
 
 ## Description of CSS Framework Tailwind
 
+Tailwind CSS, a utility-first CSS framework, was used to style the "What to Watch" web application. It streamlines the styling process by providing a set of pre-defined classes for consistent and visually appealing user interface components.
 
+![Usage Example Mobile Responsive](/assets/images/gifs/What%20to%20Watch%20Mobile%20Responsize.gif)
 
 ## Learning Objectives
 
-
+This project we learned about the git work flow when working with others. We learned about how to read new documentation that we had not been introduced to previously whether that was a new CSS framework, JS library, or Server Side API.
 
 ## Authors / Contact
 
-
-
-
-
-## Usage 
-
-
-
-
-
-
-On page load, the user is presented in the left column with a search input field and **Search** button, a **Popular movies** button, a set of *Features* checkboxes labeled with movie information categories, and a *Genres* drop down. There are four additional buttons at the bottom: **Save Config**, **Clear Config**, **Clear Search History**, and **Clear Unpinned Movies**.
-
-![Left column](assets/images/left-column.png)
-
-Upon searching for a movie title using the search field, the designated film is presented in a movie card on the right column. The search query is also added to the *Search History* carousel at the top of the right column. Additional searches will continue to populate the right colum with additional movie cards.
-
-Changing checkbox selections will alter the information displayed on the movie cards. For example, unchecking the *Poster* checkbox will remove the movie poster image from the collection of movie cards. The user can save the current checkbox selection to local storage by clicking the **Save Config** button, while the **Clear Config** button will reset the checkboxes to a state of "all on".
-
-If desired, the searh history carousel can be cleared by clicking the **Clear Search History** button.
-
-The user can click on individual movie cards to pin them to the page. A pinned card is designated by a blue border. The set of pinned movie cards is also saved to local storage and will be generated again when the page is reloaded or revisited from the same browser, together with the search history carousel and any saved checkbox configuration.
-
-At any time, the user can click the **Clear Unpinned Movies** button, and any unpinned movie card will be removed. If a previously searched for movie was removed, the user can recover that title by clicking on the query term in the search history carousel.
-
-Finally, clicking on the **Popular movies** button will present the user with movie cards for the current top 20 movies from [TMDB](https://www.themoviedb.org/?language=en-US). If the user first selects a genre from the dropown, the top 20 movies in that genre will be returned.
-
-
-
-
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
-
-```md
-![alt text](assets/images/screenshot.png)
-```
-
+- James Hunter ([GitHub](https://github.com/jamessahunter))
+- Fiqre Tezare ([GitHub](https://github.com/Fiqre-Ab))
+- David Wright ([GitHub](https://github.com/d-a-v-i-d-w-r-i-g-h-t))
 
 ## Credits
 
+### Third-Party Contributions
 
-
-
-
-
-List your collaborators, if any, with links to their GitHub profiles.
-James Hunter: [github.com/jamessahunter](https://github.com/jamessahunter)
-Fiqre Tezare: [github.com/Fiqre-Ab](https://github.com/Fiqre-Ab)
-David Wright: [github.com/d-a-v-i-d-w-r-i-g-h-t](https://github.com/d-a-v-i-d-w-r-i-g-h-t)
-
-Created the Slick carousel that contains the previously searched for movies
-Ken Wheeler [https://github.com/kenwheeler](https://github.com/kenwheeler)
+- Ken Wheeler: Created the Slick carousel that contains the previously searched for movies. [GitHub Profile](https://github.com/kenwheeler)
 
 ## License
 
-MIT License
+This project is licensed under the MIT License. For detailed information, see the [LICENSE](LICENSE) file.
 
-Copyright (c) 2023 James Hunter, David Wright, Fiqre Tezare
+MIT License © 2023 James Hunter, David Wright, Fiqre Tezare
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software")...
