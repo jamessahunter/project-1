@@ -125,7 +125,7 @@ function handleSearch(event) {
 popularButton.on("click", function() {
   //sets the popular clicked to true
   popularClicked = true;
-  // opens the modal to notify user that some apis are not calles
+  // opens the modal to notify user that some apis are not called
   $(popSearchModal).dialog("open");
   //calls fetch popular with the a genre selected
   fetchPopular(genreSelect.val());
@@ -162,7 +162,7 @@ movieCardsContainer.on("click", ".movie-card", function(event) {
 
   // toggle the value of "pinned"
   $(this).data("pinned", !isPinned);
-  // toggle the coresponding value of pinned in the object variable
+  // toggle the corresponding value of pinned in the object variable
   currentMovieList[index].pinned = !isPinned;
 
   if ( isPinned ) {
@@ -328,7 +328,7 @@ function fetchPopular(genre){
 
 // function to call OMDB to get list of movies
 function fetchOMDB(movieSearchQuery,year){
-  // setting the variable to get the movei title
+  // setting the variable to get the movie title
   movieToPass=movieSearchQuery;
   // api url
   var omdbUrl = "https://www.omdbapi.com/?s="+ movieSearchQuery +"&type=movie&apikey=704a2c08"
@@ -438,7 +438,7 @@ function fetchOMDBSpecific(movieSearchQuery,year){
 
 
 
-//functino to get the info from TMDB
+//function to get the info from TMDB
 function fetchTMDB(movie,year){
   //fetches to TMDB
   const options = {
@@ -773,7 +773,7 @@ carouselContainer.slick({
   slidesToShow: 6,
   //scrolls 6 slides
   slidesToScroll:6,
-  //chages slides shown and scrolled based off break points
+  //changes slides shown and scrolled based off break points
   responsive: [
     {
       breakpoint: 1200,
